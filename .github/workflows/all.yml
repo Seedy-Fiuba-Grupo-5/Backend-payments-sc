@@ -15,9 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Create .env file
+        env:
+          MNEMONIC: ${{ secrets.MNEMONIC }}
+          INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
         run: |
-          echo MNEMONIC=${{ secrets.MNEMONIC }} >> .env
-          echo INFURA_API_KEY=${{ secrets.INFURA_API_KEY }} >> .env
+          echo MNEMONIC=${MNEMONIC} >> .env
+          echo INFURA_API_KEY=${INFURA_API_KEY} >> .env
           cat .env
       - name: Build docker image
         run: |
