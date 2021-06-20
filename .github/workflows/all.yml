@@ -25,5 +25,5 @@ jobs:
         run: |
           docker build . -t smart-contract-image
       - name: Run tests inside container
-      - run: |
+        run: |
           docker run --rm smart-contract-image npm test
