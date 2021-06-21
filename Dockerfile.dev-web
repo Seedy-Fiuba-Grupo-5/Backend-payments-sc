@@ -1,0 +1,13 @@
+FROM node:12.18.1
+
+WORKDIR /app
+
+COPY /backend-payments/package.json /app/
+
+RUN npm i
+
+COPY /deployments /app/deployments
+COPY /backend-payments/src/ /app/src/
+COPY .env /app/
+
+ENV NODE_ENV=development

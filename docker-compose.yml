@@ -18,7 +18,7 @@ services:
     container_name: web_pay_cont
     build: 
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.dev-web
     depends_on: 
       - hh_node
     command: npm start
@@ -34,7 +34,7 @@ services:
     container_name: hh_node_cont
     build: 
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.dev-hh
     command: npx hardhat node
     volumes:
       - *services-volume

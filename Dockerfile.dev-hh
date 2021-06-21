@@ -13,6 +13,7 @@ COPY yarn.lock /app/
 
 RUN npm i
 
-ENV NODE_ENV=development
 
 COPY . /app/
+# Excluded files are specified in 
+# Dockerfile.dev-hh.dockerignore

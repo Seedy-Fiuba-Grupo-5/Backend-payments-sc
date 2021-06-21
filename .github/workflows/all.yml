@@ -22,9 +22,12 @@ jobs:
         env:
           MNEMONIC: ${{secrets.MNEMONIC}}
           INFURA_API_KEY: ${{secrets.INFURA_API_KEY}}
-      - name: Build docker image
+      - name: Build containers
         run: |
-          docker build . -t smart-contract-image
-      - name: Run tests inside container
+          docker-compose build
+      - name: Start services
         run: |
-          docker run --rm smart-contract-image npm test
+          docker-compose up
+      - name: Test Smart Contract
+        run: |
+          docker-compose exec hh_node npm test
