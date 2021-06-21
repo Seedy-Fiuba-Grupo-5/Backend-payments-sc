@@ -22,6 +22,8 @@ services:
     depends_on: 
       - hh_node
     command: npm start
+    environment: 
+      - PORT=5002
     ports:
       - 5002:5002
     volumes: 

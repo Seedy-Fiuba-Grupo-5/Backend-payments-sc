@@ -1,9 +1,10 @@
+const config = require("./config");
 const app = require("./app")();
 
 // Run the server!
 const start = async () => {
   try {
-    await app.listen(5002, '0.0.0.0');
+    await app.listen(config.web_port, '0.0.0.0');
     app.log.info(`server listening on ${app.server.address().port}`);
   } catch (err) {
     app.log.error(err);
