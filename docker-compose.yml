@@ -28,6 +28,8 @@ services:
       - 5002:5002
     volumes: 
       - *services-volume
+      - ./backend-payments/src/:/app/src/
+      - ./backend-payments/test/:/app/test/
     networks: 
       dev-net:
         ipv4_address: 172.31.0.3

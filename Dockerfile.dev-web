@@ -6,8 +6,9 @@ COPY /backend-payments/package.json /app/
 
 RUN npm i
 
-COPY /deployments /app/deployments
-COPY /backend-payments/src/ /app/src/
 COPY .env /app/
+COPY /backend-payments/src/ /app/src/
+COPY /backend-payments/test/ /app/test/
+COPY /deployments /app/deployments
 
 ENV NODE_ENV=development
