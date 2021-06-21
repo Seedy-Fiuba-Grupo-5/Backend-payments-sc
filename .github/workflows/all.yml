@@ -30,4 +30,4 @@ jobs:
           docker-compose up -d
       - name: Test Smart Contract
         run: |
-          docker-compose exec hh_node npm test
+          docker-compose exec -T hh_node npm test
