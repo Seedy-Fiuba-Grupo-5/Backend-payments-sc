@@ -1,20 +1,12 @@
-const config = require("./config");
-const services = require("./services/services")({ config });
-const routes = require("./routes");
-
-// Require the framework and instantiate it
-const fastify = require("fastify")({ logger: true });
-
-// Declares routes
-routes.forEach(route => fastify.route(route({ config, services })));
+const app = require("./app")();
 
 // Run the server!
 const start = async () => {
   try {
-    await fastify.listen(5002, '0.0.0.0');
-    fastify.log.info(`server listening on ${fastify.server.address().port}`);
+    await app.listen(5002, '0.0.0.0');
+    app.log.info(`server listening on ${app.server.address().port}`);
   } catch (err) {
-    fastify.log.error(err);
+    app.log.error(err);
     process.exit(1);
   }
 };
