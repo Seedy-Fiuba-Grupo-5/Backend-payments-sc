@@ -18,7 +18,6 @@ jobs:
         run: |
           echo MNEMONIC=$MNEMONIC >> .env
           echo INFURA_API_KEY=$INFURA_API_KEY >> .env
-          cat .env
         shell: bash
         env:
           MNEMONIC: ${{secrets.MNEMONIC}}
