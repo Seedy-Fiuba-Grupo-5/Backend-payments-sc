@@ -1,6 +1,8 @@
 const config = require("./config");
 const app = require("./app")();
 
+console.log(config.deployerMnemonic);
+
 // Run the server!
 const start = async () => {
   try {

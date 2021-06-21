@@ -15,7 +15,6 @@ const infuraApiKey = process.env.INFURA_API_KEY;
 const hh_node_local_url = 'http://172.31.0.2:8545' // Should use ipv4_address set in docker-compose.yml
 const web_port = process.env.PORT
 
-console.log(deployerMnemonic);
 module.exports = {
   contractAddress: deployArtifact.address,
   contractAbi: deployArtifact.abi,
