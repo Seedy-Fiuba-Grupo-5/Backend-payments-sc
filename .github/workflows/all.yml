@@ -13,15 +13,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
       - name: Create .env file
-        env:
-          MNEMONIC: ${{ secrets.MNEMONIC }}
-          INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
         run: |
-          echo MNEMONIC=${MNEMONIC} >> .env
-          echo INFURA_API_KEY=${INFURA_API_KEY} >> .env
+          echo MNEMONIC=$MNEMONIC >> .env
+          echo INFURA_API_KEY=$INFURA_API_KEY >> .env
           cat .env
+        shell: bash
+        env:
+          MNEMONIC: ${{secrets.MNEMONIC}}
+          INFURA_API_KEY: ${{secrets.INFURA_API_KEY}}
       - name: Build docker image
         run: |
           docker build . -t smart-contract-image
