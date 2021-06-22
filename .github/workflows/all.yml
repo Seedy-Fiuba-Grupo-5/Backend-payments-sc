@@ -24,7 +24,7 @@ jobs:
           INFURA_API_KEY: ${{secrets.INFURA_API_KEY}}
       - name: Build containers
         run: |
-          docker-compose build
+          DOCKER_BUILDKIT=1 docker-compose build
       - name: Start services
         run: |
           docker-compose up -d
