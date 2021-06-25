@@ -1,32 +1,49 @@
 # Seedifyuba - New documentation
 Smart contract and basic service to solve payments in the seedifyuba project.
 
-## Docker
-The original documentation command should be executed inside docker container.  
-
+## Local environment
 ### Build
 ```
-docker build . -t smart-contract-i 
+docker-compose build
 ```
 
-### Execute
-This command will open a /bin/bash terminal
+### Start services
 ```
-docker run --name smart-contract-c -it -p 5002:5002 
+docker-compose up [-d]
+```
+This command will start two services:
+- hh_node: It is a service of nodes where the smart contract is deployed.
+- web: It is the backend payments service which needs to interact with the
+smart contract through the hh_node service.
+
+The web service will wait until a file deployments/localhost/Seedifyuba.json exists,
+to start up. This file is created the first time hh_node is executed. When these
+services are stopped but not destroyed, then this file will be kept in containers
+shared volume.
+
+### Test
+#### Test backend payments
+```
+docker-compose exec web npm test
+```
+
+#### Test Smart-contract
+```
+docker-compose exec hh_node npm test
 ```
 
 ### Stop
 ```
-docker stop smart-contract-c 
+docker-compose stop
 ```
 
-### Re-Start
+### Destroy
 ```
-docker start -i smart-contract-c
+docker-compose down -v
 ```
 
-### Notes
-Different instances of the container may deploy new contracts with the same INFURA KEY and MEMONIC.
+## Notes
+Different instances of the container may deploy new contracts with the same INFURA KEY and MEMONIC in Kovan net.
 
 # Seedifyuba - Original documentation
 
@@ -54,16 +71,16 @@ keep in mind that you should have everything in config set before that.
 
 The following endpoints are available:
 
-- Create wallet: POST /wallet - No body 
-- Get wallets: GET /wallet
-- Get wallet: GET /wallet/:id:
-- Create project: POST /project - Body params: reviewerId(integer), ownerId(integer), stagesCost(array of numbers)
-- Get project: GET /project/:hash:
+- Create wallet: POST /wallets - No body
+- Get wallets: GET /wallets
+- Get wallet: GET /wallets/:id:
+- Create project: POST /projects - Body params: reviewerId(integer), ownerId(integer), stagesCost(array of numbers)
+- Get project: GET /projects/:hash:
 
 ### Usage example
 
 ```sh
-$ http POST http://localhost:5002/walllet
+$ http POST http://localhost:5002/wallets
 HTTP/1.1 200 OK
 Connection: keep-alive
 Date: Fri, 16 Apr 2021 02:05:45 GMT
@@ -77,7 +94,7 @@ content-type: application/json; charset=utf-8
     "privateKey": "0xb9444636faac0ab28ac177c767fa434d7c0767d1b3019d980e079a4d644727ba"
 }
 
-$ http POST http://localhost:5002/wallet
+$ http POST http://localhost:5002/wallets
 HTTP/1.1 200 OK
 Connection: keep-alive
 Date: Fri, 16 Apr 2021 02:05:46 GMT
@@ -91,7 +108,7 @@ content-type: application/json; charset=utf-8
     "privateKey": "0x6906bdfcebf1e2366d3c32aa001b0b7e882f719daabe590650f854279979c62e"
 }
 
-$ http POST http://localhost:5002/project ownerId=1 reviewerId=2 stagesCost:='[10,20,10]'
+$ http POST http://localhost:5002/projects ownerId=1 reviewerId=2 stagesCost:='[10,20,10]'
 HTTP/1.1 200 OK
 Connection: keep-alive
 Date: Fri, 16 Apr 2021 02:07:07 GMT
@@ -124,7 +141,7 @@ content-type: application/json; charset=utf-8
     }
 }
 
-$ http GET http://localhost:5002/project/0x30b003c570eccaf1705acd4621f72993acb51715f8decbf61535f21376cfe1d2
+$ http GET http://localhost:5002/projects/0x30b003c570eccaf1705acd4621f72993acb51715f8decbf61535f21376cfe1d2
 HTTP/1.1 200 OK
 Connection: keep-alive
 Date: Fri, 16 Apr 2021 02:09:27 GMT
@@ -161,19 +178,19 @@ To run the tests, after you installed the dependencies, just run
 
 #### Linting
 
-To run the linter, after you installed the dependencies, just run 
+To run the linter, after you installed the dependencies, just run
 
 `npm run lint`
 
 #### Coverage
 
-To create a coverage report, after you installed the dependencies, just run 
+To create a coverage report, after you installed the dependencies, just run
 
 `npm run coverage`
 
 #### Doc generation
 
-To create the smart contract documentation, after you installed the dependencies, just run 
+To create the smart contract documentation, after you installed the dependencies, just run
 
 `npm run docgen`
 
