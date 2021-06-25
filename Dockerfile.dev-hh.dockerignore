@@ -1,0 +1,3 @@
+backend-payments/
+deployments/kovan/
+deployments/localhost/*

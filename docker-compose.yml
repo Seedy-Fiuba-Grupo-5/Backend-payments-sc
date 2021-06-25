@@ -1,0 +1,45 @@
+version: '3.5'
+
+volumes:
+  deployments:
+
+networks:
+  dev-net:
+    driver: bridge
+    ipam:
+      config: 
+        - subnet: 172.31.0.0/24
+
+services:
+  web:
+    container_name: web_pay_cont
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev-web
+    depends_on: 
+      - hh_node
+    entrypoint: /app/docker-entrypoint-dev.sh
+    environment: 
+      - PORT=5002
+    ports:
+      - 5002:5002
+    volumes: 
+      - deployments:/app/deployments
+      - ./backend-payments/src/:/app/src/
+      - ./backend-payments/test/:/app/test/
+    networks: 
+      dev-net:
+        ipv4_address: 172.31.0.3
+
+  hh_node:
+    container_name: hh_node_cont
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev-hh
+    command: npx hardhat node
+    volumes:
+      - deployments:/app/deployments
+    networks: 
+      dev-net:
+        ipv4_address: 172.31.0.2
+    
