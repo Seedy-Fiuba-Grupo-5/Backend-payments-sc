@@ -3,5 +3,5 @@ const contractInteraction = require("./contractInteraction");
 
 module.exports = ({ config }) => ({
   walletService: walletService({ config }),
-  contractInteraction: contractInteraction({ config }),
+  contractInteraction: contractInteraction({ config })
 });

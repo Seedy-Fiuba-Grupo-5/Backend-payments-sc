@@ -1,3 +1,5 @@
+db = require('../services/db')
+
 function schema() {
   return {
     params: {
@@ -7,9 +9,11 @@ function schema() {
   };
 }
 
-function handler({ accounts }) {
+function handler() {
   return async function (req, reply) {
-    accounts = [];
+    while (db.accounts.length > 0) {
+      db.accounts.pop();
+    }
     reply.code(204);
   };
 }

@@ -8,10 +8,10 @@ const expect = require('chai').expect;
 chai.use(chaiHttp);
 const url = `http://0.0.0.0:${config.web_port}`;
 
-describe('Endpoint /wallets: ',()=>{
-  beforeEach(function() {
-    chai.request(url)
-      .delete('/db');
+describe('Endpoint /wallets: ', ()=>{
+  beforeEach(async function() {
+    await chai.request(url)
+            .delete('/db');
   });
 
   let route = '/wallets'

@@ -1,5 +1,5 @@
 const ethers = require("ethers");
-// const accounts = [];
+const db = require('./db');
 
 function create_ethers_provider(config) {
   if (config.node_env == 'development') {
@@ -17,12 +17,12 @@ const createWallet = ({ config }) => async () => {
   const provider = create_ethers_provider(config);
   // This may break in some environments, keep an eye on it
   const wallet = ethers.Wallet.createRandom().connect(provider);
-  config.accounts.push({
+  db.accounts.push({
     address: wallet.address,
     privateKey: wallet.privateKey,
   });
   const result = {
-    id: config.accounts.length,
+    id: db.accounts.length,
     address: wallet.address,
     privateKey: wallet.privateKey,
   };
@@ -30,16 +30,16 @@ const createWallet = ({ config }) => async () => {
 };
 
 const getWalletsData = ( {config} ) => () => {
-  return config.accounts;
+  return db.accounts;
 };
 
 const getWalletData = ( {config} ) => index => {
-  return config.accounts[index - 1];
+  return db.accounts[index - 1];
 };
 
 const getWallet = ( {config} ) => index => {
   const provider = create_ethers_provider(config);
-  return new ethers.Wallet(config.accounts[index - 1].privateKey, provider);
+  return new ethers.Wallet(db.accounts[index - 1].privateKey, provider);
 };
 
 module.exports = ({ config }) => ({
