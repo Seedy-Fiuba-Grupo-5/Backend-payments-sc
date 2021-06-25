@@ -20,7 +20,8 @@ describe('Endpoint /wallets: ', ()=>{
 			.get(route)
 			.end( function (err, res) {
 				expect(res).to.have.status(200);
-        expect(res.body).to.eql([])
+        expect(res.body).to.be.a('array');
+        expect(res.body).to.eql([]);
 				done();
 			});
 	});
@@ -30,9 +31,9 @@ describe('Endpoint /wallets: ', ()=>{
 			.post(route)
 			.end( function (err, res) {
 				expect(res).to.have.status(200);
-        expect(res.body).to.have.property("id")
-        expect(res.body).to.have.property("address")
-        expect(res.body).to.have.property("privateKey")
+        expect(res.body).to.have.property("id").to.be.a('number');
+        expect(res.body).to.have.property("address").to.be.a('string');
+        expect(res.body).to.have.property("privateKey").to.be.a('string');
 				done();
 			});
 	});

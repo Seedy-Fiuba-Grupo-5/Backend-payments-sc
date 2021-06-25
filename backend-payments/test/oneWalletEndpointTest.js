@@ -9,8 +9,8 @@ chai.use(chaiHttp);
 const url = `http://0.0.0.0:${config.web_port}`;
 
 describe('Endpoint /wallets/<id>: ',()=>{
-  beforeEach(function() {
-    chai.request(url)
+  beforeEach(async function() {
+    await chai.request(url)
       .delete('/db');
   });
 
@@ -25,8 +25,8 @@ describe('Endpoint /wallets/<id>: ',()=>{
 			.get(route)
 			.end( function (err, res) {
 				expect(res).to.have.status(200);
-        expect(res.body).to.have.property('address');
-        expect(res.body).to.have.property('privateKey');
+        expect(res.body).to.have.property('address').to.be.a('string');
+        expect(res.body).to.have.property('privateKey').to.be.a('string');
 			});
 	});
 });
