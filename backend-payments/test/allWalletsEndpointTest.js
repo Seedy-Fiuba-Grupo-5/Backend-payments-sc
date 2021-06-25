@@ -11,7 +11,7 @@ const url = `http://0.0.0.0:${config.web_port}`;
 describe('Endpoint /wallets: ', ()=>{
   beforeEach(async function() {
     await chai.request(url)
-            .delete('/db');
+      .delete('/db');
   });
 
   let route = '/wallets'
@@ -21,7 +21,7 @@ describe('Endpoint /wallets: ', ()=>{
 			.end( function (err, res) {
 				expect(res).to.have.status(200);
         expect(res.body).to.be.a('array');
-        expect(res.body).to.eql([]);
+        expect(res.body).to.have.lengthOf(0);
 				done();
 			});
 	});
@@ -37,4 +37,25 @@ describe('Endpoint /wallets: ', ()=>{
 				done();
 			});
 	});
+
+  it('GET should return a list with two wallets when two wallets were created', async () => {
+    wallet1 = await chai.request(url)
+			.post(route)
+      .body
+    wallet2 = await chai.request(url)
+			.post(route)
+      .body
+
+		chai.request(url)
+			.get(route)
+			.end( function (err, res) {
+				expect(res).to.have.status(200);
+        expect(res.body).to.be.a('array');
+        expect(res.body).to.have.lengthOf(2);
+        expect(res.body[0]).to.have.property('address').to.be.a('string');
+        expect(res.body[0]).to.have.property('privateKey').to.be.a('string');
+			});
+	});
 });
+
+
