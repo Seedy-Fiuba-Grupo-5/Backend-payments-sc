@@ -8,12 +8,13 @@ const expect = require('chai').expect;
 chai.use(chaiHttp);
 const url = `http://0.0.0.0:${config.web_port}`;
 
-describe('Endpoint /wallet: ',()=>{
+describe('Endpoint /wallets: ',()=>{
   beforeEach(function() {
     chai.request(url)
       .delete('/db');
   });
-  let route = '/wallet'
+
+  let route = '/wallets'
 	it('GET should return an empty list when there are not wallets created', (done) => {
 		chai.request(url)
 			.get(route)
