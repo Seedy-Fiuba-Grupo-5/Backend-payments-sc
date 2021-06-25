@@ -8,8 +8,11 @@ const expect = require('chai').expect;
 chai.use(chaiHttp);
 const url = `http://0.0.0.0:${config.web_port}`;
 
-
 describe('Endpoint /wallet: ',()=>{
+  beforeEach(function() {
+    chai.request(url)
+      .delete('/db');
+  });
   let route = '/wallet'
 	it('GET should return an empty list when there are not wallets created', (done) => {
 		chai.request(url)
@@ -17,6 +20,18 @@ describe('Endpoint /wallet: ',()=>{
 			.end( function (err, res) {
 				expect(res).to.have.status(200);
         expect(res.body).to.eql([])
+				done();
+			});
+	});
+
+  it('POST should create a new wallet', (done) => {
+		chai.request(url)
+			.post(route)
+			.end( function (err, res) {
+				expect(res).to.have.status(200);
+        expect(res.body).to.have.property("id")
+        expect(res.body).to.have.property("address")
+        expect(res.body).to.have.property("privateKey")
 				done();
 			});
 	});

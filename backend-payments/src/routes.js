@@ -3,6 +3,7 @@ const getWalletsData = require("./handlers/getWalletsHandler");
 const createWallet = require("./handlers/createWalletHandler");
 const createProject = require("./handlers/createProjectHandler");
 const getProject = require("./handlers/getProjectHandler");
+const recreateDB = require("./handlers/recreateDBHandler");
 
 function getWalletDataRoute({ services, config }) {
   return {
@@ -49,4 +50,14 @@ function getProjectRoute({ services, config }) {
   };
 }
 
-module.exports = [getWalletDataRoute, getWalletsDataRoute, createWalletRoute, createProjectRoute, getProjectRoute];
+function recreateDBRoute({ services, config }) {
+  return {
+    method: "DELETE",
+    url: "/db",
+    schema: recreateDB.schema(config),
+    handler: recreateDB.handler({ config, ...services }),
+  };
+}
+
+module.exports = [getWalletDataRoute, getWalletsDataRoute, createWalletRoute,
+                  createProjectRoute, getProjectRoute, recreateDBRoute];
