@@ -8,53 +8,37 @@ const expect = require('chai').expect;
 chai.use(chaiHttp);
 const url = `http://0.0.0.0:${config.web_port}`;
 
-describe('Endpoint /wallets: ', ()=>{
+describe('Endpoint /wallets: ', () => {
   beforeEach(async function() {
-    await chai.request(url)
-      .delete('/db');
+    await chai.request(url).delete('/db');
   });
 
   let route = '/wallets'
-	it('GET should return an empty list when there are not wallets created', (done) => {
-		chai.request(url)
-			.get(route)
-			.end( function (err, res) {
-				expect(res).to.have.status(200);
-        expect(res.body).to.be.a('array');
-        expect(res.body).to.have.lengthOf(0);
-				done();
-			});
+	it('GET should return an empty list when there are not wallets created', async () => {
+		res = await chai.request(url).get(route)
+    expect(res).to.have.status(200);
+    expect(res.body).to.be.a('array');
+    expect(res.body).to.have.lengthOf(0);
 	});
 
-  it('POST should create a new wallet', (done) => {
-		chai.request(url)
-			.post(route)
-			.end( function (err, res) {
-				expect(res).to.have.status(200);
-        expect(res.body).to.have.property("id").to.be.a('number');
-        expect(res.body).to.have.property("address").to.be.a('string');
-        expect(res.body).to.have.property("privateKey").to.be.a('string');
-				done();
-			});
+  it('POST should create a new wallet', async () => {
+		res = await chai.request(url).post(route)
+    expect(res).to.have.status(200);
+    expect(res.body).to.have.property("id").to.be.a('number');
+    expect(res.body).to.have.property("address").to.be.a('string');
+    expect(res.body).to.have.property("privateKey").to.be.a('string');
 	});
 
   it('GET should return a list with two wallets when two wallets were created', async () => {
-    wallet1 = await chai.request(url)
-			.post(route)
-      .body
-    wallet2 = await chai.request(url)
-			.post(route)
-      .body
+    await chai.request(url).post(route)
+    await chai.request(url).post(route)
 
-		chai.request(url)
-			.get(route)
-			.end( function (err, res) {
-				expect(res).to.have.status(200);
-        expect(res.body).to.be.a('array');
-        expect(res.body).to.have.lengthOf(2);
-        expect(res.body[0]).to.have.property('address').to.be.a('string');
-        expect(res.body[0]).to.have.property('privateKey').to.be.a('string');
-			});
+		res = await chai.request(url).get(route)
+    expect(res).to.have.status(200);
+    expect(res.body).to.be.a('array');
+    expect(res.body).to.have.lengthOf(2);
+    expect(res.body[0]).to.have.property('address').to.be.a('string');
+    expect(res.body[0]).to.have.property('privateKey').to.be.a('string');
 	});
 });
 
