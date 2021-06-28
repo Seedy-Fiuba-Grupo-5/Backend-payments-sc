@@ -33,8 +33,12 @@ const getWalletsData = ( {config} ) => () => {
   return db.accounts;
 };
 
-const getWalletData = ( {config} ) => index => {
-  return db.accounts[index - 1];
+const getWalletData = ( {config} ) => async(index) => {
+  data = db.accounts[index - 1];
+  const provider = create_ethers_provider(config);
+  weis = await provider.getBalance(data['address']);
+  data['balance'] = ethers.utils.formatEther(weis);
+  return data;
 };
 
 const getWallet = ( {config} ) => index => {
