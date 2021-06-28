@@ -4,7 +4,7 @@ Smart contract and basic service to solve payments in the seedifyuba project.
 ## Local environment
 ### Build
 ```
-docker-compose build
+DOCKER_BUILDKIT=1 docker-compose build
 ```
 
 ### Start services
