@@ -14,10 +14,11 @@
     "@commitlint/config-conventional": "12.0.1",
     "chai": "4.2.0",
     "chai-http": "^3.0.0",
-    "mocha": "^3.5.0"
+    "mocha": "^3.5.0",
+    "nodemon": "^2.0.7"
   },
   "scripts": {
-    "start": "node src/server",
+    "start": "nodemon src/server",
     "test": "./node_modules/mocha/bin/mocha test/**/*Test.js --reporter spec"
   }
 }
