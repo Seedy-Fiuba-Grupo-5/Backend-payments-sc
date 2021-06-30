@@ -17,6 +17,7 @@ services:
       - sc
     entrypoint: /app/docker-entrypoint-dev.sh
     environment:
+      - NODE_ENV=development
       - SC_HH_NODE_URL=http://sc:8545
       # sc is the name of the sc service and it will be
       # translated to its Ipv4 address by docker-compose
