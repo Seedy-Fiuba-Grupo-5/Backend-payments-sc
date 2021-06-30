@@ -18,8 +18,11 @@ const createProject = ({ config }) => async (
   projectOwnerAddress,
   projectReviewerAddress,
 ) => {
-  const bookBnb = await getContract(config, deployerWallet);
-  const tx = await bookBnb.createProject(stagesCost.map(toWei), projectOwnerAddress, projectReviewerAddress);
+  const seedyFiubaContract = await getContract(config, deployerWallet);
+  const tx = await seedyFiubaContract.createProject(
+                    stagesCost.map(toWei),
+                    projectOwnerAddress,
+                    projectReviewerAddress);
   tx.wait(1).then(receipt => {
     console.log("Transaction mined");
     const firstEvent = receipt && receipt.events && receipt.events[0];

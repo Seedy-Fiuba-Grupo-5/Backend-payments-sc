@@ -21,13 +21,16 @@ function schema() {
 }
 
 function handler({ contractInteraction, walletService }) {
-  return async function (req) {
-    return contractInteraction.createProject(
-      walletService.getDeployerWallet(),
-      req.body.stagesCost,
-      walletService.getWalletData(req.body.ownerId).address,
-      walletService.getWalletData(req.body.reviewerId).address,
-    );
+  return async function (req, reply) {
+    ownerWallet = await walletService.getWalletData(req.body.ownerId);
+    reviewerWallet = await walletService.getWalletData(req.body.reviewerId);
+    const body = await contractInteraction.createProject(
+                    walletService.getDeployerWallet(),
+                    req.body.stagesCost,
+                    ownerWallet.address,
+                    reviewerWallet.address,
+                  );
+    reply.code(201).send(body);
   };
 }
 
