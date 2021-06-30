@@ -2,7 +2,7 @@
 
 const expect = require('chai').expect;
 const ethers = require("ethers");
-const config = require('../src/config')
+const config = require('../../src/config')
 
 const provider = new ethers.providers.JsonRpcProvider(config.hh_node_local_url);
 const testWallet = ethers.Wallet.fromMnemonic(config.deployerMnemonic).connect(provider);

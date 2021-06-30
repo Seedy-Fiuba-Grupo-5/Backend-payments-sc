@@ -1,7 +1,7 @@
 'use stricts'
 
 const expect = require('chai').expect;
-const config = require('../src/config');
+const config = require('../../src/config');
 const ethers = require("ethers");
 
 describe('ethers.js: ', ()=>{
