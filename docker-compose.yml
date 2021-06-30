@@ -17,7 +17,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev-web
     depends_on:
-      - hh_node
+      - sc
     entrypoint: /app/docker-entrypoint-dev.sh
     environment:
       - PORT=5002
@@ -31,11 +31,11 @@ services:
       dev-net:
         ipv4_address: 172.31.0.3
 
-  hh_node:
-    container_name: hh_node_cont
+  sc:
+    container_name: sc_cont
     build:
       context: .
-      dockerfile: Dockerfile.dev-hh
+      dockerfile: Dockerfile.dev-sc
     command: npx hardhat node
     volumes:
       - deployments:/app/deployments

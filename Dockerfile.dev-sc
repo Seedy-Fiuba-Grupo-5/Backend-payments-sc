@@ -14,5 +14,5 @@ COPY yarn.lock /app/
 RUN npm i
 
 COPY . /app/
-# Excluded files are specified in 
-# Dockerfile.dev-hh.dockerignore
+# Excluded files are specified in
+# Dockerfile.dev-sc.dockerignore
