@@ -6,6 +6,10 @@ Smart contract and basic service to solve payments in the seedifyuba project.
 ```
 DOCKER_BUILDKIT=1 docker-compose build
 ```
+Nota: La variable de entorno DOCKER_BUILDKIT seteada en 1, permite utilizar
+herramientas adicionales del motor Docker. Entre ellas, permite la utilización
+de archivos `<Dockerfile name>.dockerignore` que permiten indicar que archivos
+ignorar para archivos Dockerfile ubicados en un mismo directorio.
 
 ### Start services
 ```
