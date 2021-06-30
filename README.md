@@ -6,7 +6,7 @@ Smart contract and basic service to solve payments in the seedifyuba project.
 ```
 DOCKER_BUILDKIT=1 docker-compose build
 ```
-Nota: La variable de entorno DOCKER_BUILDKIT seteada en 1, permite utilizar
+Note: La variable de entorno DOCKER_BUILDKIT seteada en 1, permite utilizar
 herramientas adicionales del motor Docker. Entre ellas, permite la utilización
 de archivos `<Dockerfile name>.dockerignore` que permiten indicar que archivos
 ignorar para archivos Dockerfile ubicados en un mismo directorio.
@@ -30,6 +30,12 @@ shared volume.
 ```
 docker-compose exec web npm test
 ```
+Note 1: Tests are not isolated from each other :(
+This means that all test interact with the same db and with the same hardhat node.
+As a consecuence, tests should recreate db before running.
+Another more important consecuence is that all test should share the same wallet for testing,
+which means that we have a limitated amount of weis (ethers) to distribute among all tests.
+Note 2: Executing a transactions costs additional ethers to those sent in the transaction.
 
 #### Test Smart-contract
 ```
