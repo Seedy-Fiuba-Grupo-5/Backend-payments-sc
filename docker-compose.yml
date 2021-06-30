@@ -6,9 +6,6 @@ volumes:
 networks:
   dev-net:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 172.31.0.0/24
 
 services:
   web:
@@ -20,6 +17,10 @@ services:
       - sc
     entrypoint: /app/docker-entrypoint-dev.sh
     environment:
+      - SC_HH_NODE_URL=http://sc:8545
+      # sc is the name of the sc service and it will be
+      # translated to its Ipv4 address by docker-compose
+      # engine
       - PORT=5002
     ports:
       - 5002:5002
@@ -28,8 +29,7 @@ services:
       - ./backend-payments/src/:/app/src/
       - ./backend-payments/test/:/app/test/
     networks:
-      dev-net:
-        ipv4_address: 172.31.0.3
+      - dev-net
 
   sc:
     container_name: sc_cont
@@ -37,9 +37,12 @@ services:
       context: .
       dockerfile: Dockerfile.dev-sc
     command: npx hardhat node
+    # This command will also find and deploy the smart-contract
+    # (This is true if the folders are arranged like in this repository;
+    # for another folder structure it might as well be true, but it was
+    # not tested yet)
     volumes:
       - deployments:/app/deployments
     networks:
-      dev-net:
-        ipv4_address: 172.31.0.2
+      - dev-net
 

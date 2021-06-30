@@ -5,7 +5,7 @@ const config = require('../../src/config');
 const ethers = require("ethers");
 
 describe('ethers.js: ', ()=>{
-  let provider = new ethers.providers.JsonRpcProvider(config.hh_node_local_url);
+  let provider = new ethers.providers.JsonRpcProvider(config.hh_node_url);
   let testWallet = ethers.Wallet.fromMnemonic(config.deployerMnemonic)
                                 .connect(provider);
 
