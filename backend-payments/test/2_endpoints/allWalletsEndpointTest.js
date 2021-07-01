@@ -23,7 +23,7 @@ describe('Endpoint /wallets: ', () => {
 
   it('POST should create a new wallet', async () => {
 		res = await chai.request(url).post(route)
-    expect(res).to.have.status(200);
+    expect(res).to.have.status(201);
     expect(res.body).to.have.property("id").to.be.a('number');
     expect(res.body).to.have.property("address").to.be.a('string');
     expect(res.body).to.have.property("privateKey").to.be.a('string');
