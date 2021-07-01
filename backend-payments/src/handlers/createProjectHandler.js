@@ -30,7 +30,7 @@ function handler({ contractInteraction, walletService }) {
                     ownerWallet.address,
                     reviewerWallet.address,
                   );
-    reply.code(201).send(body);
+    reply.code(202).send(body);
   };
 }
 

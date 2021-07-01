@@ -16,8 +16,8 @@ describe('Endpoint /projects: ', () => {
     await chai.request(url).delete('/db');
   });
 
-	it('POST should create a new project from an owner wallet, \
-      a reviewer wallet and a stages cost list', async () => {
+	it('POST should create a new project from an owner wallet, ' +
+      'a reviewer wallet and a stages cost list', async () => {
     ownerRes = await chai.request(url).post(wallerRoute);
     reviewerRes = await chai.request(url).post(wallerRoute);
     stagesCost = [2, 1, 3];
@@ -30,7 +30,7 @@ describe('Endpoint /projects: ', () => {
                     .post(route)
                     .set('content-type', 'application/json')
                     .send(payload);
-    expect(res).to.have.status(201);
+    expect(res).to.have.status(202);
     expect(res.body).to.have.property('hash').to.be.a('string');
 	});
 });
