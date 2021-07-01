@@ -12,7 +12,7 @@ const config = require('../../src/config')
 
 describe('Endpoint /wallets/<id>: ',()=>{
   let url = `http://0.0.0.0:${config.web_port}`;
-  let parcialRoute = '/wallets'
+  let parcialRoute = '/wallets';
   let provider = new ethers.providers.JsonRpcProvider(config.hh_node_url);
   let testWallet = ethers.Wallet.fromMnemonic(config.deployerMnemonic)
                                 .connect(provider);
@@ -22,11 +22,11 @@ describe('Endpoint /wallets/<id>: ',()=>{
   });
 
 	it('GET should return a wallet without ethers when it was just created', async () => {
-    res = await chai.request(url).post(parcialRoute)
+    res = await chai.request(url).post(parcialRoute);
     id = res.body['id']
     route = `${parcialRoute}/${id}`;
 
-		res = await chai.request(url).get(route)
+		res = await chai.request(url).get(route);
     expect(res).to.have.status(200);
     expect(res.body).to.have.property('address').to.be.a('string');
     expect(res.body).to.have.property('privateKey').to.be.a('string');
@@ -35,7 +35,7 @@ describe('Endpoint /wallets/<id>: ',()=>{
 
   it('GET should return a wallet with 10^(-18) ethers (1 wei) when it was just loaded with that',
       async () => {
-    res = await chai.request(url).post(parcialRoute)
+    res = await chai.request(url).post(parcialRoute);
     const id = res.body['id']
     const route = `${parcialRoute}/${id}`;
     const address = res.body.address;
@@ -44,7 +44,7 @@ describe('Endpoint /wallets/<id>: ',()=>{
 
     await testWallet.sendTransaction(tx);
 
-		res = await chai.request(url).get(route)
+		res = await chai.request(url).get(route);
     expect(res).to.have.status(200);
     const ethersLoad = ethers.utils.formatEther(weisLoad);
     expect(res.body).to.have.property('balance').to.be.eql( ethersLoad );

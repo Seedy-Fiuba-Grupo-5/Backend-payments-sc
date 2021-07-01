@@ -10,7 +10,7 @@ const config = require('../../src/config')
 describe('Endpoint /projects: ', () => {
   let url = `http://0.0.0.0:${config.web_port}`;
   let route = '/projects';
-  let wallerRoute = '/wallets';
+  let walletRoute = '/wallets';
 
   beforeEach(async function() {
     await chai.request(url).delete('/db');
@@ -18,8 +18,8 @@ describe('Endpoint /projects: ', () => {
 
 	it('POST should create a new project from an owner wallet, ' +
       'a reviewer wallet and a stages cost list', async () => {
-    ownerRes = await chai.request(url).post(wallerRoute);
-    reviewerRes = await chai.request(url).post(wallerRoute);
+    ownerRes = await chai.request(url).post(walletRoute);
+    reviewerRes = await chai.request(url).post(walletRoute);
     stagesCost = [2, 1, 3];
     payload = {
       "ownerId": ownerRes.body['id'],
