@@ -5,7 +5,7 @@ on:
     branches:
       - "*"
   push:
-    branches: 
+    branches:
       - "*"
 
 jobs:
@@ -30,7 +30,7 @@ jobs:
           docker-compose up -d
       - name: Test Smart Contract
         run: |
-          docker-compose exec -T hh_node npm test
+          docker-compose exec -T sc npm test
       - name: Test Backend Payments
         run: |
           docker-compose exec -T web npm test

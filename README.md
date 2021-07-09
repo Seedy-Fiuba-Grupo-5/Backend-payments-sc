@@ -4,28 +4,41 @@ Smart contract and basic service to solve payments in the seedifyuba project.
 ## Local environment
 ### Build
 ```
-docker-compose build
+DOCKER_BUILDKIT=1 docker-compose build
 ```
+Note: La variable de entorno DOCKER_BUILDKIT seteada en 1, permite utilizar
+herramientas adicionales del motor Docker. Entre ellas, permite la utilización
+de archivos `<Dockerfile name>.dockerignore` que permiten indicar que archivos
+ignorar para archivos Dockerfile ubicados en un mismo directorio.
 
 ### Start services
 ```
 docker-compose up [-d]
 ```
 This command will start two services:
-- hh_node: It is a service of nodes where the smart contract is deployed.
+- sc: It is a service of hardhat's nodes where the smart contract is deployed.
 - web: It is the backend payments service which needs to interact with the
 smart contract through the hh_node service.
 
-The web service will wait until a file deployments/localhost/Seedifyuba.json exists,
-to start up. This file is created the first time hh_node is executed. When these
-services are stopped but not destroyed, then this file will be kept in containers
-shared volume.
+The `web` service will wait until a file deployments/localhost/Seedifyuba.json exists,
+to start up. This file is created for the first time when `sc` service is executed. When
+these services are stopped but not destroyed, then this file will be kept in containers
+shared volume, so the `web` will not wait for the `sc` to start. This is only useful when
+pushing code to the repository where pipeline build containers from cero. Locally, we will
+have to wait for it looking (with our eyes) at services logs.
 
 ### Test
 #### Test backend payments
 ```
 docker-compose exec web npm test
 ```
+Note 1: Tests are not isolated from each other :(
+This means that all test interact with the same db and with the same hardhat node.
+As a consecuence, tests should recreate db before running.
+Another more important consecuence is that all test should share the same wallet for testing,
+which means that we have a limitated amount of weis (ethers) to distribute among all tests.
+
+Note 2: Executing a transaction costs additional ethers to those sent in the same one.
 
 #### Test Smart-contract
 ```

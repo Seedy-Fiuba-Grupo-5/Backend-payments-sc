@@ -10,4 +10,3 @@ COPY .env /app/
 COPY /deployments /app/deployments
 COPY /backend-payments/ /app/
 
-ENV NODE_ENV=development
