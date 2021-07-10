@@ -15,17 +15,19 @@ ignorar para archivos Dockerfile ubicados en un mismo directorio.
 ```
 docker-compose up [-d]
 ```
-This command will start two services:
-- sc: It is a service of hardhat's nodes where the smart contract is deployed.
-- web: It is the backend payments service which needs to interact with the
-smart contract through the hh_node service.
+This command will start the next services:
+- `sc`: It is a service of hardhat's nodes where the smart contract is deployed.
+- `db`: It is the postgres database for developing.
+- `web`: It is the backend payments service which needs to interact with:
+  - the smart contract through the `sc` service
+  - the database through the `db` service
 
 The `web` service will wait until a file deployments/localhost/Seedifyuba.json exists,
 to start up. This file is created for the first time when `sc` service is executed. When
 these services are stopped but not destroyed, then this file will be kept in containers
-shared volume, so the `web` will not wait for the `sc` to start. This is only useful when
+shared volume, so `web` will not wait again for `sc` to start. This is only useful when
 pushing code to the repository where pipeline build containers from cero. Locally, we will
-have to wait for it looking (with our eyes) at services logs.
+have to wait for it looking (with our eyes) at the services logs.
 
 ### Test
 #### Test backend payments
@@ -44,6 +46,13 @@ Note 2: Executing a transaction costs additional ethers to those sent in the sam
 ```
 docker-compose exec hh_node npm test
 ```
+
+### Postgres DB
+#### Open cli
+```
+docker-compose exec db psql -U postgres
+```
+Nota: `postgres` es el usuario definido el archivo docker-compose.yml al crear el contendor de esta base de datos.
 
 ### Stop
 ```

@@ -9,10 +9,10 @@ networks:
 
 services:
   web:
-    container_name: web_pay_cont
     build:
       context: .
       dockerfile: Dockerfile.dev-web
+    container_name: web_pay_cont
     depends_on:
       - sc
     entrypoint: /app/docker-entrypoint-dev.sh
@@ -22,6 +22,7 @@ services:
       # sc is the name of the sc service and it will be
       # translated to its Ipv4 address by docker-compose
       # engine
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/pay_dev
       - PORT=5002
     ports:
       - 5002:5002
@@ -31,12 +32,11 @@ services:
       - ./backend-payments/test/:/app/test/
     networks:
       - dev-net
-
   sc:
-    container_name: sc_cont
     build:
       context: .
       dockerfile: Dockerfile.dev-sc
+    container_name: sc_cont
     command: npx hardhat node
     # This command will also find and deploy the smart-contract
     # (This is true if the folders are arranged like in this repository;
@@ -46,4 +46,13 @@ services:
       - deployments:/app/deployments
     networks:
       - dev-net
-
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev-db
+    container_name: db_pay_cont
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - dev-net
