@@ -36,4 +36,11 @@ describe('ethers.js: ', ()=>{
     const testWalletPostBalance = await provider.getBalance(testWallet.address);
     expect( testWalletPostBalance ).to.be.eql( testDiffBalance );
 	});
+
+  it('New wallet should have a mnemonic phrase', async () => {
+    const wallet = ethers.Wallet.createRandom();
+
+    expect( wallet.mnemonic.phrase ).to.be.a('string');
+    // console.log(`\tNew wallet mnemonic: ${wallet.mnemonic.phrase}`);
+  });
 });
