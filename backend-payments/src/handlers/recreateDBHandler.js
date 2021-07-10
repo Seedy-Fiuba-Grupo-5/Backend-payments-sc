@@ -1,5 +1,5 @@
-//db = require('../services/db')
-const { db } = require("../db/db")
+const { db } = require("../db/db");
+const {node_env} = require("../config");
 
 function schema() {
   return {
@@ -12,11 +12,12 @@ function schema() {
 
 function handler() {
   return async function (req, reply) {
-    // while (db.accounts.length > 0) {
-    //   db.accounts.pop();
-    // }
-    await db.sync({ force: true });
-    reply.code(204);
+    if(node_env === 'development'){
+      await db.sync({ force: true });
+      reply.code(204);
+      return;
+    }
+    reply.code(405);
   };
 }
 

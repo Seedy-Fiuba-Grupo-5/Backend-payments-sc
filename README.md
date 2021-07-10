@@ -12,10 +12,7 @@ A new MNEMONIC can be created looking at the test `New wallet should have a mnem
 ```
 DOCKER_BUILDKIT=1 docker-compose build
 ```
-Note: La variable de entorno DOCKER_BUILDKIT seteada en 1, permite utilizar
-herramientas adicionales del motor Docker. Entre ellas, permite la utilización
-de archivos `<Dockerfile name>.dockerignore` que permiten indicar que archivos
-ignorar para archivos Dockerfile ubicados en un mismo directorio.
+
 Note: The environment variable DOCKER_BUILDKIT set to 1, allows the utilization of
 additional tools of Docker engine. One of these tools is the
 `<Dockerfile name>.dockerignore` files like, which are used to ignore files and

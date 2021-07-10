@@ -14,6 +14,7 @@ profiles/
 docs/
 # files
 *.env
+.idea
 *.log
 *.tsbuildinfo
 coverage.json
