@@ -2,6 +2,12 @@
 Smart contract and basic service to solve payments in the seedifyuba project.
 
 ## Local environment
+
+### Pre-build
+You should create a `.env` file following instructions describe in the `Original Documentation`.
+If you are a member of SeedyFiuba organization, you could use MNEMONIC and INFURA_API_KEY defined in `Github Repository Secrets`.
+A new MNEMONIC can be created looking at the test `New wallet should have a mnemonic phrase` described in `/backend-payments/test/1_ethersLib/ethersLibTest.js`.
+
 ### Build
 ```
 DOCKER_BUILDKIT=1 docker-compose build
@@ -10,6 +16,10 @@ Note: La variable de entorno DOCKER_BUILDKIT seteada en 1, permite utilizar
 herramientas adicionales del motor Docker. Entre ellas, permite la utilización
 de archivos `<Dockerfile name>.dockerignore` que permiten indicar que archivos
 ignorar para archivos Dockerfile ubicados en un mismo directorio.
+Note: The environment variable DOCKER_BUILDKIT set to 1, allows the utilization of
+additional tools of Docker engine. One of these tools is the
+`<Dockerfile name>.dockerignore` files like, which are used to ignore files and
+folders while building containers whose dockerfile exists in the same directory.
 
 ### Start services
 ```
@@ -48,11 +58,23 @@ docker-compose exec hh_node npm test
 ```
 
 ### Postgres DB
-#### Open cli
+#### Open CLI
 ```
 docker-compose exec db psql -U postgres
 ```
-Nota: `postgres` es el usuario definido el archivo docker-compose.yml al crear el contendor de esta base de datos.
+Note: `postgres` is the user defined in `docker-compose.yml` file while creating the container for this database.
+
+#### CLI commands
+- `\l`: list all databases.
+- `\c <name of db>`: connect to specific database.
+- `\dt`: display all relation inside the current database to which we are connected.
+
+##### Queries
+When connected to a certain DB you should write SQL queries to get data.
+For example:
+```
+SELECT * FROM wallets;
+```
 
 ### Stop
 ```
