@@ -1,5 +1,6 @@
 const ethers = require("ethers");
 const db = require('./db');
+const { WalletDB } = require("../db/models/wallet");
 
 function create_ethers_provider(config) {
   if (config.node_env == 'development') {
@@ -17,28 +18,54 @@ const createWallet = ({ config }) => async () => {
   const provider = create_ethers_provider(config);
   // This may break in some environments, keep an eye on it
   const wallet = ethers.Wallet.createRandom().connect(provider);
-  db.accounts.push({
+  // db.accounts.push({
+  //   address: wallet.address,
+  //   privateKey: wallet.privateKey,
+  // });
+  const walletRepr = await WalletDB.create({
     address: wallet.address,
-    privateKey: wallet.privateKey,
+    privateKey: wallet.privateKey
   });
+  // const result = {
+  //   id: db.accounts.length,
+  //   address: wallet.address,
+  //   privateKey: wallet.privateKey,
+  // };
   const result = {
-    id: db.accounts.length,
-    address: wallet.address,
-    privateKey: wallet.privateKey,
+    id: walletRepr.id,
+    address: walletRepr.address,
+    privateKey: walletRepr.privateKey
   };
   return result;
 };
 
-const getWalletsData = ( {config} ) => () => {
-  return db.accounts;
+const getWalletsData = ( {config} ) => async () => {
+  const allWallets = await WalletDB.findAll();
+  let result = [];
+  allWallets.every(
+    walletRepr => result.push({
+      id: walletRepr.id,
+      address: walletRepr.address,
+      privateKey: walletRepr.privateKey
+    })
+  );
+  return result;
 };
 
-const getWalletData = ( {config} ) => async(index) => {
-  data = db.accounts[index - 1];
+const getWalletData = ( {config} ) => async (id) => {
+  const walletRepr = await WalletDB.findByPk(id);
+
   const provider = create_ethers_provider(config);
-  weis = await provider.getBalance(data['address']);
-  data['balance'] = ethers.utils.formatEther(weis);
-  return data;
+  const weis = await provider.getBalance(walletRepr.address);
+  const balance = ethers.utils.formatEther(weis);
+
+  const result = {
+    id: walletRepr.id,
+    address: walletRepr.address,
+    privateKey: walletRepr.privateKey,
+    balance: balance
+  };
+  return result;
 };
 
 const getWallet = ( {config} ) => index => {

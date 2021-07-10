@@ -21,6 +21,6 @@
   },
   "scripts": {
     "start": "nodemon src/server",
-    "test": "./node_modules/mocha/bin/mocha test/**/*Test.js --reporter spec"
+    "test": "./node_modules/mocha/bin/mocha test/**/*Test.js test/**/**/*Test.js --reporter spec"
   }
 }

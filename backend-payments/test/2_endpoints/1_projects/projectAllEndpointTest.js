@@ -5,7 +5,7 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const expect = require('chai').expect;
 
-const config = require('../../src/config')
+const config = require('../../../src/config')
 
 describe('Endpoint /projects: ', () => {
   let url = `http://0.0.0.0:${config.web_port}`;

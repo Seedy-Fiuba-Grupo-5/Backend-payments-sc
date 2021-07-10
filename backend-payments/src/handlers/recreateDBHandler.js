@@ -1,4 +1,5 @@
-db = require('../services/db')
+//db = require('../services/db')
+const { db } = require("../db/db")
 
 function schema() {
   return {
@@ -11,9 +12,10 @@ function schema() {
 
 function handler() {
   return async function (req, reply) {
-    while (db.accounts.length > 0) {
-      db.accounts.pop();
-    }
+    // while (db.accounts.length > 0) {
+    //   db.accounts.pop();
+    // }
+    await db.sync({ force: true });
     reply.code(204);
   };
 }

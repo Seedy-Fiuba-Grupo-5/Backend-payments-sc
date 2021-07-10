@@ -3,7 +3,7 @@
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 const expect = require('chai').expect;
-const config = require('../../src/config')
+const config = require('../../../src/config')
 
 chai.use(chaiHttp);
 const url = `http://0.0.0.0:${config.web_port}`;
