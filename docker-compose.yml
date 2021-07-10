@@ -15,6 +15,7 @@ services:
     container_name: web_pay_cont
     depends_on:
       - sc
+      - db
     entrypoint: /app/docker-entrypoint-dev.sh
     environment:
       - NODE_ENV=development
@@ -40,8 +41,8 @@ services:
     command: npx hardhat node
     # This command will also find and deploy the smart-contract
     # (This is true if the folders are arranged like in this repository;
-    # for another folder structure it might as well be true, but it was
-    # not tested yet)
+    # for another folder structure it might as well be true, but it has
+    # not been tested yet)
     volumes:
       - deployments:/app/deployments
     networks:
