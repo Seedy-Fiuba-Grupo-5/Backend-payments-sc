@@ -1,5 +1,4 @@
 const ethers = require("ethers");
-const db = require('./db');
 const { WalletDB } = require("../db/models/wallet");
 
 function create_ethers_provider(config) {
@@ -18,19 +17,10 @@ const createWallet = ({ config }) => async () => {
   const provider = create_ethers_provider(config);
   // This may break in some environments, keep an eye on it
   const wallet = ethers.Wallet.createRandom().connect(provider);
-  // db.accounts.push({
-  //   address: wallet.address,
-  //   privateKey: wallet.privateKey,
-  // });
   const walletRepr = await WalletDB.create({
     address: wallet.address,
     privateKey: wallet.privateKey
   });
-  // const result = {
-  //   id: db.accounts.length,
-  //   address: wallet.address,
-  //   privateKey: wallet.privateKey,
-  // };
   const result = {
     id: walletRepr.id,
     address: walletRepr.address,
@@ -39,7 +29,7 @@ const createWallet = ({ config }) => async () => {
   return result;
 };
 
-const getWalletsData = ( {config} ) => async () => {
+const getWalletsData = () => async () => {
   const allWallets = await WalletDB.findAll();
   let result = [];
   allWallets.every(
@@ -68,15 +58,9 @@ const getWalletData = ( {config} ) => async (id) => {
   return result;
 };
 
-const getWallet = ( {config} ) => index => {
-  const provider = create_ethers_provider(config);
-  return new ethers.Wallet(db.accounts[index - 1].privateKey, provider);
-};
-
 module.exports = ({ config }) => ({
   createWallet: createWallet({ config }),
   getDeployerWallet: getDeployerWallet({ config }),
   getWalletsData: getWalletsData({ config }),
-  getWalletData: getWalletData({ config }),
-  getWallet: getWallet({ config }),
+  getWalletData: getWalletData({ config })
 });
