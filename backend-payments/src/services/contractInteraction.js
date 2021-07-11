@@ -45,7 +45,7 @@ const createProject = ({ config }) => async (
       projectRepr.stagesCost = stagesCost;
       projectRepr.projectOwnerAddress = projectOwnerAddress;
       projectRepr.projectReviewerAddress = projectReviewerAddress;
-      projectRepr.balance = '0';
+      projectRepr.balance = '0.0';
       projectRepr.creationStatus = 'done';
       projectRepr.save();
     } else {
