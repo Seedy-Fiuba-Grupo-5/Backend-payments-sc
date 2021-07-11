@@ -29,6 +29,7 @@ function handler({ contractInteraction, walletService }) {
                     req.body.stagesCost,
                     ownerWallet.address,
                     reviewerWallet.address,
+                    req.body["publicId"]
                   );
     reply.code(202).send(body);
   };

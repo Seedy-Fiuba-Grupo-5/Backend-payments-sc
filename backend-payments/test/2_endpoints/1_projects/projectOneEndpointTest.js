@@ -22,28 +22,22 @@ describe('Endpoint /projects/<id>: ',()=>{
     ownerRes = await chai.request(url).post(walletRoute);
     reviewerRes = await chai.request(url).post(walletRoute);
     stagesCost = [2, 1, 3];
+    const publicId = 1;
     payload = {
       "ownerId": ownerRes.body['id'],
       "reviewerId": reviewerRes.body['id'],
-      "stagesCost": stagesCost
+      "stagesCost": stagesCost,
+      "publicId": publicId
     };
 		res = await chai.request(url)
                     .post(parcialRoute)
                     .set('content-type', 'application/json')
                     .send(payload);
-    hash = res.body['hash']
-    route = `${parcialRoute}/${hash}`;
+    route = `${parcialRoute}/${publicId}`;
 
 		res = await chai.request(url).get(route);
-    const status_code = res.status;
-    expect(status_code).to.be.oneOf([200, 204]);
-    if (status_code == 204) {
-      return;
-    }
-    console.log('Its 200 !')
-    expect(res.body).to.have.property('projectId').to.be.a(integer);
-    expect(res.body).to.have.property('projectOwnerAddress').to.be.eql( ownerRes.body.address );
-    expect(res.body).to.have.property('projectReviewerAddress').to.be.eql( reviewerRes.body.address );
-    expect(res.body).to.have.property('stagesCost').to.be.eql( stagesCost );
+    expect(res.status).to.be.eql(200);
+    expect(res.body).to.have.property('publicId').to.be.eql(publicId);
+    expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
 	});
 });

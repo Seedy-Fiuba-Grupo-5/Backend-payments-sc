@@ -17,21 +17,25 @@ describe('Endpoint /projects: ', () => {
   });
 
 	it('POST should create a new project from an owner wallet, ' +
-      'a reviewer wallet and a stages cost list', async () => {
+      'a reviewer wallet, a stages cost list and a public id ' +
+      'of a previously created project', async () => {
     ownerRes = await chai.request(url).post(walletRoute);
     reviewerRes = await chai.request(url).post(walletRoute);
     stagesCost = [2, 1, 3];
+    const publicId = 1;
     payload = {
       "ownerId": ownerRes.body['id'],
       "reviewerId": reviewerRes.body['id'],
-      "stagesCost": stagesCost
+      "stagesCost": stagesCost,
+      "publicId": publicId
     };
 		res = await chai.request(url)
                     .post(route)
                     .set('content-type', 'application/json')
                     .send(payload);
     expect(res).to.have.status(202);
-    expect(res.body).to.have.property('hash').to.be.a('string');
+    expect(res.body).to.have.property('publicId').to.be.eql(publicId);
+    expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
 	});
 });
 
