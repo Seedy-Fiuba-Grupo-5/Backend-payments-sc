@@ -93,6 +93,11 @@ Heroku Postgres (BDD): postgresql-transparent-72738
 
 App's url: https://seedy-fiuba-backend-payments.herokuapp.com/
 
+### Environment variables
+- `DATABASE_URL`: It is set up `automatically` when adding `Heroku Postgres` add-on to this app.
+- `GATEWAY_URL`: It must be set up `manually` with Gateway service's URL which will be the only service
+able to interact with the current service (CORS). (Note: curl, postman, etc request will still work)
+
 ### Deployment
 Connect to Heroku:
 ```
