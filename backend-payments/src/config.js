@@ -9,7 +9,7 @@ const network = temp_network;
 const deployArtifact = require(`../deployments/${network}/Seedifyuba`);
 const deployerMnemonic = process.env.MNEMONIC;
 const infuraApiKey = process.env.INFURA_API_KEY;
-const hh_node_url = process.env.SC_HH_NODE_URL;
+const hh_node_url = process.env.SC_HH_NODE_URL || '';
 const web_port = process.env.PORT;
 const databaseURL = process.env.DATABASE_URL;
 

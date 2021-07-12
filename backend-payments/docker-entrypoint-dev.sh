@@ -5,4 +5,4 @@ do
   sleep 5
 done
 echo "Hardhat node has started"
-npm start
+npm run start-dev
