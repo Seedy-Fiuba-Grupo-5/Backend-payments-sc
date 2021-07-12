@@ -23,10 +23,11 @@ services:
       # sc is the name of the sc service and it will be
       # translated to its Ipv4 address by docker-compose
       # engine
+      - GATEWAY_URL=http://localhost:5002
       - DATABASE_URL=postgres://postgres:postgres@db:5432/pay_dev
-      - PORT=5002
+      - PORT=5003
     ports:
-      - 5002:5002
+      - 5003:5003
     volumes:
       - deployments:/app/deployments
       - ./backend-payments/src/:/app/src/

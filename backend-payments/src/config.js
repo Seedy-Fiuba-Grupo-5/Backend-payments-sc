@@ -12,6 +12,7 @@ const infuraApiKey = process.env.INFURA_API_KEY;
 const hh_node_url = process.env.SC_HH_NODE_URL || '';
 const web_port = process.env.PORT;
 const databaseURL = process.env.DATABASE_URL;
+const gatewayURL = process.env.GATEWAY_URL;
 
 module.exports = {
   contractAddress: deployArtifact.address,
@@ -22,6 +23,7 @@ module.exports = {
   node_env,
   hh_node_url,
   web_port,
-  databaseURL
+  databaseURL,
+  gatewayURL
 };
 

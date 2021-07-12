@@ -10,7 +10,12 @@ function build() {
   // Create app
   const app = fastify({ logger: true })
 
-  // Add routes
+  // Register CORS
+  app.register(require('fastify-cors'), {
+    origin: config.gatewayURL
+  })
+
+  // Register routes (endpoints)
   routes.forEach(route => app.route(route({ config, services })));
 
   return app
