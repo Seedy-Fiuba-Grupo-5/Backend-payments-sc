@@ -83,7 +83,83 @@ docker-compose stop
 docker-compose down -v
 ```
 
-## Notes
+## Heroku Environment
+
+Heroku app's name (App): seedy-fiuba-backend-payments
+Heroku repository's name: https://git.heroku.com/seedy-fiuba-backend-payments.git
+
+Heroku Postgres (BDD): postgresql-transparent-72738
+(La aplicación desplegada en Heroku utiliza una base de datos Postgres propia de la plataforma, agregada como add-on de la aplicacion)
+
+App's url: https://seedy-fiuba-backend-payments.herokuapp.com/
+
+### Deployment
+Connect to Heroku:
+```
+heroku login
+```
+
+Add Heroku's remote repository:
+```
+heroku git:remote -a seedy-fiuba-backend-projects
+```
+Note: Heoku app's creator should lend collaborator access to it before pushing any image.
+
+Connect to Heroku's container:
+```
+heroku container:login
+```
+
+Build app's image and push to Heroku's container:
+```
+heroku container:push web --app seedy-fiuba-backend-payments
+```
+
+Release recently pushed app's image to Heroku execution environment:
+```
+heroku container:release web --app seedy-fiuba-backend-payments
+```
+
+## Up / Down service
+Up service:
+```
+heroku ps:scale web=1 --app seedy-fiuba-backend-payments
+```
+
+Down service:
+```
+heroku ps:scale web=0 --app seedy-fiuba-backend-payments
+```
+
+## Postgres psql
+```
+heroku pg:psql --app seedy-fiuba-backend-payments
+```
+
+## Migrations (both environments)
+"Migrations" are triggered when app's starts:
+`backend-payments/src/server.js`
+```
+(...)
+await db.sync({alter: true});
+(...)
+```
+This line of code will tell postgres database to create unexistent tables and
+modify existent tables so they match with current database relations defined in
+`backend-payments/src/db/models/`
+
+This is not the correct way to do migrations. Migrations should be triggered manually
+some administrator, and it should exists a folder with every migration made to be able
+rollback if anything breaks.
+
+We did not follow the "nice" way of migrations due to lack of time.
+
+
+## Smart-contract
+
+Follow steps described in the Original Documentation but execute commands from `sc` docker container.
+
+### Notes
 Different instances of the container may deploy new contracts with the same INFURA KEY and MEMONIC in Kovan net.
 
 # Seedifyuba - Original documentation
