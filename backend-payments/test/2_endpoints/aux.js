@@ -1,11 +1,11 @@
 const { apiKey, web_port } = require('../../src/config');
 
-function getServerUrl(){
+function serverURL(){
   url = `http://0.0.0.0:${web_port}`;
   return url;
 }
 
-function getHeaders(payload=false) {
+function requestHeaders(payload=false) {
   headers = {
     "Authorization": `Bearer ${apiKey}`
   };
@@ -16,9 +16,9 @@ function getHeaders(payload=false) {
 }
 
 async function postNewWallet(chai, publicId) {
-  const url = getServerUrl();
+  const url = serverURL();
   const route = "/wallets";
-  const headers = getHeaders(true);
+  const headers = requestHeaders(true);
   const payload = { "publicId": publicId };
   res = await chai.request(url)
                   .post(route)
@@ -27,8 +27,18 @@ async function postNewWallet(chai, publicId) {
   return res;
 }
 
+async function deleteDB(chai) {
+  url = serverURL();
+  route = '/db';
+  headers = requestHeaders();
+  await chai.request(url)
+            .delete(route)
+            .set(headers);
+}
+
 module.exports = {
-  getServerUrl,
-  getHeaders,
+  serverURL,
+  requestHeaders,
+  deleteDB,
   postNewWallet
 }

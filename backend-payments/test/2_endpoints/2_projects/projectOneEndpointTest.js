@@ -7,17 +7,15 @@ chai.use(chaiHttp);
 const expect = require('chai').expect;
 
 // Auxiliary
-const config = require('../../../src/config')
-const { getHeaders, postNewWallet } = require('../aux');
+const { serverURL, requestHeaders, deleteDB, postNewWallet } = require('../aux');
 
 describe('Endpoint /projects/<id>: ',()=>{
-  let url = `http://0.0.0.0:${config.web_port}`;
+  let url = serverURL();
   let parcialRoute = '/projects';
-  let walletRoute = '/wallets';
 
   beforeEach(async function() {
-    headers = getHeaders();
-    await chai.request(url).delete('/db').set(headers);
+    headers = requestHeaders();
+    await deleteDB(chai);
   });
 
 	it('GET should return project data if transaction was mined', async function () {

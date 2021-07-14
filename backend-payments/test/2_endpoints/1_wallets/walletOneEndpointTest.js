@@ -3,34 +3,34 @@
 // Test suit
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-chai.use(chaiHttp);
 const expect = require('chai').expect;
 
 // Auxiliary
 const ethers = require("ethers");
 const config = require('../../../src/config')
-const { getHeaders } = require('../aux');
+const { serverURL, requestHeaders, deleteDB } = require('../aux');
+
+chai.use(chaiHttp);
 
 describe('Endpoint /wallets/<id>: ',()=>{
-  let url = `http://0.0.0.0:${config.web_port}`;
+  let url = serverURL();
   let parcialRoute = '/wallets';
   let provider = new ethers.providers.JsonRpcProvider(config.hh_node_url);
   let testWallet = ethers.Wallet.fromMnemonic(config.deployerMnemonic)
                                 .connect(provider);
 
   beforeEach(async function() {
-    headers = getHeaders();
-    await chai.request(url).delete('/db').set(headers);
+    headers = requestHeaders();
+    headersPayload = requestHeaders(true);
+    await deleteDB(chai);
   });
 
 	it('GET should return a wallet without ethers when it was just created', async () => {
     const publicId = 1;
     const payload = { "publicId": publicId };
-    headers_post = {...headers};
-    headers_post['content-type'] = 'application/json';
     res = await chai.request(url)
                     .post(parcialRoute)
-                    .set(headers_post)
+                    .set(headersPayload)
                     .send(payload);
     route = `${parcialRoute}/${publicId}`;
 
@@ -43,10 +43,9 @@ describe('Endpoint /wallets/<id>: ',()=>{
       async () => {
     const publicId = 1;
     const payload = { "publicId": publicId };
-    headers['content-type'] = 'application/json';
     res = await chai.request(url)
                     .post(parcialRoute)
-                    .set(headers)
+                    .set(headersPayload)
                     .send(payload);
     const route = `${parcialRoute}/${publicId}`;
     const address = res.body.address;

@@ -5,18 +5,16 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const expect = require('chai').expect;
 
-const config = require('../../../src/config');
-const { getHeaders, postNewWallet } = require('../aux');
+const { serverURL, requestHeaders, deleteDB, postNewWallet } = require('../aux');
 
 describe('Endpoint /projects: ', () => {
-  let url = `http://0.0.0.0:${config.web_port}`;
+  let url = serverURL();
   let route = '/projects';
-  let walletRoute = '/wallets';
 
   beforeEach(async function() {
-    headers = getHeaders();
-    headers_payload = getHeaders(true);
-    await chai.request(url).delete('/db').set(headers);
+    headers = requestHeaders();
+    headers_payload = requestHeaders(true);
+    await deleteDB(chai);
   });
 
 	it('POST should create a new project from an owner wallet, ' +

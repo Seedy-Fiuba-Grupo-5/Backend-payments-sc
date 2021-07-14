@@ -4,18 +4,19 @@ let chai = require('chai');
 let chaiHttp = require('chai-http');
 const expect = require('chai').expect;
 const config = require('../../../src/config')
-const { getHeaders } = require('../aux');
+const { serverURL, requestHeaders, deleteDB } = require('../aux');
 
 chai.use(chaiHttp);
-const url = `http://0.0.0.0:${config.web_port}`;
 
 describe('Endpoint /wallets: ', () => {
+  let url = serverURL();
+  let route = '/wallets';
+
   beforeEach(async function() {
-    headers = getHeaders();
-    await chai.request(url).delete('/db').set(headers);
+    headers = requestHeaders();
+    await deleteDB(chai);
   });
 
-  let route = '/wallets';
 
 	it('GET should return an empty list when there are not wallets created', async () => {
     res = await chai.request(url).get(route).set(headers);
