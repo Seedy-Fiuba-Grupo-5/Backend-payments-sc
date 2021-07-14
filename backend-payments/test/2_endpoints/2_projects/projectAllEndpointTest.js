@@ -6,7 +6,7 @@ chai.use(chaiHttp);
 const expect = require('chai').expect;
 
 const config = require('../../../src/config');
-const { getHeaders } = require('../aux');
+const { getHeaders, postNewWallet } = require('../aux');
 
 describe('Endpoint /projects: ', () => {
   let url = `http://0.0.0.0:${config.web_port}`;
@@ -15,26 +15,29 @@ describe('Endpoint /projects: ', () => {
 
   beforeEach(async function() {
     headers = getHeaders();
+    headers_payload = getHeaders(true);
     await chai.request(url).delete('/db').set(headers);
   });
 
 	it('POST should create a new project from an owner wallet, ' +
       'a reviewer wallet, a stages cost list and a public id ' +
       'of a previously created project', async () => {
-    ownerRes = await chai.request(url).post(walletRoute).set(headers);
-    reviewerRes = await chai.request(url).post(walletRoute).set(headers);
-    stagesCost = [2, 1, 3];
+    publicUserId = 0;
+    const ownerRes = await postNewWallet(chai, publicUserId++);
+    const reviewerRes = await postNewWallet(chai, publicUserId++);
+    const ownerId = ownerRes.body['publicId'];
+    const reviewerId = reviewerRes.body['publicId'];
+    const stagesCost = [2, 1, 3];
     const publicId = 1;
-    payload = {
-      "ownerId": ownerRes.body['id'],
-      "reviewerId": reviewerRes.body['id'],
+    const payload = {
+      "ownerId": ownerId,
+      "reviewerId": reviewerId,
       "stagesCost": stagesCost,
       "publicId": publicId
     };
-    headers["content-type"] = 'application/json';
 		res = await chai.request(url)
                     .post(route)
-                    .set(headers)
+                    .set(headers_payload)
                     .send(payload);
     expect(res).to.have.status(202);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);

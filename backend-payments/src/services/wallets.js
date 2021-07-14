@@ -13,16 +13,17 @@ const getDeployerWallet = ({ config }) => () => {
   return ethers.Wallet.fromMnemonic(config.deployerMnemonic).connect(provider);
 };
 
-const createWallet = ({ config }) => async () => {
+const createWallet = ({ config }) => async (publicId) => {
   const provider = create_ethers_provider(config);
   // This may break in some environments, keep an eye on it
   const wallet = ethers.Wallet.createRandom().connect(provider);
   const walletRepr = await WalletDB.create({
+    publicId: publicId,
     address: wallet.address,
     privateKey: wallet.privateKey
   });
   const result = {
-    id: walletRepr.id,
+    publicId: walletRepr.publicId,
     address: walletRepr.address,
     privateKey: walletRepr.privateKey
   };
@@ -34,7 +35,7 @@ const getWalletsData = () => async () => {
   let result = [];
   allWallets.every(
     walletRepr => result.push({
-      id: walletRepr.id,
+      publicId: walletRepr.publicId,
       address: walletRepr.address,
       privateKey: walletRepr.privateKey
     })
@@ -50,7 +51,7 @@ const getWalletData = ( {config} ) => async (id) => {
   const balance = ethers.utils.formatEther(weis);
 
   const result = {
-    id: walletRepr.id,
+    publicId: walletRepr.publidId,
     address: walletRepr.address,
     privateKey: walletRepr.privateKey,
     balance: balance

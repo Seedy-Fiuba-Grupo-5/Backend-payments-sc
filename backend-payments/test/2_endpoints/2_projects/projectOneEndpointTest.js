@@ -8,7 +8,7 @@ const expect = require('chai').expect;
 
 // Auxiliary
 const config = require('../../../src/config')
-const { getHeaders } = require('../aux');
+const { getHeaders, postNewWallet } = require('../aux');
 
 describe('Endpoint /projects/<id>: ',()=>{
   let url = `http://0.0.0.0:${config.web_port}`;
@@ -21,10 +21,11 @@ describe('Endpoint /projects/<id>: ',()=>{
   });
 
 	it('GET should return project data if transaction was mined', async function () {
-    const ownerRes = await chai.request(url).post(walletRoute).set(headers);
-    const reviewerRes = await chai.request(url).post(walletRoute).set(headers);
-    const ownerId = ownerRes.body['id'];
-    const reviewerId = reviewerRes.body['id'];
+    publicUserId = 0;
+    const ownerRes = await postNewWallet(chai, publicUserId++);
+    const reviewerRes = await postNewWallet(chai, publicUserId++);
+    const ownerId = ownerRes.body['publicId'];
+    const reviewerId = reviewerRes.body['publicId'];
     const stagesCost = [2, 1, 3];
     const publicId = 1;
     const projectOwnerAddress = ownerRes.body['address'];
