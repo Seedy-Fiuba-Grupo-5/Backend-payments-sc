@@ -8,6 +8,7 @@ const expect = require('chai').expect;
 
 // Auxiliary
 const config = require('../../../src/config')
+const { getHeaders } = require('../aux');
 
 describe('Endpoint /projects/<id>: ',()=>{
   let url = `http://0.0.0.0:${config.web_port}`;
@@ -15,12 +16,13 @@ describe('Endpoint /projects/<id>: ',()=>{
   let walletRoute = '/wallets';
 
   beforeEach(async function() {
-    await chai.request(url).delete('/db');
+    headers = getHeaders();
+    await chai.request(url).delete('/db').set(headers);
   });
 
 	it('GET should return project data if transaction was mined', async function () {
-    const ownerRes = await chai.request(url).post(walletRoute);
-    const reviewerRes = await chai.request(url).post(walletRoute);
+    const ownerRes = await chai.request(url).post(walletRoute).set(headers);
+    const reviewerRes = await chai.request(url).post(walletRoute).set(headers);
     const ownerId = ownerRes.body['id'];
     const reviewerId = reviewerRes.body['id'];
     const stagesCost = [2, 1, 3];
@@ -33,13 +35,14 @@ describe('Endpoint /projects/<id>: ',()=>{
       "stagesCost": stagesCost,
       "publicId": publicId
     };
+    headers["content-type"] = 'application/json';
     res = await chai.request(url)
       .post(parcialRoute)
-      .set('content-type', 'application/json')
+      .set(headers)
       .send(payload);
     route = `${parcialRoute}/${publicId}`;
 
-    res = await chai.request(url).get(route);
+    res = await chai.request(url).get(route).set(headers);
     expect(res.status).to.be.eql(200);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
@@ -47,7 +50,7 @@ describe('Endpoint /projects/<id>: ',()=>{
     let creationStatus = res.body['creationStatus'];
     while (creationStatus === 'mining') {
       this.timeout(1000);
-      res = await chai.request(url).get(route);
+      res = await chai.request(url).get(route).set(headers);
       creationStatus = res.body['creationStatus'];
     }
 

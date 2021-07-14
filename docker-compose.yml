@@ -25,6 +25,7 @@ services:
       # engine
       - GATEWAY_URL=http://localhost:5002
       - DATABASE_URL=postgres://postgres:postgres@db:5432/pay_dev
+      - API_KEY=27bf6eb7-5b73-46e0-8319-d916ce3d4b52
       - PORT=5003
     ports:
       - 5003:5003

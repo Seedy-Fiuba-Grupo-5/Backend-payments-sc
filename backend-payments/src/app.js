@@ -4,20 +4,37 @@ const config = require("./config");
 const services = require("./services/services")({ config });
 const routes = require("./routes");
 const fastify = require("fastify");
+const bearerAuthFastifyPlugin = require('fastify-bearer-auth');
+const corsFastifyPlugin = require('fastify-cors');
 
-// Declares routes
-function build() {
-  // Create app
-  const app = fastify({ logger: true })
+function registerApiKey(app) {
+  app.register(bearerAuthFastifyPlugin, {
+    keys: [config.apiKey],
+    contentType: undefined,
+    bearerType: 'Bearer',
+    errorResponse: (err) => {
+      return {error: err.message}
+    },
+    auth: undefined,
+    addHook: true
+  });
+}
 
-  // Register CORS
-  app.register(require('fastify-cors'), {
+function registerCors(app) {
+  app.register(corsFastifyPlugin, {
     origin: config.gatewayURL
-  })
+  });
+}
 
-  // Register routes (endpoints)
+function registerRoutes(app) {
   routes.forEach(route => app.route(route({ config, services })));
+}
 
+function build() {
+  const app = fastify({ logger: true })
+  registerApiKey(app);
+  registerCors(app)
+  registerRoutes(app)
   return app
 }
 

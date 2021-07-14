@@ -13,6 +13,7 @@ const hh_node_url = process.env.SC_HH_NODE_URL || '';
 const web_port = process.env.PORT;
 const databaseURL = process.env.DATABASE_URL;
 const gatewayURL = process.env.GATEWAY_URL;
+const apiKey = process.env.API_KEY;
 
 module.exports = {
   contractAddress: deployArtifact.address,
@@ -24,6 +25,7 @@ module.exports = {
   hh_node_url,
   web_port,
   databaseURL,
-  gatewayURL
+  gatewayURL,
+  apiKey
 };
 
