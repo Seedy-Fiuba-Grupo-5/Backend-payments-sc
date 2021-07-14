@@ -1,6 +1,6 @@
 const BigNumber = require("bignumber.js");
 const ethers = require("ethers");
-const {ProjectDB} = require("../db/models/project")
+const { ProjectDB } = require("../db/models/project")
 
 const getContract = (config, wallet) => {
   return new ethers.Contract(config.contractAddress, config.contractAbi, wallet);
@@ -11,30 +11,21 @@ const toWei = number => {
   return BigNumber(number).times(WEIS_IN_ETHER).toFixed();
 };
 
-const projects = {};
-
 const createProject = ({ config }) => async (
   deployerWallet,
   stagesCost,
   projectOwnerAddress,
   projectReviewerAddress,
-  publicId,
+  publicId
 ) => {
   const seedyFiubaContract = await getContract(config, deployerWallet);
   const tx = await seedyFiubaContract.createProject(
                     stagesCost.map(toWei),
                     projectOwnerAddress,
                     projectReviewerAddress);
-  const projectRepr = await ProjectDB.create({
-    "publicId": publicId,
-    "creationStatus": "mining",
-    "balance": null,
-    "projectReviewerAddress": null,
-    "projectOwnerAddress": null,
-    "stagesCost": null,
-    "privateId": null
-  })
-
+  projectRepr = await ProjectDB.findByPk(publicId);
+  projectRepr.creationStatus = 'mining';
+  await projectRepr.save();
   tx.wait(1).then(receipt => {
     console.log("Transaction mined");
     const firstEvent = receipt && receipt.events && receipt.events[0];
@@ -42,9 +33,6 @@ const createProject = ({ config }) => async (
     if (firstEvent && firstEvent.event === "ProjectCreated") {
       const projectId = firstEvent.args.projectId.toNumber();
       projectRepr.privateId = projectId;
-      projectRepr.stagesCost = stagesCost;
-      projectRepr.projectOwnerAddress = projectOwnerAddress;
-      projectRepr.projectReviewerAddress = projectReviewerAddress;
       projectRepr.balance = '0.0';
       projectRepr.creationStatus = 'done';
       projectRepr.save();
@@ -55,11 +43,6 @@ const createProject = ({ config }) => async (
   return projectRepr;
 };
 
-const getProject = () => async id => {
-  return await ProjectDB.findByPk(id);
-};
-
 module.exports = dependencies => ({
-  createProject: createProject(dependencies),
-  getProject: getProject(dependencies),
+  createProject: createProject(dependencies)
 });

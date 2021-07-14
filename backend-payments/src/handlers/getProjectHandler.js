@@ -12,9 +12,9 @@ function schema() {
   };
 }
 
-function handler({ contractInteraction }) {
+function handler({ projectService }) {
   return async function (req, reply) {
-    const body = await contractInteraction.getProject(req.params.id);
+    const body = await projectService.getProject(req.params.id);
     reply.code(200).send(body);
   };
 }

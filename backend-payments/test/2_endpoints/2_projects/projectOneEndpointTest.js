@@ -16,6 +16,7 @@ describe('Endpoint /projects/<id>: ',()=>{
 
   beforeEach(async function() {
     headers = requestHeaders();
+    headersPayload = requestHeaders(true);
     await deleteDB(chai);
   });
 
@@ -23,23 +24,20 @@ describe('Endpoint /projects/<id>: ',()=>{
     publicUserId = 0;
     const ownerRes = await postNewWallet(chai, publicUserId++);
     const reviewerRes = await postNewWallet(chai, publicUserId++);
-    const ownerId = ownerRes.body['publicId'];
-    const reviewerId = reviewerRes.body['publicId'];
+    const ownerPublicId = ownerRes.body['publicId'];
+    const reviewerPublicId = reviewerRes.body['publicId'];
     const stagesCost = [2, 1, 3];
     const publicId = 1;
-    const projectOwnerAddress = ownerRes.body['address'];
-    const projectReviewerAddress = reviewerRes.body['address'];
     payload = {
-      "ownerId": ownerId,
-      "reviewerId": reviewerId,
+      "ownerPublicId": ownerPublicId,
+      "reviewerPublicId": reviewerPublicId,
       "stagesCost": stagesCost,
       "publicId": publicId
     };
-    headers["content-type"] = 'application/json';
     res = await chai.request(url)
-      .post(parcialRoute)
-      .set(headers)
-      .send(payload);
+                    .post(parcialRoute)
+                    .set(headersPayload)
+                    .send(payload);
     route = `${parcialRoute}/${publicId}`;
 
     res = await chai.request(url).get(route).set(headers);
@@ -56,10 +54,11 @@ describe('Endpoint /projects/<id>: ',()=>{
 
     expect(res.status).to.be.eql(200);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
+    expect(res.body).to.have.property('privateId').to.be.a('number');
     expect(res.body).to.have.property('creationStatus').to.be.eql('done');
-    expect(res.body).to.have.property('projectOwnerAddress').to.be.eql(projectOwnerAddress);
-    expect(res.body).to.have.property('projectReviewerAddress').to.be.eql(projectReviewerAddress);
-    expect(res.body).to.have.property('balance').to.be.eql('0.0');
     expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost);
+    expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
+    expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
+    expect(res.body).to.have.property('balance').to.be.eql('0.0');
   });
 });

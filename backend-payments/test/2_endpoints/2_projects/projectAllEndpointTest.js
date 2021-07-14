@@ -26,13 +26,13 @@ describe('Endpoint /projects: ', () => {
     publicUserId = 0;
     const ownerRes = await postNewWallet(chai, publicUserId++);
     const reviewerRes = await postNewWallet(chai, publicUserId++);
-    const ownerId = ownerRes.body['publicId'];
-    const reviewerId = reviewerRes.body['publicId'];
+    const ownerPublicId = ownerRes.body['publicId'];
+    const reviewerPublicId = reviewerRes.body['publicId'];
     const stagesCost = [2, 1, 3];
     const publicId = 1;
     const payload = {
-      "ownerId": ownerId,
-      "reviewerId": reviewerId,
+      "ownerPublicId": ownerPublicId,
+      "reviewerPublicId": reviewerPublicId,
       "stagesCost": stagesCost,
       "publicId": publicId
     };
@@ -41,6 +41,9 @@ describe('Endpoint /projects: ', () => {
                     .set(headers_payload)
                     .send(payload);
     expect(res).to.have.status(202);
+    expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
+    expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
+    expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
 	});
