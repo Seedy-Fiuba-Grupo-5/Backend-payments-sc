@@ -43,5 +43,3 @@ describe('Endpoint /wallets: ', () => {
     expect(res.body[0]).to.have.property('privateKey').to.be.a('string');
 	});
 });
-
-
