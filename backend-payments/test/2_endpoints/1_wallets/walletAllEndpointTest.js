@@ -1,9 +1,11 @@
 'use stricts'
 
+// Test suit
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 const expect = require('chai').expect;
-const config = require('../../../src/config')
+
+// Auxiliary
 const { serverURL, requestHeaders, deleteDB } = require('../aux');
 
 chai.use(chaiHttp);
@@ -16,7 +18,6 @@ describe('Endpoint /wallets: ', () => {
     headers = requestHeaders();
     await deleteDB(chai);
   });
-
 
 	it('GET should return an empty list when there are not wallets created', async () => {
     res = await chai.request(url).get(route).set(headers);

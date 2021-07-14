@@ -3,11 +3,12 @@
 // Test suit
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-chai.use(chaiHttp);
 const expect = require('chai').expect;
 
 // Auxiliary
 const { serverURL, requestHeaders, deleteDB, postNewWallet } = require('../aux');
+
+chai.use(chaiHttp);
 
 describe('Endpoint /projects/<id>: ',()=>{
   let url = serverURL();
