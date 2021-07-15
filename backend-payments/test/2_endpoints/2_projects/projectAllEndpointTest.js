@@ -16,7 +16,7 @@ describe('Endpoint /projects: ', () => {
 
   beforeEach(async function() {
     headers = requestHeaders();
-    headers_payload = requestHeaders(true);
+    headersPayload = requestHeaders(true);
     await deleteDB(chai);
   });
 
@@ -38,7 +38,7 @@ describe('Endpoint /projects: ', () => {
     };
 		res = await chai.request(url)
                     .post(route)
-                    .set(headers_payload)
+                    .set(headersPayload)
                     .send(payload);
     expect(res).to.have.status(202);
     expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
@@ -48,33 +48,33 @@ describe('Endpoint /projects: ', () => {
     expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
 	});
 
-  // TODO: Continuar
-  // it( 'POST should leave a new project in a "lacks_reviewer" status when ' +
-  //     'the revierwer wallet public id is not specified', async () => {
-  //   const publicUserId = 0;
-  //   const ownerRes = await postNewWallet(chai, publicUserId);
-  //   const publicId = 1;
-  //   const ownerId = ownerRes.body['publicId'];
-  //   const revierwerId = null;
-  //   const stagesCost = [2, 1, 3];
-  //   const payload = {
-  //     "publicId": publicId,
-  //     "ownerId": ownerId,
-  //     "reviewerId": revierwerId,
-  //     "stagesCost": stagesCost,
-  //   };
+  it( 'POST should leave a new project in a "building" status when ' +
+      'the reviewer wallet public id is not specified', async () => {
+    const publicUserId = 0;
+    const ownerRes = await postNewWallet(chai, publicUserId);
+    const publicId = 1;
+    const ownerPublicId = ownerRes.body['publicId'];
+    const reviewerPublicId = null;
+    const stagesCost = [2, 1, 3];
+    const payload = {
+      "publicId": publicId,
+      "ownerPublicId": ownerPublicId,
+      "reviewerPublicId": reviewerPublicId,
+      "stagesCost": stagesCost,
+    };
 
-  //   res = await chai.request(url)
-  //                   .post(route)
-  //                   .set(headers_payload)
-  //                   .send(payload);
+    res = await chai.request(url)
+                    .post(route)
+                    .set(headersPayload)
+                    .send(payload);
 
-  //   expect(res).to.have.status(201);
-  //   expect(res.body).to.have.property('publicId').to.be.eql(publicId);
-  //   expect(res.body).to.have.property('ownerAddress').to.be.eql(ownerAddress);
-  //   expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost);
-  //   expect(res.body).to.have.property('creationStatus').to.be.eql('lacks_reviewer');
-  // });
+    expect(res).to.have.status(202);
+    expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
+    expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
+    expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost);
+    expect(res.body).to.have.property('publicId').to.be.eql(publicId);
+    expect(res.body).to.have.property('creationStatus').to.be.eql('building');
+  });
 });
 
 
