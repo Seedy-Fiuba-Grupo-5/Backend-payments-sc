@@ -1,9 +1,10 @@
+const recreateDB = require("./handlers/recreateDBHandler");
 const getWalletData = require("./handlers/getWalletHandler");
 const getWalletsData = require("./handlers/getWalletsHandler");
 const createWallet = require("./handlers/createWalletHandler");
 const createProject = require("./handlers/createProjectHandler");
 const getProject = require("./handlers/getProjectHandler");
-const recreateDB = require("./handlers/recreateDBHandler");
+const patchProject = require("./handlers/patchProjectHandler");
 
 function getWalletDataRoute({ services, config }) {
   return {
@@ -50,6 +51,15 @@ function getProjectRoute({ services, config }) {
   };
 }
 
+function patchProjectRoute({ services, config }) {
+  return {
+    method: "PATCH",
+    url: "/projects/:publicId",
+    schema: patchProject.schema(config),
+    handler: patchProject.handler({ config, ...services }),
+  };
+}
+
 function recreateDBRoute({ services, config }) {
   return {
     method: "DELETE",
@@ -59,5 +69,12 @@ function recreateDBRoute({ services, config }) {
   };
 }
 
-module.exports = [getWalletDataRoute, getWalletsDataRoute, createWalletRoute,
-                  createProjectRoute, getProjectRoute, recreateDBRoute];
+module.exports = [
+  recreateDBRoute,
+  getWalletDataRoute,
+  getWalletsDataRoute,
+  createWalletRoute,
+  createProjectRoute,
+  getProjectRoute,
+  patchProjectRoute
+];

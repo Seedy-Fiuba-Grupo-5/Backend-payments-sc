@@ -61,4 +61,22 @@ describe('Endpoint /projects/<id>: ',()=>{
     expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
     expect(res.body).to.have.property('balance').to.be.eql('0.0');
   });
+
+  it('PATCH should return 404 if the project does not exists', async function () {
+    const publicId = 999999;
+    const route = `${parcialRoute}/${publicId}`;
+    const payload = {
+      'reviewerId': 1
+    }
+
+    await chai.request(url)
+      .patch(route)
+      .set(headersPayload)
+      .send(payload)
+      .catch( function(err) {
+        expect(err.status).to.be.eql(404);
+        expect(err.response.body).to.have.property('status')
+          .to.be.eql('The project requested could not be found');
+      });
+  });
 });
