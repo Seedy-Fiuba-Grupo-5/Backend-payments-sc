@@ -1,3 +1,6 @@
+const { log } = require('../log');
+const { mineAProject } = require('./helpers/helpers');
+
 function schema() {
   return {
     params: {
@@ -22,24 +25,17 @@ function schema() {
 
 function handler({ contractInteraction, walletService, projectService }) {
   return async function (req, reply) {
+    log(`POST /projects`);
+    const publicId = req.body.publicId;
     const stagesCost = req.body.stagesCost;
     const ownerPublicId = req.body.ownerPublicId;
     const reviewerPublicId = req.body.reviewerPublicId;
-    const publicId = req.body.publicId;
-
+    
+    log(`Building project ${publicId}`);
     projectRepr = await projectService.createProject(stagesCost, ownerPublicId,
                                                           reviewerPublicId, publicId);
 
-    creationStatus = projectRepr.dataValues.creationStatus;
-    if ((creationStatus === 'building') && (reviewerPublicId != null)) {
-      const ownerWallet = await walletService.getWalletData(ownerPublicId);
-      const reviewerWallet = await walletService.getWalletData(reviewerPublicId);
-      const deployerWallet = walletService.getDeployerWallet();
-      projectRepr = await contractInteraction.createProject(deployerWallet, stagesCost,
-                                                            ownerWallet.address,
-                                                            reviewerWallet.address,
-                                                            publicId);
-    }
+    projectRepr = await mineAProject(projectService, walletService, contractInteraction, publicId);
     body = projectRepr;
     reply.code(202).send(body);
   };

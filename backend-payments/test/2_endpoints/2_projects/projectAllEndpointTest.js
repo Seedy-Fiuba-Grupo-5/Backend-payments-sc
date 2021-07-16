@@ -76,5 +76,3 @@ describe('Endpoint /projects: ', () => {
     expect(res.body).to.have.property('creationStatus').to.be.eql('building');
   });
 });
-
-

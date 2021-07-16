@@ -24,7 +24,15 @@ const getProject = () => async id => {
   return await ProjectDB.findByPk(id);
 };
 
+const addReviewer = () => async publicId => {
+  var projectRepr = await ProjectDB.findByPk(publicId);
+  projectRepr.reviewerPublicId = publicId;
+  await projectRepr.save();
+  return projectRepr;
+}
+
 module.exports = dependencies => ({
   createProject: createProject(dependencies),
   getProject: getProject(dependencies),
+  addReviewer: addReviewer(dependencies)
 });
