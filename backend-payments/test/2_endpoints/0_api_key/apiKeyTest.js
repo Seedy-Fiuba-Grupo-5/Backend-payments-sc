@@ -15,7 +15,6 @@ describe('Endpoint /: ', () => {
   let route = '/';
 
 	it('GET should return 401 when the api key header was not set up', async function() {
-    errGet = null;
     await chai.request(url)
       .get(route)
       .catch(function(err) {
