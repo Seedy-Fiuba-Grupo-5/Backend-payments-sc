@@ -1,3 +1,5 @@
+const getAllWalletsHelper = require('../helpers/getAllWalletsHelper');
+const getAllWalletsService = require('../processors/getAllWalletsService');
 const { log } = require('../log');
 
 function schema() {
@@ -6,11 +8,13 @@ function schema() {
   };
 }
 
-function handler({ walletService }) {
+function handler() {
   return async function (req, reply) {
     log(`GET /wallets`);
-    const body = await walletService.getWalletsData();
-    return reply.code(200).send(body);
+    const data = getAllWalletsHelper.parse(req);
+    const result = await getAllWalletsService.process(data);
+    const [statusCode, body] = getAllWalletsHelper.format(result);
+    return reply.code(statusCode).send(body);
   };
 }
 
