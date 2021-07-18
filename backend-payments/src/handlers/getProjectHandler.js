@@ -1,5 +1,5 @@
 const getProjectHelper = require('../helpers/getProjectHelper');
-const getProjectService = require('../processors/getProjectService');
+const getProjectService = require('../services/getProjectService');
 const { log } = require('../log');
 
 function schema() {

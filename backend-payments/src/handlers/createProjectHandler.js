@@ -1,5 +1,5 @@
 const { log } = require('../log');
-const createProjectService = require('../processors/createProjectService');
+const createProjectService = require('../services/createProjectService');
 const createProjectHelper = require('../helpers/createProjectHelper');
 
 function schema() {

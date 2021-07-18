@@ -6,66 +6,66 @@ const createProject = require("./handlers/createProjectHandler");
 const getProject = require("./handlers/getProjectHandler");
 const patchProject = require("./handlers/patchProjectHandler");
 
-function getWalletDataRoute({ services, config }) {
+function getWalletDataRoute() {
   return {
     method: "GET",
     url: "/wallets/:publicId",
-    schema: getWalletData.schema(config),
-    handler: getWalletData.handler({ config, ...services }),
+    schema: getWalletData.schema(),
+    handler: getWalletData.handler(),
   };
 }
 
-function getWalletsDataRoute({ services, config }) {
+function getWalletsDataRoute() {
   return {
     method: "GET",
     url: "/wallets",
-    schema: getWalletsData.schema(config),
-    handler: getWalletsData.handler({ config, ...services }),
+    schema: getWalletsData.schema(),
+    handler: getWalletsData.handler(),
   };
 }
 
-function createWalletRoute({ services, config }) {
+function createWalletRoute() {
   return {
     method: "POST",
     url: "/wallets",
-    schema: createWallet.schema(config),
-    handler: createWallet.handler({ config, ...services }),
+    schema: createWallet.schema(),
+    handler: createWallet.handler(),
   };
 }
 
-function createProjectRoute({ services, config }) {
+function createProjectRoute() {
   return {
     method: "POST",
     url: "/projects",
-    schema: createProject.schema(config),
-    handler: createProject.handler({ config, ...services }),
+    schema: createProject.schema(),
+    handler: createProject.handler(),
   };
 }
 
-function getProjectRoute({ services, config }) {
+function getProjectRoute() {
   return {
     method: "GET",
     url: "/projects/:publicId",
-    schema: getProject.schema(config),
-    handler: getProject.handler({ config, ...services }),
+    schema: getProject.schema(),
+    handler: getProject.handler(),
   };
 }
 
-function patchProjectRoute({ services, config }) {
+function patchProjectRoute() {
   return {
     method: "PATCH",
     url: "/projects/:publicId",
-    schema: patchProject.schema(config),
-    handler: patchProject.handler({ config, ...services }),
+    schema: patchProject.schema(),
+    handler: patchProject.handler(),
   };
 }
 
-function recreateDBRoute({ services, config }) {
+function recreateDBRoute() {
   return {
     method: "DELETE",
     url: "/db",
-    schema: recreateDB.schema(config),
-    handler: recreateDB.handler({ config, ...services }),
+    schema: recreateDB.schema(),
+    handler: recreateDB.handler(),
   };
 }
 

@@ -1,5 +1,5 @@
 const getWalletHelper = require('../helpers/getWalletHelper');
-const getWalletService = require('../processors/getWalletService');
+const getWalletService = require('../services/getWalletService');
 const { log } = require('../log');
 
 function schema() {

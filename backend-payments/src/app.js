@@ -1,7 +1,6 @@
 'use strict'
 
 const config = require("./config");
-const services = require("./services/services")({ config });
 const routes = require("./routes");
 const fastify = require("fastify");
 const bearerAuthFastifyPlugin = require('fastify-bearer-auth');
@@ -27,7 +26,7 @@ function registerCors(app) {
 }
 
 function registerRoutes(app) {
-  routes.forEach(route => app.route(route({ config, services })));
+  routes.forEach(route => app.route(route()));
 }
 
 function build() {

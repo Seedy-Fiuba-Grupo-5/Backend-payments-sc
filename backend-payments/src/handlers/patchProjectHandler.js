@@ -1,5 +1,5 @@
 const patchProjectHelper = require('../helpers/patchProjectHelper');
-const patchProjectService = require('../processors/patchProjectService');
+const patchProjectService = require('../services/patchProjectService');
 const { log } = require('../log');
 
 function schema() {
