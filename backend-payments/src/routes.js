@@ -45,7 +45,7 @@ function createProjectRoute({ services, config }) {
 function getProjectRoute({ services, config }) {
   return {
     method: "GET",
-    url: "/projects/:id",
+    url: "/projects/:publicId",
     schema: getProject.schema(config),
     handler: getProject.handler({ config, ...services }),
   };

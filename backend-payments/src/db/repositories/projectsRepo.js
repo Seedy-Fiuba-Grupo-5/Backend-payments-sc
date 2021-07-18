@@ -20,6 +20,21 @@ async function getProjectDB(publicId) {
   }
 }
 
+async function get(publicId) {
+  const t = await db.transaction();
+  try {
+    projectRepr = await ProjectDB.findByPk(
+      publicId,
+      { transaction: t }
+    );
+    t.commit();
+    return projectRepr;
+  } catch (error) {
+    t.rollback();
+    throw error;
+  }
+}
+
 async function updateProjectDB(publicId, updatesDict) {
   const t = await db.transaction();
   try {
@@ -39,5 +54,6 @@ async function updateProjectDB(publicId, updatesDict) {
 module.exports = {
   createProjectDB,
   getProjectDB,
-  updateProjectDB
+  updateProjectDB,
+  get
 };

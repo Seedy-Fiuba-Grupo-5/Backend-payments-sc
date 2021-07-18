@@ -1,3 +1,5 @@
+const getProjectHelper = require('../helpers/getProjectHelper');
+const getProjectService = require('../processors/getProjectService');
 const { log } = require('../log');
 
 function schema() {
@@ -14,12 +16,13 @@ function schema() {
   };
 }
 
-function handler({ projectService }) {
+function handler() {
   return async function (req, reply) {
-    const publicId = req.params.id
-    log(`GET /projects/${publicId}`);
-    const body = await projectService.getProject(publicId);
-    reply.code(200).send(body);
+    const data = getProjectHelper.parse(req);
+    log(`GET /projects/${data.publicId}`);
+    const result = await getProjectService.process(data);
+    const [statusCode, body] = getProjectHelper.format(result);
+    return reply.code(statusCode).send(body);
   };
 }
 
