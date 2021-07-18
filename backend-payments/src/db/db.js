@@ -1,15 +1,15 @@
 const Sequelize = require('sequelize');
-const { node_env, databaseURL } = require("../config");
+const { nodeENV, databaseURL } = require("../config");
 
 let db = null;
 
-if (node_env === 'development') {
+if (nodeENV === 'development') {
   db = new Sequelize(databaseURL, {
     dialect: 'postgres'
   });
 }
 
-if (node_env === 'production') {
+if (nodeENV === 'production') {
   db = new Sequelize(databaseURL, {
     dialect: 'postgres',
     dialectOptions: {

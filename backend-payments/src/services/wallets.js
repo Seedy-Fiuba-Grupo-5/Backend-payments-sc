@@ -2,8 +2,8 @@ const ethers = require("ethers");
 const { WalletDB } = require("../db/models/wallet");
 
 function create_ethers_provider(config) {
-  if (config.node_env == 'development') {
-    return new ethers.providers.JsonRpcProvider(config.hh_node_url);
+  if (config.nodeENV == 'development') {
+    return new ethers.providers.JsonRpcProvider(config.hhNodeURL);
   }
   return new ethers.providers.InfuraProvider(config.network, config.infuraApiKey);
 }

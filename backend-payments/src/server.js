@@ -8,7 +8,7 @@ const start = async () => {
     await db.sync({alter: true});
     console.log(`[LOG] Database was syncronized.`);
 
-    await app.listen(config.web_port, '0.0.0.0');
+    await app.listen(config.webPort, '0.0.0.0');
     app.log.info(`server listening on ${app.server.address().port}`);
 
   } catch (err) {

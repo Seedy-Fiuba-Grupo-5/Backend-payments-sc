@@ -4,7 +4,7 @@ const expect = require('chai').expect;
 const ethers = require("ethers");
 const config = require('../../src/config');
 
-const provider = new ethers.providers.JsonRpcProvider(config.hh_node_url);
+const provider = new ethers.providers.JsonRpcProvider(config.hhNodeURL);
 const testWallet = ethers.Wallet.fromMnemonic(config.deployerMnemonic).connect(provider);
 
 describe("Hardhat node's wallet for testing: ", async () => {

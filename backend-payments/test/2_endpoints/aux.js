@@ -1,7 +1,7 @@
-const { apiKey, web_port } = require('../../src/config');
+const { apiKey, webPort } = require('../../src/config');
 
 function serverURL(){
-  url = `http://0.0.0.0:${web_port}`;
+  url = `http://0.0.0.0:${webPort}`;
   return url;
 }
 

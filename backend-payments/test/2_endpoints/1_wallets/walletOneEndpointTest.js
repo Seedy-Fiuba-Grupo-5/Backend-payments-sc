@@ -15,7 +15,7 @@ chai.use(chaiHttp);
 describe('Endpoint /wallets/<id>: ',()=>{
   let url = serverURL();
   let parcialRoute = '/wallets';
-  let provider = new ethers.providers.JsonRpcProvider(config.hh_node_url);
+  let provider = new ethers.providers.JsonRpcProvider(config.hhNodeURL);
   let testWallet = ethers.Wallet.fromMnemonic(config.deployerMnemonic)
                                 .connect(provider);
 
