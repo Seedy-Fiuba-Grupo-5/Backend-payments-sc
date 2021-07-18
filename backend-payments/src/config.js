@@ -1,16 +1,19 @@
 require("dotenv").config();
 
-const node_env = process.env.NODE_ENV;
+const nodeENV = process.env.NODE_ENV;
 temp_network = 'kovan';
-if (node_env == 'development') {
+if (nodeENV === 'development') {
   temp_network = 'localhost';
 }
 const network = temp_network;
 const deployArtifact = require(`../deployments/${network}/Seedifyuba`);
 const deployerMnemonic = process.env.MNEMONIC;
 const infuraApiKey = process.env.INFURA_API_KEY;
-const hh_node_url = process.env.SC_HH_NODE_URL;
-const web_port = process.env.PORT;
+const hhNodeURL = process.env.SC_HH_NODE_URL || '';
+const webPort = process.env.PORT;
+const databaseURL = process.env.DATABASE_URL;
+const gatewayURL = process.env.GATEWAY_URL;
+const apiKey = process.env.API_KEY;
 
 module.exports = {
   contractAddress: deployArtifact.address,
@@ -18,8 +21,11 @@ module.exports = {
   deployerMnemonic,
   infuraApiKey,
   network,
-  node_env,
-  hh_node_url,
-  web_port
+  nodeENV,
+  hhNodeURL,
+  webPort,
+  databaseURL,
+  gatewayURL,
+  apiKey
 };
 

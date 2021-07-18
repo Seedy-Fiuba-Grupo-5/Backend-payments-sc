@@ -7,7 +7,11 @@
     "bignumber.js": "9.0.1",
     "dotenv": "8.2.0",
     "ethers": "5.0.24",
-    "fastify": "3.14.2"
+    "fastify": "3.14.2",
+    "fastify-bearer-auth": "^6.0.0",
+    "fastify-cors": "^6.0.1",
+    "pg": "^8.6.0",
+    "sequelize": "6.6.5"
   },
   "devDependencies": {
     "@commitlint/cli": "9.1.2",
@@ -18,7 +22,8 @@
     "nodemon": "^2.0.7"
   },
   "scripts": {
-    "start": "nodemon src/server",
-    "test": "./node_modules/mocha/bin/mocha test/**/*Test.js --reporter spec"
+    "start-prod": "node src/server",
+    "start-dev": "nodemon src/server",
+    "test": "./node_modules/mocha/bin/mocha test/**/*Test.js test/**/**/*Test.js --reporter spec"
   }
 }

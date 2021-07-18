@@ -1,3 +1,7 @@
+const getProjectHelper = require('../helpers/getProjectHelper');
+const getProjectService = require('../services/getProjectService');
+const { log } = require('../log');
+
 function schema() {
   return {
     params: {
@@ -12,14 +16,13 @@ function schema() {
   };
 }
 
-function handler({ contractInteraction }) {
+function handler() {
   return async function (req, reply) {
-    const body = await contractInteraction.getProject(req.params.id);
-    if (! body) {
-      reply.code(204);
-      return;
-    }
-    reply.code(200).send(body);
+    const data = getProjectHelper.parse(req);
+    log(`GET /projects/${data.publicId}`);
+    const result = await getProjectService.process(data);
+    const [statusCode, body] = getProjectHelper.format(result);
+    return reply.code(statusCode).send(body);
   };
 }
 

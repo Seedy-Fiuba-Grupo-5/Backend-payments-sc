@@ -1,3 +1,7 @@
+const { log } = require('../log');
+const createProjectService = require('../services/createProjectService');
+const createProjectHelper = require('../helpers/createProjectHelper');
+
 function schema() {
   return {
     params: {
@@ -20,17 +24,13 @@ function schema() {
   };
 }
 
-function handler({ contractInteraction, walletService }) {
+function handler() {
   return async function (req, reply) {
-    ownerWallet = await walletService.getWalletData(req.body.ownerId);
-    reviewerWallet = await walletService.getWalletData(req.body.reviewerId);
-    const body = await contractInteraction.createProject(
-                    walletService.getDeployerWallet(),
-                    req.body.stagesCost,
-                    ownerWallet.address,
-                    reviewerWallet.address,
-                  );
-    reply.code(202).send(body);
+    log(`POST /projects`);
+    const data = createProjectHelper.parse(req);
+    const result = await createProjectService.process(data);
+    let [statusCode, body] = createProjectHelper.format(result);
+    reply.code(statusCode).send(body);
   };
 }
 

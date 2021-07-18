@@ -5,7 +5,7 @@ const config = require('../../src/config');
 const ethers = require("ethers");
 
 describe('ethers.js: ', ()=>{
-  let provider = new ethers.providers.JsonRpcProvider(config.hh_node_url);
+  let provider = new ethers.providers.JsonRpcProvider(config.hhNodeURL);
   let testWallet = ethers.Wallet.fromMnemonic(config.deployerMnemonic)
                                 .connect(provider);
 
@@ -36,4 +36,11 @@ describe('ethers.js: ', ()=>{
     const testWalletPostBalance = await provider.getBalance(testWallet.address);
     expect( testWalletPostBalance ).to.be.eql( testDiffBalance );
 	});
+
+  it('New wallet should have a mnemonic phrase', async () => {
+    const wallet = ethers.Wallet.createRandom();
+
+    expect( wallet.mnemonic.phrase ).to.be.a('string');
+    // console.log(`\tNew wallet mnemonic: ${wallet.mnemonic.phrase}`);
+  });
 });

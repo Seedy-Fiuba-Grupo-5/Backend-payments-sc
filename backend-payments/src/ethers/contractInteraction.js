@@ -1,54 +1,48 @@
 const BigNumber = require("bignumber.js");
 const ethers = require("ethers");
+const { contractAddress, contractAbi } = require("../config");
+const projectsRepo = require("../db/repositories/projectsRepo");
 
-const getContract = (config, wallet) => {
-  return new ethers.Contract(config.contractAddress, config.contractAbi, wallet);
+async function getContract(wallet) {
+  return new ethers.Contract(contractAddress, contractAbi, wallet);
 };
 
-const toWei = number => {
+function toWei(number) {
   const WEIS_IN_ETHER = BigNumber(10).pow(18);
   return BigNumber(number).times(WEIS_IN_ETHER).toFixed();
 };
 
-const projects = {};
-
-const createProject = ({ config }) => async (
+async function createProject(
   deployerWallet,
   stagesCost,
   projectOwnerAddress,
   projectReviewerAddress,
-) => {
-  const seedyFiubaContract = await getContract(config, deployerWallet);
+  publicId
+) {
+  const seedyFiubaContract = await getContract(deployerWallet);
   const tx = await seedyFiubaContract.createProject(
                     stagesCost.map(toWei),
                     projectOwnerAddress,
                     projectReviewerAddress);
+  await projectsRepo.update(publicId, {creationStatus: 'mining'});
   tx.wait(1).then(receipt => {
     console.log("Transaction mined");
     const firstEvent = receipt && receipt.events && receipt.events[0];
     console.log(firstEvent);
-    if (firstEvent && firstEvent.event == "ProjectCreated") {
+    if (firstEvent && firstEvent.event === "ProjectCreated") {
       const projectId = firstEvent.args.projectId.toNumber();
-      console.log();
-      projects[tx.hash] = {
-        projectId,
-        stagesCost,
-        projectOwnerAddress,
-        projectReviewerAddress,
+      updatesDict = {
+        privateId: projectId,
+        balance: '0.0',
+        creationStatus: 'done'
       };
+      projectsRepo.update(publicId, updatesDict);
     } else {
       console.error(`Project not created in tx ${tx.hash}`);
     }
   });
-  return tx;
 };
 
-const getProject = () => async id => {
-  console.log(`Getting project ${id}: ${projects[id]}`);
-  return projects[id];
+module.exports = {
+  createProject
 };
-
-module.exports = dependencies => ({
-  createProject: createProject(dependencies),
-  getProject: getProject(dependencies),
-});

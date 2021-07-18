@@ -1,3 +1,7 @@
+const getWalletHelper = require('../helpers/getWalletHelper');
+const getWalletService = require('../services/getWalletService');
+const { log } = require('../log');
+
 function schema() {
   return {
     params: {
@@ -12,10 +16,13 @@ function schema() {
   };
 }
 
-function handler({ walletService }) {
+function handler() {
   return async function (req, reply) {
-    const body = await walletService.getWalletData(req.params.id);
-    reply.code(200).send(body);
+    const data = getWalletHelper.parse(req);
+    log(`GET /wallets/${data.publicId}`);
+    const result = await getWalletService.process(data);
+    const [statusCode, body] = getWalletHelper.format(result);
+    return reply.code(statusCode).send(body);
   };
 }
 

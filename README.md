@@ -2,30 +2,39 @@
 Smart contract and basic service to solve payments in the seedifyuba project.
 
 ## Local environment
+
+### Pre-build
+You should create a `.env` file following instructions describe in the `Original Documentation`.
+If you are a member of SeedyFiuba organization, you could use MNEMONIC and INFURA_API_KEY defined in `Github Repository Secrets`.
+A new MNEMONIC can be created looking at the test `New wallet should have a mnemonic phrase` described in `/backend-payments/test/1_ethersLib/ethersLibTest.js`.
+
 ### Build
 ```
 DOCKER_BUILDKIT=1 docker-compose build
 ```
-Note: La variable de entorno DOCKER_BUILDKIT seteada en 1, permite utilizar
-herramientas adicionales del motor Docker. Entre ellas, permite la utilización
-de archivos `<Dockerfile name>.dockerignore` que permiten indicar que archivos
-ignorar para archivos Dockerfile ubicados en un mismo directorio.
+
+Note: The environment variable DOCKER_BUILDKIT set to 1, allows the utilization of
+additional tools of Docker engine. One of these tools is the
+`<Dockerfile name>.dockerignore` files like, which are used to ignore files and
+folders while building containers whose dockerfile exists in the same directory.
 
 ### Start services
 ```
 docker-compose up [-d]
 ```
-This command will start two services:
-- sc: It is a service of hardhat's nodes where the smart contract is deployed.
-- web: It is the backend payments service which needs to interact with the
-smart contract through the hh_node service.
+This command will start the next services:
+- `sc`: It is a service of hardhat's nodes where the smart contract is deployed.
+- `db`: It is the postgres database for developing.
+- `web`: It is the backend payments service which needs to interact with:
+  - the smart contract through the `sc` service
+  - the database through the `db` service
 
 The `web` service will wait until a file deployments/localhost/Seedifyuba.json exists,
 to start up. This file is created for the first time when `sc` service is executed. When
 these services are stopped but not destroyed, then this file will be kept in containers
-shared volume, so the `web` will not wait for the `sc` to start. This is only useful when
+shared volume, so `web` will not wait again for `sc` to start. This is only useful when
 pushing code to the repository where pipeline build containers from cero. Locally, we will
-have to wait for it looking (with our eyes) at services logs.
+have to wait for it looking (with our eyes) at the services logs.
 
 ### Test
 #### Test backend payments
@@ -45,6 +54,25 @@ Note 2: Executing a transaction costs additional ethers to those sent in the sam
 docker-compose exec hh_node npm test
 ```
 
+### Postgres DB
+#### Open CLI
+```
+docker-compose exec db psql -U postgres
+```
+Note: `postgres` is the user defined in `docker-compose.yml` file while creating the container for this database.
+
+#### CLI commands
+- `\l`: list all databases.
+- `\c <name of db>`: connect to specific database.
+- `\dt`: display all relation inside the current database to which we are connected.
+
+##### Queries
+When connected to a certain DB you should write SQL queries to get data.
+For example:
+```
+SELECT * FROM wallets;
+```
+
 ### Stop
 ```
 docker-compose stop
@@ -55,7 +83,88 @@ docker-compose stop
 docker-compose down -v
 ```
 
-## Notes
+## Heroku Environment
+
+Heroku app's name (App): seedy-fiuba-backend-payments
+Heroku repository's name: https://git.heroku.com/seedy-fiuba-backend-payments.git
+
+Heroku Postgres (BDD): postgresql-transparent-72738
+(La aplicación desplegada en Heroku utiliza una base de datos Postgres propia de la plataforma, agregada como add-on de la aplicacion)
+
+App's url: https://seedy-fiuba-backend-payments.herokuapp.com/
+
+### Environment variables
+- `DATABASE_URL`: It is set up `automatically` when adding `Heroku Postgres` add-on to this app.
+- `GATEWAY_URL`: It must be set up `manually` with Gateway service's URL which will be the only service
+able to interact with the current service (CORS). (Note: curl, postman, etc request will still work)
+
+### Deployment
+Connect to Heroku:
+```
+heroku login
+```
+
+Add Heroku's remote repository:
+```
+heroku git:remote -a seedy-fiuba-backend-payments
+```
+Note: Heoku app's creator should lend collaborator access to it before pushing any image.
+
+Connect to Heroku's container:
+```
+heroku container:login
+```
+
+Build app's image and push to Heroku's container:
+```
+heroku container:push web --app seedy-fiuba-backend-payments
+```
+
+Release recently pushed app's image to Heroku execution environment:
+```
+heroku container:release web --app seedy-fiuba-backend-payments
+```
+
+## Up / Down service
+Up service:
+```
+heroku ps:scale web=1 --app seedy-fiuba-backend-payments
+```
+
+Down service:
+```
+heroku ps:scale web=0 --app seedy-fiuba-backend-payments
+```
+
+## Postgres psql
+```
+heroku pg:psql --app seedy-fiuba-backend-payments
+```
+
+## Migrations (both environments)
+"Migrations" are triggered when app's starts:
+`backend-payments/src/server.js`
+```
+(...)
+await db.sync({alter: true});
+(...)
+```
+This line of code will tell postgres database to create unexistent tables and
+modify existent tables so they match with current database relations defined in
+`backend-payments/src/db/models/`
+
+This is not the correct way to do migrations. Migrations should be triggered manually
+some administrator, and it should exists a folder with every migration made to be able
+rollback if anything breaks.
+
+We did not follow the "nice" way of migrations due to lack of time.
+
+
+## Smart-contract
+
+Follow steps described in the Original Documentation but execute commands from `sc` docker container.
+
+### Notes
 Different instances of the container may deploy new contracts with the same INFURA KEY and MEMONIC in Kovan net.
 
 # Seedifyuba - Original documentation

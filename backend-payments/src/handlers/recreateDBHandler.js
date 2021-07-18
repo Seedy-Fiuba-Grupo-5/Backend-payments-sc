@@ -1,4 +1,6 @@
-db = require('../services/db')
+const { db } = require("../db/db");
+const { nodeENV } = require("../config");
+const { log } = require('../log');
 
 function schema() {
   return {
@@ -11,10 +13,15 @@ function schema() {
 
 function handler() {
   return async function (req, reply) {
-    while (db.accounts.length > 0) {
-      db.accounts.pop();
+    log(`DELETE /db`);
+    if(nodeENV === 'development'){
+      log(`Recreating database`);
+      await db.sync({ force: true });
+      reply.code(204);
+      return;
     }
-    reply.code(204);
+    log(`NOT Recreating database`);
+    reply.code(405);
   };
 }
 
