@@ -1,17 +1,17 @@
-function createWalletParse(request) {
+function parse(request) {
   data = {
     publicId: request.body.publicId,
   };
   return data;
 }
 
-function createWalletFormat(result) {
+function format(result) {
   code = 201;
   body = result;
   return [code, body]
 }
 
 module.exports = { 
-  createWalletParse,
-  createWalletFormat
+  parse,
+  format
 };

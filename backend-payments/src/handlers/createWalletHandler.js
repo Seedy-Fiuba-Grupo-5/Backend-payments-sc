@@ -1,5 +1,5 @@
-const { createWalletParse, createWalletFormat } = require('../helpers/createWalletHelper');
-const { createWalletProcess } = require('../processors/createWalletProcess');
+const createWalletHelper = require('../helpers/createWalletHelper');
+const createWalletService = require('../processors/createWalletService');
 const { log } = require('../log');
 
 function schema() {
@@ -19,9 +19,9 @@ function schema() {
 function handler() {
   return async function (req, reply) {
     log(`POST /wallets`);
-    const data = createWalletParse(req);
-    const result = await createWalletProcess(data);
-    const [statusCode, body] = createWalletFormat(result);
+    const data = createWalletHelper.parse(req);
+    const result = await createWalletService.process(data);
+    const [statusCode, body] = createWalletHelper.format(result);
     return reply.code(statusCode).send(body);
   };
 }

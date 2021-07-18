@@ -6,6 +6,11 @@ async function createWalletDB(dataDict) {
   return walletRepr;
 }
 
+async function create(dataDict) {
+  walletRepr = await WalletDB.create(dataDict);
+  return walletRepr;
+}
+
 async function getWalletDB(publicId) {
   const t = await db.transaction();
   try {
@@ -69,5 +74,6 @@ module.exports = {
   getAllWalletsDB,
   getWalletDB,
   get,
-  getAll
+  getAll,
+  create
 };

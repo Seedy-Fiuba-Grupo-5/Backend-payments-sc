@@ -30,6 +30,13 @@ async function createWallet() {
   return wallet;
 };
 
+async function create() {
+  const provider = create_ethers_provider();
+  // This may break in some environments, keep an eye on it
+  const wallet = ethers.Wallet.createRandom().connect(provider);
+  return wallet;
+};
+
 async function getWalletsData() {
   const allWallets = await getAllWalletsDB();
   let result = [];
@@ -71,5 +78,6 @@ module.exports = {
   getDeployerWallet,
   getWalletsData,
   getWalletData,
-  balance
+  balance,
+  create
 };
