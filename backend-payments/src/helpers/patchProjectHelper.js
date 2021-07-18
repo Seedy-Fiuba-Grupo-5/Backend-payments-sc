@@ -1,4 +1,4 @@
-function patchProjectParse(request) {
+function parse(request) {
   data = {
     publicId: parseInt(request.params.publicId),
     reviewerPublicId: request.body.reviewerPublicId
@@ -6,7 +6,7 @@ function patchProjectParse(request) {
   return data;
 }
 
-function patchProjectFormat(result) {
+function format(result) {
   code = 202;
   body = result;
   if (projectRepr === null) {
@@ -17,6 +17,6 @@ function patchProjectFormat(result) {
 }
 
 module.exports = { 
-  patchProjectParse,
-  patchProjectFormat
+  parse,
+  format
 };
