@@ -23,7 +23,7 @@ function getDeployerWallet() {
   return ethers.Wallet.fromMnemonic(deployerMnemonic).connect(provider);
 };
 
-async function createWallet(publicId) {
+async function createWallet() {
   const provider = create_ethers_provider();
   // This may break in some environments, keep an eye on it
   const wallet = ethers.Wallet.createRandom().connect(provider);
@@ -41,6 +41,13 @@ async function getWalletsData() {
     })
   );
   return result;
+};
+
+async function balance(walletAddress) {
+  const provider = create_ethers_provider();
+  const weis = await provider.getBalance(walletAddress);
+  const balance = ethers.utils.formatEther(weis);
+  return balance;
 };
 
 async function getWalletData(publicId) {
@@ -63,5 +70,6 @@ module.exports = {
   createWallet,
   getDeployerWallet,
   getWalletsData,
-  getWalletData
+  getWalletData,
+  balance
 };

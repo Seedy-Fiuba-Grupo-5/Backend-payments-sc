@@ -21,6 +21,21 @@ async function getWalletDB(publicId) {
   }
 }
 
+async function get(publicId) {
+  const t = await db.transaction();
+  try {
+    walletRepr = await WalletDB.findByPk(
+      publicId,
+      { transaction: t }
+    );
+    t.commit();
+    return walletRepr;
+  } catch (error) {
+    t.rollback();
+    throw error;
+  }
+}
+
 async function getAllWalletsDB() {
   const t = await db.transaction();
   try {
@@ -38,5 +53,6 @@ async function getAllWalletsDB() {
 module.exports = {
   createWalletDB,
   getAllWalletsDB,
-  getWalletDB
+  getWalletDB,
+  get
 };

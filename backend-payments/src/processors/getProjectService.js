@@ -1,5 +1,3 @@
-const { createWallet } = require("../ethers/wallets");
-const { createWalletDB } = require("../db/repositories/walletsRepo");
 const projectsRepo = require('../db/repositories/projectsRepo');
 const { log } = require("../log");
 

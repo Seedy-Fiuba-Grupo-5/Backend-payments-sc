@@ -9,7 +9,7 @@ const patchProject = require("./handlers/patchProjectHandler");
 function getWalletDataRoute({ services, config }) {
   return {
     method: "GET",
-    url: "/wallets/:id",
+    url: "/wallets/:publicId",
     schema: getWalletData.schema(config),
     handler: getWalletData.handler({ config, ...services }),
   };
