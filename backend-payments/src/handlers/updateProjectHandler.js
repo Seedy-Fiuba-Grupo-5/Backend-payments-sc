@@ -1,5 +1,5 @@
-const patchProjectHelper = require('../helpers/patchProjectHelper');
-const patchProjectService = require('../services/patchProjectService');
+const updateProjectHelper = require('../helpers/updateProjectHelper');
+const updateProjectService = require('../services/updateProjectService');
 const { log } = require('../log');
 
 function schema() {
@@ -18,10 +18,10 @@ function schema() {
 
 function handler() {
   return async function (req, reply) {
-    const data = patchProjectHelper.parse(req);
+    const data = updateProjectHelper.parse(req);
     log(`PATCH /projects/${data.publicId}`);
-    const result = await patchProjectService.process(data);
-    let [statusCode, body] = patchProjectHelper.format(result);
+    const result = await updateProjectService.process(data);
+    let [statusCode, body] = updateProjectHelper.format(result);
     reply.code(statusCode).send(body);
   };
 }
