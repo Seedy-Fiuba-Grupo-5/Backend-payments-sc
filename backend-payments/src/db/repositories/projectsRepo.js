@@ -55,10 +55,27 @@ async function updateProjectDB(publicId, updatesDict) {
   }
 }
 
+async function update(publicId, updatesDict) {
+  const t = await db.transaction();
+  try {
+    await ProjectDB.update(
+      updatesDict,
+      {
+        where: { publicId: publicId },
+        transaction: t
+      });
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    throw error;
+  }
+}
+
 module.exports = {
   createProjectDB,
   getProjectDB,
   updateProjectDB,
   get,
-  create
+  create,
+  update
 };

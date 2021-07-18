@@ -1,7 +1,7 @@
 const BigNumber = require("bignumber.js");
 const ethers = require("ethers");
 const { contractAddress, contractAbi } = require("../config");
-const { updateProjectDB } = require("../db/repositories/projectsRepo");
+const projectsRepo = require("../db/repositories/projectsRepo");
 
 async function getContract(wallet) {
   return new ethers.Contract(contractAddress, contractAbi, wallet);
@@ -24,7 +24,7 @@ async function createProject(
                     stagesCost.map(toWei),
                     projectOwnerAddress,
                     projectReviewerAddress);
-  await updateProjectDB(publicId, {creationStatus: 'mining'});
+  await projectsRepo.update(publicId, {creationStatus: 'mining'});
   tx.wait(1).then(receipt => {
     console.log("Transaction mined");
     const firstEvent = receipt && receipt.events && receipt.events[0];
@@ -36,7 +36,7 @@ async function createProject(
         balance: '0.0',
         creationStatus: 'done'
       };
-      updateProjectDB(publicId, updatesDict);
+      projectsRepo.update(publicId, updatesDict);
     } else {
       console.error(`Project not created in tx ${tx.hash}`);
     }
