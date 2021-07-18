@@ -1,5 +1,6 @@
 const { log } = require('../log');
-const { mineAProject } = require('./helpers/helpers');
+const { patchProjectParse, patchProjectFormat } = require('../helpers/patchProjectHelper');
+const { patchProjectProcess } = require('../processors/patchProjectProcess');
 
 function schema() {
   return {
@@ -15,25 +16,13 @@ function schema() {
   };
 }
 
-function handler({ contractInteraction, walletService, projectService }) {
+function handler() {
   return async function (req, reply) {
-    const publicId = parseInt(req.params.publicId);
-    log(`PATCH /projects/${publicId}`);
-    projectRepr = await projectService.getProject(publicId);
-    if (projectRepr === null) {
-      log(`Project not found`);
-      body = {
-        "status": "The project requested could not be found"
-      }
-      reply.code(404).send(body);
-      return;
-    }
-    log(`Project found`);
-    await projectService.addReviewer(publicId);
-    projectRepr = await mineAProject(projectService, walletService, contractInteraction, publicId);
-    body = projectRepr;
-    reply.code(202).send(body);
-    return;
+    const data = patchProjectParse(req);
+    log(`PATCH /projects/${data.publicId}`);
+    const result = await patchProjectProcess(data);
+    let [statusCode, body] = patchProjectFormat(result);
+    reply.code(statusCode).send(body);
   };
 }
 

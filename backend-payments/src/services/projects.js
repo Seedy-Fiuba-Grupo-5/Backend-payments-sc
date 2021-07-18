@@ -7,15 +7,16 @@ const createProject = () => async (
   publicId,
 ) => {
   var creationStatus = "building";
-  const projectRepr = await ProjectDB.create({
-    "publicId": publicId,
-    "privateId": null,
-    "creationStatus": creationStatus,
-    "stagesCost": stagesCost,
-    "ownerPublicId": ownerPublicId,
-    "reviewerPublicId": reviewerPublicId,
-    "balance": null,
-  });
+  const dataDict = {
+    publicId: publicId,
+    privateId: null,
+    creationStatus: creationStatus,
+    stagesCost: stagesCost,
+    ownerPublicId: ownerPublicId,
+    reviewerPublicId: reviewerPublicId,
+    balance: null
+  };
+  projectRepr = await createProject(dataDict);
 
   return projectRepr;
 };

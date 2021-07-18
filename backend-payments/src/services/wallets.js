@@ -35,9 +35,9 @@ const getWalletsData = () => async () => {
   let result = [];
   allWallets.every(
     walletRepr => result.push({
-      publicId: walletRepr.publicId,
-      address: walletRepr.address,
-      privateKey: walletRepr.privateKey
+      publicId: walletRepr.dataValues.publicId,
+      address: walletRepr.dataValues.address,
+      privateKey: walletRepr.dataValues.privateKey
     })
   );
   return result;
@@ -47,13 +47,13 @@ const getWalletData = ( {config} ) => async (id) => {
   const walletRepr = await WalletDB.findByPk(id);
 
   const provider = create_ethers_provider(config);
-  const weis = await provider.getBalance(walletRepr.address);
+  const weis = await provider.getBalance(walletRepr.dataValues.address);
   const balance = ethers.utils.formatEther(weis);
 
   const result = {
-    publicId: walletRepr.publidId,
-    address: walletRepr.address,
-    privateKey: walletRepr.privateKey,
+    publicId: walletRepr.dataValues.publidId,
+    address: walletRepr.dataValues.address,
+    privateKey: walletRepr.dataValues.privateKey,
     balance: balance
   };
   return result;

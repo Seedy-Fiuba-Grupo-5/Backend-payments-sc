@@ -6,7 +6,12 @@ const chaiHttp = require('chai-http');
 const expect = require('chai').expect;
 
 // Auxiliary
-const { serverURL, requestHeaders, deleteDB, postNewWallet } = require('../aux');
+const { 
+  serverURL, 
+  requestHeaders, 
+  deleteDB, 
+  postNewWallet
+} = require('../aux');
 
 chai.use(chaiHttp);
 

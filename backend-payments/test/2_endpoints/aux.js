@@ -38,6 +38,16 @@ async function postNewWallet(chai, publicId) {
   return res;
 }
 
+var publicUserId = 0
+async function postManyNewWallets(chai, quantity) {
+  var walletsList = [] 
+  for (; walletsList.length < quantity;) {
+    walletRes = await postNewWallet(chai, publicUserId++);
+    walletsList.push(walletRes);
+  }
+  return walletsList;
+}
+
 async function postNewProject(chai, payload) {
   console.log("[TEST] POST NEW PROJECT");
   const url = serverURL();
@@ -61,11 +71,25 @@ async function getProject(chai, publicId) {
   return res
 }
 
+async function patchProject(chai, publicId, payload) {
+  console.log("[TEST] PATCH PROJECT");
+  const url = serverURL();
+  const route = `/projects/${publicId}`;
+  const headers = requestHeaders(true);
+  const res = await chai.request(url)
+                        .patch(route)
+                        .set(headers)
+                        .send(payload);
+  return res;
+}
+
 module.exports = {
   serverURL,
   requestHeaders,
   deleteDB,
   postNewWallet,
   postNewProject,
-  getProject
+  getProject,
+  postManyNewWallets,
+  patchProject
 }

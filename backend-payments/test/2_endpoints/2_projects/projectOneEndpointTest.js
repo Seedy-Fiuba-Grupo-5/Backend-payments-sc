@@ -9,10 +9,11 @@ const expect = require('chai').expect;
 const { 
   serverURL, 
   requestHeaders, 
-  deleteDB, 
-  postNewWallet, 
+  deleteDB,
   postNewProject,
-  getProject
+  getProject,
+  postManyNewWallets,
+  patchProject
 } = require('../aux');
 
 chai.use(chaiHttp);
@@ -28,26 +29,25 @@ describe('Endpoint /projects/<id>: ',()=>{
   });
 
 	it('GET should return project data if transaction was mined', async function () {
-    publicUserId = 0;
-    const ownerRes = await postNewWallet(chai, publicUserId++);
-    const reviewerRes = await postNewWallet(chai, publicUserId++);
+    const publicId = 1;
+    const [ownerRes, reviewerRes] = await postManyNewWallets(chai, 2);
     const ownerPublicId = ownerRes.body['publicId'];
     const reviewerPublicId = reviewerRes.body['publicId'];
     const stagesCost = [2, 1, 3];
-    const publicId = 1;
-    payload = {
+    const payload = {
+      "publicId": publicId,
       "ownerPublicId": ownerPublicId,
       "reviewerPublicId": reviewerPublicId,
-      "stagesCost": stagesCost,
-      "publicId": publicId
+      "stagesCost": stagesCost
     };
-    res = await chai.request(url)
-                    .post(parcialRoute)
-                    .set(headersPayload)
-                    .send(payload);
-    route = `${parcialRoute}/${publicId}`;
+    await postNewProject(chai, payload);
 
-    res = await chai.request(url).get(route).set(headers);
+    const route = `${parcialRoute}/${publicId}`;
+
+    // This example shows how to GET a project
+    res = await chai.request(url)
+                    .get(route)
+                    .set(headers);
     expect(res.status).to.be.eql(200);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
@@ -55,7 +55,8 @@ describe('Endpoint /projects/<id>: ',()=>{
     let creationStatus = res.body['creationStatus'];
     while (creationStatus === 'mining') {
       this.timeout(1000);
-      res = await chai.request(url).get(route).set(headers);
+      // This is a shortcut to the request described above
+      res = await getProject(chai, publicId)
       creationStatus = res.body['creationStatus'];
     }
 
@@ -76,6 +77,7 @@ describe('Endpoint /projects/<id>: ',()=>{
       'reviewerPublicId': 1
     }
 
+    // This requests show how to PATCH a project with a reviewer id
     await chai.request(url)
       .patch(route)
       .set(headersPayload)
@@ -88,31 +90,24 @@ describe('Endpoint /projects/<id>: ',()=>{
   });
 
   it('PATCH should return 202 a reviewer id is asigned for the first time', async function () {
-    console.log("[DEBUG] CURRENT TEST");
     const publicId = 1;
-    var publicUserId = 0;
-    const ownerRes = await postNewWallet(chai, publicUserId++);
+    const [ownerRes, reviewerRes] = await postManyNewWallets(chai, 2);
     const ownerPublicId = ownerRes.body['publicId'];
-    var reviewerPublicId = null
     const stagesCost = [2, 1, 3];
     var payload = {
       "publicId": publicId,
       "ownerPublicId": ownerPublicId,
-      "reviewerPublicId": reviewerPublicId,
+      "reviewerPublicId": null,
       "stagesCost": stagesCost
     };
     await postNewProject(chai, payload);
 
-    const route = `${parcialRoute}/${publicId}`;
-    const reviewerRes = await postNewWallet(chai, publicUserId++);
-    reviewerPublicId = reviewerRes.body['publicId'];
+    const reviewerPublicId = reviewerRes.body['publicId'];
     payload = {
       "reviewerPublicId": reviewerPublicId
     };
-    var res = await chai.request(url)
-                        .patch(route)
-                        .set(headersPayload)
-                        .send(payload);
+    var res = await patchProject(chai, publicId, payload);
+    
     expect(res.status).to.be.eql(202);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
@@ -133,4 +128,51 @@ describe('Endpoint /projects/<id>: ',()=>{
     expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
     expect(res.body).to.have.property('balance').to.be.eql('0.0');
   });
+
+  // it( 'PATCH should return 409 while trying asign a reviewer id ' +
+  //     'when the project creation status is not "building"', async function () {
+  //   console.log("[DEBUG] CURRENT TEST");
+  //   const publicId = 1;
+  //   let [ownerRes, aReviewerRes, otherReviewerRes] = postManyNewWallets(chai, 3);
+  //   const ownerPublicId = ownerRes.body['publicId'];
+  //   const reviewerPublicId = aReviewerRes.body['publicId'];
+  //   const stagesCost = [2, 1, 3];
+  //   var payload = {
+  //     "publicId": publicId,
+  //     "ownerPublicId": ownerPublicId,
+  //     "reviewerPublicId": reviewerPublicId,
+  //     "stagesCost": stagesCost
+  //   };
+  //   await postNewProject(chai, payload);
+
+  //   const route = `${parcialRoute}/${publicId}`;
+    
+  //   otherReviewerPublicId = otherReviewerRes.body['publicId'];
+  //   payload = {
+  //     "reviewerPublicId": otherReviewerPublicId
+  //   };
+  //   var res = await chai.request(url)
+  //                       .patch(route)
+  //                       .set(headersPayload)
+  //                       .send(payload);
+  //   expect(res.status).to.be.eql(202);
+  //   expect(res.body).to.have.property('publicId').to.be.eql(publicId);
+  //   expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
+
+  //   var creationStatus = res.body['creationStatus'];
+  //   while (creationStatus === 'mining') {
+  //     this.timeout(1000);
+  //     res = await getProject(chai, publicId);
+  //     creationStatus = res.body['creationStatus'];
+  //   }
+
+  //   expect(res.status).to.be.eql(200);
+  //   expect(res.body).to.have.property('publicId').to.be.eql(publicId);
+  //   expect(res.body).to.have.property('privateId').to.be.a('number');
+  //   expect(res.body).to.have.property('creationStatus').to.be.eql('done');
+  //   expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost);
+  //   expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
+  //   expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
+  //   expect(res.body).to.have.property('balance').to.be.eql('0.0');
+  // });
 });

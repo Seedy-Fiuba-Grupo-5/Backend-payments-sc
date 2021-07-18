@@ -1,5 +1,6 @@
 const { log } = require('../log');
-const { mineAProject } = require('./helpers/helpers');
+const { createProjectProcess } = require('../processors/createProjectProcess');
+const { createProjectParse, createProjectFormat } = require('../helpers/createProjectHelper');
 
 function schema() {
   return {
@@ -23,21 +24,13 @@ function schema() {
   };
 }
 
-function handler({ contractInteraction, walletService, projectService }) {
+function handler() {
   return async function (req, reply) {
     log(`POST /projects`);
-    const publicId = req.body.publicId;
-    const stagesCost = req.body.stagesCost;
-    const ownerPublicId = req.body.ownerPublicId;
-    const reviewerPublicId = req.body.reviewerPublicId;
-    
-    log(`Building project ${publicId}`);
-    projectRepr = await projectService.createProject(stagesCost, ownerPublicId,
-                                                          reviewerPublicId, publicId);
-
-    projectRepr = await mineAProject(projectService, walletService, contractInteraction, publicId);
-    body = projectRepr;
-    reply.code(202).send(body);
+    const data = createProjectParse(req);
+    const result = await createProjectProcess(data);
+    let [statusCode, body] = createProjectFormat(result);
+    reply.code(statusCode).send(body);
   };
 }
 
