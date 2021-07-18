@@ -106,7 +106,7 @@ heroku login
 
 Add Heroku's remote repository:
 ```
-heroku git:remote -a seedy-fiuba-backend-projects
+heroku git:remote -a seedy-fiuba-backend-payments
 ```
 Note: Heoku app's creator should lend collaborator access to it before pushing any image.
 
