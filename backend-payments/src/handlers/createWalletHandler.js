@@ -1,3 +1,5 @@
+const { createWalletParse, createWalletFormat } = require('../helpers/createWalletHelper');
+const { createWalletProcess } = require('../processors/createWalletProcess');
 const { log } = require('../log');
 
 function schema() {
@@ -14,11 +16,13 @@ function schema() {
   };
 }
 
-function handler({ walletService }) {
+function handler() {
   return async function (req, reply) {
     log(`POST /wallets`);
-    const body = await walletService.createWallet(req.body.publicId);
-    return reply.code(201).send(body);
+    const data = createWalletParse(req);
+    const result = await createWalletProcess(data);
+    const [statusCode, body] = createWalletFormat(result);
+    return reply.code(statusCode).send(body);
   };
 }
 

@@ -6,7 +6,10 @@ const {
   node_env, 
   deployerMnemonic 
 } = require("../config");
-const { createWalletDB, getAllWalletsDB, getWalletDB } = require("../db/repositories/walletsRepo");
+const {
+  getAllWalletsDB, 
+  getWalletDB 
+} = require("../db/repositories/walletsRepo");
 
 function create_ethers_provider() {
   if (node_env === 'development') {
@@ -24,18 +27,7 @@ async function createWallet(publicId) {
   const provider = create_ethers_provider();
   // This may break in some environments, keep an eye on it
   const wallet = ethers.Wallet.createRandom().connect(provider);
-  dataDict = {
-    publicId: publicId,
-    address: wallet.address,
-    privateKey: wallet.privateKey
-  }
-  const walletRepr = await createWalletDB(dataDict);
-  const result = {
-    publicId: walletRepr.publicId,
-    address: walletRepr.address,
-    privateKey: walletRepr.privateKey
-  };
-  return result;
+  return wallet;
 };
 
 async function getWalletsData() {
