@@ -1,7 +1,7 @@
 'use strict'
 
 const config = require("./config");
-const routes = require("./routes");
+const routes = require("./routes/routes");
 const fastify = require("fastify");
 const bearerAuthFastifyPlugin = require('fastify-bearer-auth');
 const corsFastifyPlugin = require('fastify-cors');
