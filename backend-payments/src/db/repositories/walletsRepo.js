@@ -1,11 +1,6 @@
 const { db } = require("../db");
 const { WalletDB } = require("../models/wallet");
 
-async function createWalletDB(dataDict) {
-  walletRepr = await WalletDB.create(dataDict);
-  return walletRepr;
-}
-
 async function create(dataDict) {
   walletRepr = await WalletDB.create(dataDict);
   return walletRepr;
@@ -70,7 +65,6 @@ async function getAllWalletsDB() {
 }
 
 module.exports = {
-  createWalletDB,
   getAllWalletsDB,
   getWalletDB,
   get,

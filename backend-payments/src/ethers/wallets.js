@@ -57,27 +57,10 @@ async function balance(walletAddress) {
   return balance;
 };
 
-async function getWalletData(publicId) {
-  const walletRepr = await getWalletDB(publicId);
-
-  const provider = create_ethers_provider();
-  const weis = await provider.getBalance(walletRepr.dataValues.address);
-  const balance = ethers.utils.formatEther(weis);
-
-  const result = {
-    publicId: walletRepr.dataValues.publidId,
-    address: walletRepr.dataValues.address,
-    privateKey: walletRepr.dataValues.privateKey,
-    balance: balance
-  };
-  return result;
-};
-
 module.exports = {
   createWallet,
   getDeployerWallet,
   getWalletsData,
-  getWalletData,
   balance,
   create
 };
