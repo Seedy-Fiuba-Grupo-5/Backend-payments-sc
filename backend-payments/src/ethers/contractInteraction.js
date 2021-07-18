@@ -12,7 +12,7 @@ function toWei(number) {
   return BigNumber(number).times(WEIS_IN_ETHER).toFixed();
 };
 
-async function createProjectSC(
+async function createProject(
   deployerWallet,
   stagesCost,
   projectOwnerAddress,
@@ -44,5 +44,5 @@ async function createProjectSC(
 };
 
 module.exports = {
-  createProjectSC
+  createProject
 };

@@ -1,8 +1,8 @@
-const { createProjectDB, getProjectDB } = require("../db/repositories/projectsRepo");
-const { mineAProject } = require("./mineAProject");
+const projectsRepo = require("../db/repositories/projectsRepo");
+const mineAProject = require("./mineAProject");
 const { log } = require("../log");
 
-async function createProjectProcess(data) {
+async function process(data) {
   log(`Building project ${data.publicId}`);
   const creationStatus = "building";
   const dataDict = {
@@ -14,10 +14,10 @@ async function createProjectProcess(data) {
     reviewerPublicId: data.reviewerPublicId,
     balance: null
   };
-  await createProjectDB(dataDict);
-  await mineAProject(data.publicId);
-  projectRepr = await getProjectDB(data.publicId);
+  await projectsRepo.create(dataDict);
+  await mineAProject.process(data.publicId);
+  projectRepr = await projectsRepo.get(data.publicId);
   return projectRepr;
 }
 
-module.exports = { createProjectProcess };
+module.exports = { process };

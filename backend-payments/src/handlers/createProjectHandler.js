@@ -1,6 +1,6 @@
 const { log } = require('../log');
-const { createProjectProcess } = require('../processors/createProjectProcess');
-const { createProjectParse, createProjectFormat } = require('../helpers/createProjectHelper');
+const createProjectService = require('../processors/createProjectService');
+const createProjectHelper = require('../helpers/createProjectHelper');
 
 function schema() {
   return {
@@ -27,9 +27,9 @@ function schema() {
 function handler() {
   return async function (req, reply) {
     log(`POST /projects`);
-    const data = createProjectParse(req);
-    const result = await createProjectProcess(data);
-    let [statusCode, body] = createProjectFormat(result);
+    const data = createProjectHelper.parse(req);
+    const result = await createProjectService.process(data);
+    let [statusCode, body] = createProjectHelper.format(result);
     reply.code(statusCode).send(body);
   };
 }

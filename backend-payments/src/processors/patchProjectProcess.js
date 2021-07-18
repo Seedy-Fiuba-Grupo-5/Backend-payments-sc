@@ -1,5 +1,5 @@
 const { getProjectDB, updateProjectDB } = require("../db/repositories/projectsRepo");
-const { mineAProject } = require("./mineAProject");
+const mineAProject = require("./mineAProject");
 const { log } = require("../log");
 
 async function patchProjectProcess(data) {
@@ -12,7 +12,7 @@ async function patchProjectProcess(data) {
   updatesDict = {reviewerPublicId: data.reviewerPublicId}
   await updateProjectDB(data.publicId, updatesDict);
   log(`Reviewer updated to ${data.reviewerPublicId}`);
-  await mineAProject(data.publicId);
+  await mineAProject.process(data.publicId);
   projectRepr = await getProjectDB(data.publicId);
   return projectRepr;
 }

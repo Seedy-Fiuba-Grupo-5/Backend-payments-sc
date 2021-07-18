@@ -5,6 +5,10 @@ async function createProjectDB(dataDict) {
   await ProjectDB.create(dataDict);
 }
 
+async function create(dataDict) {
+  await ProjectDB.create(dataDict);
+}
+
 async function getProjectDB(publicId) {
   const t = await db.transaction();
   try {
@@ -55,5 +59,6 @@ module.exports = {
   createProjectDB,
   getProjectDB,
   updateProjectDB,
-  get
+  get,
+  create
 };

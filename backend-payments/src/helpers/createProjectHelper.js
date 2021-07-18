@@ -1,4 +1,4 @@
-function createProjectParse(request) {
+function parse(request) {
   data = {
     publicId: request.body.publicId,
     stagesCost: request.body.stagesCost,
@@ -8,13 +8,13 @@ function createProjectParse(request) {
   return data;
 }
 
-function createProjectFormat(result) {
+function format(result) {
   code = 202;
   body = result;
   return [code, body]
 }
 
 module.exports = { 
-  createProjectParse,
-  createProjectFormat
+  parse,
+  format
 };
