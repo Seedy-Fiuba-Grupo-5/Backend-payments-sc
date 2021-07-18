@@ -20,7 +20,7 @@ function handler() {
       reply.code(204);
       return;
     }
-    log(`Not recreation database`);
+    log(`NOT Recreating database`);
     reply.code(405);
   };
 }
