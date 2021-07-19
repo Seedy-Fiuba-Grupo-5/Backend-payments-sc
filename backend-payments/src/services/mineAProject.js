@@ -8,7 +8,7 @@ async function process(publicId) {
   projectRepr = await projectsRepo.get(publicId);
   const creationStatus = projectRepr.dataValues.creationStatus;
   const reviewerPublicId = projectRepr.dataValues.reviewerPublicId;
-  if ((creationStatus === 'building') && (reviewerPublicId != null)) {
+  if ((creationStatus === 'building') && (reviewerPublicId >= 0)) {
     log(`Mining project`);
     const ownerPublicId = projectRepr.dataValues.ownerPublicId;
     const stagesCost = projectRepr.dataValues.stagesCost;

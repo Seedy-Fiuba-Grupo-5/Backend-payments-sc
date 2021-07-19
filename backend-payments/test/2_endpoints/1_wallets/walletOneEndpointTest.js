@@ -37,6 +37,9 @@ describe('Endpoint /wallets/<id>: ',()=>{
 		res = await chai.request(url).get(route).set(headers);
     expect(res).to.have.status(200);
     expect(res.body).to.have.property('balance').to.be.eql('0.0');
+    expect(res.body).to.have.property('publicId').to.be.eql(publicId);
+    expect(res.body).to.have.property('address').to.be.a('string');
+    expect(res.body).to.have.property('privateKey').to.be.a('string');
 	});
 
   it('GET should return a wallet with 10^(-18) ethers (1 wei) when it was just loaded with that',

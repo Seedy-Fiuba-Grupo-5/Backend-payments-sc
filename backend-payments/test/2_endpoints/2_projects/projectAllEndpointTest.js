@@ -59,7 +59,7 @@ describe('Endpoint /projects: ', () => {
     const ownerRes = await postNewWallet(chai, publicUserId);
     const publicId = 1;
     const ownerPublicId = ownerRes.body['publicId'];
-    const reviewerPublicId = null;
+    const reviewerPublicId = -1;
     const stagesCost = [2, 1, 3];
     const payload = {
       "publicId": publicId,

@@ -2,12 +2,6 @@ const getAllWalletsHelper = require('../helpers/getAllWalletsHelper');
 const getAllWalletsService = require('../services/getAllWalletsService');
 const { log } = require('../log');
 
-function schema() {
-  return {
-    params: {},
-  };
-}
-
 function handler() {
   return async function (req, reply) {
     log(`GET /wallets`);
@@ -18,4 +12,4 @@ function handler() {
   };
 }
 
-module.exports = { handler, schema };
+module.exports = { handler };

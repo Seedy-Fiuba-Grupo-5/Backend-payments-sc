@@ -2,15 +2,6 @@ const { db } = require("../db/db");
 const { nodeENV } = require("../config");
 const { log } = require('../log');
 
-function schema() {
-  return {
-    params: {
-      type: "object",
-      properties: {},
-    }
-  };
-}
-
 function handler() {
   return async function (req, reply) {
     log(`DELETE /db`);
@@ -25,4 +16,4 @@ function handler() {
   };
 }
 
-module.exports = { handler, schema };
+module.exports = { handler };

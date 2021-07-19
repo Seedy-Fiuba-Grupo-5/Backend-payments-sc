@@ -97,7 +97,7 @@ describe('Endpoint /projects/<id>: ',()=>{
     var payload = {
       "publicId": publicId,
       "ownerPublicId": ownerPublicId,
-      "reviewerPublicId": null,
+      "reviewerPublicId": -1,
       "stagesCost": stagesCost
     };
     await postNewProject(chai, payload);
