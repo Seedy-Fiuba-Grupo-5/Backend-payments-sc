@@ -5,8 +5,12 @@ const { log } = require("../log");
 async function process(data) {
   repr = await walletsRepo.get(data.publicId);
   balance = await walletsEthers.balance(repr.dataValues.address);
-  result = {...repr};
-  result['balance'] = balance;
+  result = {
+    publicId: repr.dataValues.publicId,
+    address: repr.dataValues.address,
+    privateKey: repr.dataValues.privateKey,
+    balance: balance
+  }
   return result;
 }
 
