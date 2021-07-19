@@ -1,11 +1,13 @@
 function schema() {
   return {
     description: 'Creates a new wallet',
-    params: {
-      Authorization: {
-        in: 'header',
-        type: 'object',
-        example: 'Bearer <API KEY>'
+    headers: {
+      type: 'object',
+      properties: { 
+        'Authorization': { 
+          type: 'string',
+          description: "Example: Bearer 12345"
+        } 
       }
     },
     body: {
@@ -17,7 +19,17 @@ function schema() {
         }
       }
     },
-    required: ['publicId']
+    response: {
+      201: {
+        type: 'object',
+        properties: {
+          publicId: { type: 'integer' },
+          address: { type: 'string' },
+          privateKey: { type: 'string' }
+        }
+      }
+    },
+    required: ['Authorization', 'publicId']
   };
 }
 

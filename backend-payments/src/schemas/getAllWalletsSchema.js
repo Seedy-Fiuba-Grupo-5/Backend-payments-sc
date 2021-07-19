@@ -1,6 +1,6 @@
 function schema() {
   return {
-    description: 'Creates a new wallet',
+    description: 'Gets all wallets information',
     headers: {
       type: 'object',
       properties: { 
