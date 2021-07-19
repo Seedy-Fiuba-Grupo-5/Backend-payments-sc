@@ -41,26 +41,6 @@ function schema() {
       'stagesCost'
     ],
     response: {
-      201: {
-        type: 'object',
-        properties: {
-          publicId: { type: 'number' },
-          ownerPublicId: { type: 'number' },
-          reviewerPublicId: { example: -1 },
-          stagesCost: {
-            type: 'array',
-            minItems: 1,
-            items: { type: 'number' },
-          },
-          creationStatus: {
-            description: "Project's creation status",
-            type: 'string',
-            enum: ["building"]
-          },
-          privateId: { example: -1 },
-          balance: { example: '' }
-        }
-      },
       202: {
         type: 'object',
         properties: {
@@ -75,7 +55,7 @@ function schema() {
           creationStatus: {
             description: "Project's creation status",
             type: 'string',
-            enum: ['mining', 'done'],
+            enum: ['building', 'mining', 'done'],
           },
           privateId: {
             description: "Project's id in smart contract",
