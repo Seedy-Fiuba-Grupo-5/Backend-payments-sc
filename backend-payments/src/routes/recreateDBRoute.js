@@ -1,13 +1,14 @@
 const { preHandler } = require("../handlers/authPreHandler");
-const recreateDB = require("../handlers/recreateDBHandler");
+const { handler } = require("../handlers/recreateDBHandler");
+const { schema } = require("../schemas/recreateDBSchema");
 
 function route() {
   return {
     method: "DELETE",
     url: "/db",
-    schema: recreateDB.schema(),
+    schema: schema(),
     preHandler: preHandler,
-    handler: recreateDB.handler(),
+    handler: handler(),
   };
 }
 
