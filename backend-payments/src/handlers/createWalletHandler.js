@@ -2,20 +2,6 @@ const createWalletHelper = require('../helpers/createWalletHelper');
 const createWalletService = require('../services/createWalletService');
 const { log } = require('../log');
 
-function schema() {
-  return {
-    params: {
-      type: "object",
-      properties: {
-        id: {
-          type: "integer",
-        },
-      },
-    },
-    required: ["id"],
-  };
-}
-
 function handler() {
   return async function (req, reply) {
     log(`POST /wallets`);
@@ -26,4 +12,4 @@ function handler() {
   };
 }
 
-module.exports = { handler, schema };
+module.exports = { handler };

@@ -1,13 +1,14 @@
 const { preHandler } = require('../handlers/authPreHandler');
-const getAllWallets = require("../handlers/getWalletsHandler");
+const { handler } = require("../handlers/getWalletsHandler");
+const { schema } = require('../schemas/getAllWalletsSchema');
 
 function route() {
   return {
     method: "GET",
     url: "/wallets",
-    schema: getAllWallets.schema(),
+    schema: schema(),
     preHandler: preHandler,
-    handler: getAllWallets.handler(),
+    handler: handler(),
   };
 }
 
