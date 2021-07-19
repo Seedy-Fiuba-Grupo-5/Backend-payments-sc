@@ -1,3 +1,4 @@
+const { preHandler } = require("../handlers/authPreHandler");
 const updateProject = require("../handlers/updateProjectHandler");
 
 function route() {
@@ -5,6 +6,7 @@ function route() {
     method: "PATCH",
     url: "/projects/:publicId",
     schema: updateProject.schema(),
+    preHandler: preHandler,
     handler: updateProject.handler(),
   };
 }

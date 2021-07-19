@@ -5,7 +5,6 @@ const createWallet = require("./createWalletRoute");
 const createProject = require("./createProjectRoute");
 const getProject = require("./getProjectRoute");
 const updateProject = require("./updateProjectRoute");
-//const swagger = require("./swaggerRoute");
 
 module.exports = [
   recreateDB.route,
@@ -16,5 +15,3 @@ module.exports = [
   getProject.route,
   updateProject.route
 ];
-
-//  swagger.route

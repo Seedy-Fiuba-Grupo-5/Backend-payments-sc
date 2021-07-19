@@ -1,3 +1,4 @@
+const { preHandler } = require("../handlers/authPreHandler");
 const getWallet = require("../handlers/getWalletHandler");
 
 function route() {
@@ -5,6 +6,7 @@ function route() {
     method: "GET",
     url: "/wallets/:publicId",
     schema: getWallet.schema(),
+    preHandler: preHandler,
     handler: getWallet.handler(),
   };
 }

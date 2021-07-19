@@ -1,3 +1,4 @@
+const { preHandler } = require("../handlers/authPreHandler");
 const getProject = require("../handlers/getProjectHandler");
 
 function route() {
@@ -5,6 +6,7 @@ function route() {
     method: "GET",
     url: "/projects/:publicId",
     schema: getProject.schema(),
+    preHandler: preHandler,
     handler: getProject.handler(),
   };
 }

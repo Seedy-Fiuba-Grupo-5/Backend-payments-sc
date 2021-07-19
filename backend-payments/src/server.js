@@ -1,7 +1,6 @@
 const { webPort } = require("./config");
 const { db } = require("./db/db");
 const fastify = require("fastify");
-const bearerAuthExtension = require('./plugins/bearerAuthPlugin');
 const corsExtension = require('./plugins/corsPlugin');
 const swaggerExtension = require("./plugins/swaggerPlugin");
 const routes = require("./routes/routes");
@@ -10,10 +9,8 @@ const app = fastify({ logger: true })
 
 // Extensions
 swaggerExtension.plugIn(app); // Should be call before routing
-bearerAuthExtension.plugIn(app);
 corsExtension.plugIn(app);
 
-// Routing
 routes.forEach(route => app.route(route()));
 
 db.sync({alter: true}).then(async () => {

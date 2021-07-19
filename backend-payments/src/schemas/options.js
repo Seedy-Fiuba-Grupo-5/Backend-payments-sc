@@ -9,7 +9,7 @@ const options = {
       url: 'https://swagger.io',
       description: 'Find more info here'
     },
-    host: '0.0.0.0:5003',
+    host: '/',
     schemes: ['http'],
     consumes: ['application/json'],
     produces: ['application/json']

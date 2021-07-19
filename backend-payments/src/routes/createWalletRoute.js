@@ -1,3 +1,4 @@
+const { preHandler } = require("../handlers/authPreHandler");
 const createWallet = require("../handlers/createWalletHandler");
 
 function route() {
@@ -5,6 +6,7 @@ function route() {
     method: "POST",
     url: "/wallets",
     schema: createWallet.schema(),
+    preHandler: preHandler,
     handler: createWallet.handler(),
   };
 }

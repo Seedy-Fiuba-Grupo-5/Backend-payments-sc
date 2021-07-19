@@ -9,9 +9,19 @@ function plugIn(app) {
     errorResponse: (err) => {
       return {error: err.message}
     },
-    auth: undefined,
+    auth: auth,
     addHook: false
   });
+}
+
+function auth(key, req) {
+  unlockedURLs = ['/', '/./static/index.html'];
+  console.log(req.url);
+  if (unlockedURLs.includes(req.url)) {
+    console.log('COooool');
+    return true;
+  }
+  return key === apiKey;
 }
 
 module.exports = { plugIn };
