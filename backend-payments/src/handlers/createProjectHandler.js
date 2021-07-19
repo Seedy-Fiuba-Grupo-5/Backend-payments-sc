@@ -2,28 +2,6 @@ const { log } = require('../log');
 const createProjectService = require('../services/createProjectService');
 const createProjectHelper = require('../helpers/createProjectHelper');
 
-function schema() {
-  return {
-    params: {
-      type: "object",
-      properties: {
-        ownerId: {
-          type: "integer",
-        },
-        reviewerId: {
-          type: "integer",
-        },
-        stagesCost: {
-          type: "array",
-          minItems: 1,
-          Items: { type: "number" },
-        },
-      },
-    },
-    required: ["ownerId", "reviewerId", "stagesCost"],
-  };
-}
-
 function handler() {
   return async function (req, reply) {
     log(`POST /projects`);
@@ -34,4 +12,4 @@ function handler() {
   };
 }
 
-module.exports = { schema, handler };
+module.exports = { handler };

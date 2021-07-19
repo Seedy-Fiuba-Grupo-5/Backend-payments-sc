@@ -1,13 +1,14 @@
 const { preHandler } = require('../handlers/authPreHandler');
-const createProject = require("../handlers/createProjectHandler");
+const { handler } = require("../handlers/createProjectHandler");
+const { schema } = require('../schemas/createProjectSchema');
 
 function route() {
   return {
     method: "POST",
     url: "/projects",
-    schema: createProject.schema(),
+    schema: schema(),
     preHandler: preHandler,
-    handler: createProject.handler(),
+    handler: handler(),
   };
 }
 
