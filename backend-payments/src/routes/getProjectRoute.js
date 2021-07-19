@@ -1,13 +1,14 @@
 const { preHandler } = require("../handlers/authPreHandler");
-const getProject = require("../handlers/getProjectHandler");
+const { handler } = require("../handlers/getProjectHandler");
+const { schema } = require("../schemas/getProjectSchema");
 
 function route() {
   return {
     method: "GET",
     url: "/projects/:publicId",
-    schema: getProject.schema(),
+    schema: schema(),
     preHandler: preHandler,
-    handler: getProject.handler(),
+    handler: handler(),
   };
 }
 

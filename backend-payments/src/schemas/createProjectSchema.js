@@ -23,8 +23,7 @@ function schema() {
         },
         reviewerPublicId: {
           description: 'User id of the reviewer of the project',
-          type: 'number',
-          nullable: true
+          type: 'integer'
         },
         stagesCost: {
           description: 'Sorted array of cost (ether) by stage',
@@ -39,7 +38,7 @@ function schema() {
       'publicId', 
       'ownerPublicId', 
       'reviewerPublicId', 
-      ' stagesCost'
+      'stagesCost'
     ],
     response: {
       201: {
@@ -47,7 +46,7 @@ function schema() {
         properties: {
           publicId: { type: 'number' },
           ownerPublicId: { type: 'number' },
-          reviewerPublicId: { example: null },
+          reviewerPublicId: { example: -1 },
           stagesCost: {
             type: 'array',
             minItems: 1,
@@ -58,8 +57,8 @@ function schema() {
             type: 'string',
             enum: ["building"]
           },
-          privateId: { example: null },
-          balance: { example: null }
+          privateId: { example: -1 },
+          balance: { example: '' }
         }
       },
       202: {
