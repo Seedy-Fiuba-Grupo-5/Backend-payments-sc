@@ -5,7 +5,7 @@ const ProjectDB = db.define('project',{
   publicId: {type: Sequelize.INTEGER, primaryKey: true, allowNull: false},
   privateId: {type: Sequelize.INTEGER, allowNull: true},
   creationStatus: {type: Sequelize.STRING(256), allowNull: false},
-  stagesCost: {type: Sequelize.ARRAY(Sequelize.INTEGER), allowNull: true},
+  stagesCost: {type: Sequelize.ARRAY(Sequelize.DECIMAL(38,20)), allowNull: true},
   ownerPublicId: {type: Sequelize.INTEGER, allowNull: true},
   reviewerPublicId: {type: Sequelize.INTEGER, allowNull: true},
   balance: {type: Sequelize.STRING(256), allowNull: true},

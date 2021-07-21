@@ -1,8 +1,9 @@
 const { ProjectDB } = require("../models/project");
 const { db } = require("../db");
+const utils = require('../../ethers/utils');
 
 async function create(dataDict) {
-  await ProjectDB.create(dataDict);
+  return await ProjectDB.create(dataDict);
 }
 
 async function get(publicId) {
@@ -36,8 +37,30 @@ async function update(publicId, updatesDict) {
   }
 }
 
+async function addBalance(publicId, amountWeis) {
+  const t = await db.transaction();
+  try {
+    projectRepr = await ProjectDB.findByPk(publicId);
+    balanceEthers = projectRepr.dataValues.balance;
+    amountEthers = utils.weisToEthersString(amountWeis);
+    newBalanceEthers = utils.sumEthers(balanceEthers, amountEthers);
+    await ProjectDB.update(
+      { balance: newBalanceEthers },
+      {
+        where: { publicId: publicId },
+        transaction: t
+      });
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    throw error;
+  }
+}
+
+
 module.exports = {
   get,
   create,
-  update
+  update,
+  addBalance
 };

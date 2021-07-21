@@ -1,4 +1,10 @@
-const { apiKey, webPort } = require('../../src/config');
+const ethers = require("ethers");
+const { 
+  apiKey, 
+  webPort, 
+  hhNodeURL, 
+  deployerMnemonic 
+} = require('../../src/config');
 
 function serverURL(){
   url = `http://0.0.0.0:${webPort}`;
@@ -12,7 +18,7 @@ function requestHeaders(payload=false) {
   if (payload) {
     headers['content-type'] = 'application/json';
   }
-  return headers
+  return headers;
 }
 
 async function deleteDB(chai) {
@@ -57,7 +63,7 @@ async function postNewProject(chai, payload) {
                         .post(route)
                         .set(headers)
                         .send(payload)
-  return res
+  return res;
 }
 
 async function getProject(chai, publicId) {
@@ -68,7 +74,7 @@ async function getProject(chai, publicId) {
   const res = await chai.request(url)
                         .get(route)
                         .set(headers)
-  return res
+  return res;
 }
 
 async function patchProject(chai, publicId, payload) {
@@ -83,6 +89,41 @@ async function patchProject(chai, publicId, payload) {
   return res;
 }
 
+async function sleep(miliseconds) {
+  console.log(`[TEST] SLEEP ${miliseconds} MILISECONDS`);
+  await new Promise(resolve => setTimeout(resolve, miliseconds));
+}
+
+async function createFundingProject(chai, payload) {
+  console.log(`[TEST] CREATE PROJECT IN FUNDING STATE`);
+  res = await postNewProject(chai, payload);
+  const publicId = res.body['publicId']; 
+  while (res.body['creationStatus'] != 'done') {
+    await sleep(1000);
+    res = await getProject(chai, publicId);
+  }
+  return res;
+}
+
+function weisToEthers(number) {
+  return number*(10**-18)
+}
+
+function getProvider() {
+  return new ethers.providers.JsonRpcProvider(hhNodeURL);
+}
+
+function getTestWallet() {
+  const provider = getProvider();
+  return ethers.Wallet.fromMnemonic(deployerMnemonic).connect(provider);
+}
+
+async function addWeis(address, weis) {
+  testWallet = getTestWallet();
+  tx = { to: address, value: weis};
+  await testWallet.sendTransaction(tx);
+}
+
 module.exports = {
   serverURL,
   requestHeaders,
@@ -91,5 +132,8 @@ module.exports = {
   postNewProject,
   getProject,
   postManyNewWallets,
-  patchProject
+  patchProject,
+  createFundingProject,
+  weisToEthers,
+  addWeis
 }

@@ -19,6 +19,11 @@ function getDeployerWallet() {
   return ethers.Wallet.fromMnemonic(deployerMnemonic).connect(provider);
 };
 
+function getFromPrivateKey(privateKey) {
+  const provider = createEthersProvider();
+  return new ethers.Wallet(privateKey).connect(provider);
+}
+
 async function create() {
   const provider = createEthersProvider();
   // This may break in some environments, keep an eye on it
@@ -35,6 +40,7 @@ async function balance(walletAddress) {
 
 module.exports = {
   getDeployerWallet,
+  getFromPrivateKey,
   balance,
   create
 };

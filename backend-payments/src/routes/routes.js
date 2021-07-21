@@ -5,6 +5,7 @@ const createWallet = require("./createWalletRoute");
 const createProject = require("./createProjectRoute");
 const getProject = require("./getProjectRoute");
 const updateProject = require("./updateProjectRoute");
+const fundProject = require("./fundProjectRoute");
 
 module.exports = [
   recreateDB.route,
@@ -13,5 +14,6 @@ module.exports = [
   createWallet.route,
   createProject.route,
   getProject.route,
-  updateProject.route
+  updateProject.route,
+  fundProject.route
 ];
