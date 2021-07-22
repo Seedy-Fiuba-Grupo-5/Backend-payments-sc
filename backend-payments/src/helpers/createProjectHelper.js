@@ -1,7 +1,8 @@
 function parse(request) {
+  stagesCost = request.body.stagesCost.map((i)=>i.toString());
   data = {
     publicId: request.body.publicId,
-    stagesCost: request.body.stagesCost,
+    stagesCost: stagesCost,
     ownerPublicId: request.body.ownerPublicId,
     reviewerPublicId: request.body.reviewerPublicId
   };
@@ -10,7 +11,7 @@ function parse(request) {
 
 function format(result) {
   code = 202;
-  body = result;
+  body = JSON.stringify(result);
   return [code, body]
 }
 

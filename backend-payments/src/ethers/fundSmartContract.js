@@ -1,6 +1,6 @@
 const sc = require('./smartContract');
 const walletsEthers = require("./wallets");
-const { ethersNumToWeis } = require('./utils');
+const { ethersToWeis } = require('./utils');
 const transactionsRepo = require("../db/repositories/transactionsRepo");
 const projectsRepo = require("../db/repositories/projectsRepo");
 const { log } = require("../log");
@@ -16,7 +16,7 @@ async function fund(
   log(`Mining 'fund' transaction ${transcationId}`);
   const funderWallet = walletsEthers.getFromPrivateKey(funderPrivateKey);
   const seedyFiubaContract = await sc.getContract(funderWallet);
-  let overrides = { value: ethersNumToWeis(amountEthers) };
+  let overrides = { value: ethersToWeis(amountEthers) };
   const tx = await seedyFiubaContract.fund(projectSCId, overrides);
   await transactionsRepo.update(transcationId, {transactionState: 'mining'});
 

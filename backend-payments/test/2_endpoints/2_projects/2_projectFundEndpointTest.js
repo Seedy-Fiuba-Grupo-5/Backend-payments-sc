@@ -63,7 +63,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
                       });
 
       expect(res.status).to.be.eql(202);
-      expect(res.body).to.have.property('amountEthers').to.be.eql(weisToEthers(fundWeis));
+      expect(res.body).to.have.property('amountEthers').to.be.eql(weisToEthers(fundWeis).toString());
       expect(res.body).to.have.property('fromPublicId').to.be.eql(funderRes.body['publicId']);
       expect(res.body).to.have.property('fromType').to.be.eql('user');
       expect(res.body).to.have.property('toPublicId').to.be.eql(fundingProjectRes.body['publicId']);
@@ -99,7 +99,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
                         throw err;
                       });
       expect(res.status).to.be.eql(202);
-      expect(res.body).to.have.property('amountEthers').to.be.eql(weisToEthers(fundWeis));
+      expect(res.body).to.have.property('amountEthers').to.be.eql(weisToEthers(fundWeis).toString());
       expect(res.body).to.have.property('fromPublicId').to.be.eql(funder1Res.body['publicId']);
       expect(res.body).to.have.property('fromType').to.be.eql('user');
       expect(res.body).to.have.property('toPublicId').to.be.eql(fundingProjectRes.body['publicId']);
@@ -116,7 +116,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
                         throw err;
                       });
       expect(res.status).to.be.eql(202);
-      expect(res.body).to.have.property('amountEthers').to.be.eql(weisToEthers(fundWeis));
+      expect(res.body).to.have.property('amountEthers').to.be.eql(weisToEthers(fundWeis).toString());
       expect(res.body).to.have.property('fromPublicId').to.be.eql(funder2Res.body['publicId']);
       expect(res.body).to.have.property('fromType').to.be.eql('user');
       expect(res.body).to.have.property('toPublicId').to.be.eql(fundingProjectRes.body['publicId']);

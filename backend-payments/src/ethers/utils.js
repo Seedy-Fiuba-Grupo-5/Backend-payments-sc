@@ -1,14 +1,13 @@
 const ethers = require("ethers");
-const BigNumber = require("bignumber.js");
 
-function weisToEthersString(weis) {
+function weisToEthers(weis) {
   bigNumberWeis = ethers.BigNumber.from(weis);
   return ethers.utils.formatEther(bigNumberWeis)  
 }
 
-function ethersNumToWeis(ethersNum) {
-  const WEIS_IN_ETHER = BigNumber(10).pow(18);
-  return BigNumber(ethersNum).times(WEIS_IN_ETHER).toFixed();
+function ethersToWeis(ethersString) {
+  ethersStringFixed = parseFloat(ethersString).toFixed(18);
+  return ethers.utils.parseEther(ethersStringFixed).toString();
 }
 
 function sumEthers(e1, e2) {
@@ -20,7 +19,7 @@ function sumEthers(e1, e2) {
 }
 
 module.exports = { 
-  weisToEthersString, 
-  ethersNumToWeis,
+  weisToEthers, 
+  ethersToWeis,
   sumEthers 
 };
