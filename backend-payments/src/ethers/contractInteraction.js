@@ -2,6 +2,7 @@ const BigNumber = require("bignumber.js");
 const ethers = require("ethers");
 const { contractAddress, contractAbi } = require("../config");
 const projectsRepo = require("../db/repositories/projectsRepo");
+const { ethersToWeis } = require("./utils");
 
 async function getContract(wallet) {
   return new ethers.Contract(contractAddress, contractAbi, wallet);
@@ -21,7 +22,7 @@ async function createProject(
 ) {
   const seedyFiubaContract = await getContract(deployerWallet);
   const tx = await seedyFiubaContract.createProject(
-                    stagesCost.map(toWei),
+                    stagesCost.map(ethersToWeis),
                     projectOwnerAddress,
                     projectReviewerAddress);
   await projectsRepo.update(publicId, {creationStatus: 'mining'});
