@@ -12,11 +12,11 @@ function schema() {
     },
     headers: {
       type: 'object',
-      properties: { 
-        Authorization: { 
+      properties: {
+        Authorization: {
           description: 'Example: Bearer 12345',
           type: 'string'
-        } 
+        }
       }
     },
     body: {
@@ -29,8 +29,8 @@ function schema() {
       }
     },
     required: [
-      'Authorization', 
-      'publicId', 
+      'Authorization',
+      'publicId',
       'reviewerPublicId'
     ],
     response: {
@@ -43,7 +43,7 @@ function schema() {
           stagesCost: {
             type: 'array',
             minItems: 1,
-            items: { type: 'number' },
+            items: { type: 'string' },
           },
           creationStatus: {
             description: "Project's creation status",
@@ -61,7 +61,7 @@ function schema() {
       404: {
         type: 'object',
         properties: {
-          status: { 
+          status: {
             type: 'string',
             example: 'The project requested could not be found'
           }

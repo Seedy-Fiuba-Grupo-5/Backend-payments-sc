@@ -3,11 +3,11 @@ function schema() {
     description: 'Funds an existing project in FUNDING state',
     headers: {
       type: 'object',
-      properties: { 
-        'Authorization': { 
+      properties: {
+        'Authorization': {
           type: 'string',
           description: "Example: Bearer 12345"
-        } 
+        }
       }
     },
     body: {
@@ -19,7 +19,7 @@ function schema() {
         },
         amountEthers: {
           description: 'Amount of ethers that the user wants to fund to the project',
-          type: 'number'
+          type: 'string'
         }
       }
     },
@@ -27,7 +27,7 @@ function schema() {
       202: {
         type: 'object',
         properties: {
-          amountEthers: { type: 'number' },
+          amountEthers: { type: 'string' },
           fromPublicId: { type: 'number' },
           fromType: { type: 'string', enum: ['user'] },
           toPublicId: { type: 'number' },

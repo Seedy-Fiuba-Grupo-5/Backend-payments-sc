@@ -29,7 +29,7 @@ function schema() {
           description: 'Sorted array of cost (ether) by stage',
           type: 'array',
           minItems: 1,
-          items: { type: 'number' }
+          items: { type: 'string' }
         }
       }
     },
@@ -50,7 +50,7 @@ function schema() {
           stagesCost: {
             type: 'array',
             minItems: 1,
-            items: { type: 'number' },
+            items: { type: 'string' },
           },
           creationStatus: {
             description: "Project's creation status",
@@ -66,6 +66,7 @@ function schema() {
           state: {
             description: 'The current state of the project',
             type: 'string',
+            enum: ['INITIALIZING', 'FUNDING', 'IN_PROGRESS', 'COMPLETED']
           }
         }
       }

@@ -12,11 +12,11 @@ function schema() {
     },
     headers: {
       type: 'object',
-      properties: { 
-        'Authorization': { 
+      properties: {
+        'Authorization': {
           type: 'string',
           description: "Example: Bearer 12345"
-        } 
+        }
       }
     },
     response: {
@@ -29,7 +29,7 @@ function schema() {
           stagesCost: {
             type: 'array',
             minItems: 1,
-            items: { type: 'number' },
+            items: { type: 'string' },
           },
           creationStatus: {
             description: "Project's creation status",
@@ -41,7 +41,12 @@ function schema() {
             type: 'number',
             nullable: true
           },
-          balance: { type: 'string', nullable: true }
+          balance: { type: 'string', nullable: true },
+          state: {
+            description: 'The current state of the project',
+            type: 'string',
+            enum: ['INITIALIZING', 'FUNDING', 'IN_PROGRESS', 'COMPLETED']
+          }
         }
       }
     },
