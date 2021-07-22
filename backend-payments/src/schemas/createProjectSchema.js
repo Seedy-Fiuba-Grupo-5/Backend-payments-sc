@@ -3,11 +3,11 @@ function schema() {
     description: 'Creates a new project',
     headers: {
       type: 'object',
-      properties: { 
-        Authorization: { 
+      properties: {
+        Authorization: {
           description: 'Example: Bearer 12345',
           type: 'string',
-        } 
+        }
       }
     },
     body: {
@@ -34,10 +34,10 @@ function schema() {
       }
     },
     required: [
-      'Authorization', 
-      'publicId', 
-      'ownerPublicId', 
-      'reviewerPublicId', 
+      'Authorization',
+      'publicId',
+      'ownerPublicId',
+      'reviewerPublicId',
       'stagesCost'
     ],
     response: {
@@ -62,7 +62,11 @@ function schema() {
             type: 'number',
             nullable: true
           },
-          balance: { type: 'string', nullable: true }
+          balance: { type: 'string', nullable: true },
+          state: {
+            description: 'The current state of the project',
+            type: 'string',
+          }
         }
       }
     }
