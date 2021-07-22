@@ -41,16 +41,18 @@ describe('Endpoint /projects: ', () => {
       "stagesCost": stagesCost,
       "publicId": publicId
     };
+    console.log(payload);
 		res = await chai.request(url)
                     .post(route)
                     .set(headersPayload)
-                    .send(payload);
+                    .send(JSON.stringify(payload));
     expect(res).to.have.status(202);
     expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
     expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
-    expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost);
+    expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost.map((i)=>i.toString()));
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
+    expect(res.body).to.have.property('state').to.be.oneOf(['INITIALIZING', 'FUNDING']);
 	});
 
   it( 'POST should leave a new project in a "building" status when ' +
@@ -72,12 +74,13 @@ describe('Endpoint /projects: ', () => {
                     .post(route)
                     .set(headersPayload)
                     .send(payload);
-
+    
     expect(res).to.have.status(202);
     expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
     expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
-    expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost);
+    expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost.map((i)=>i.toString()));
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('creationStatus').to.be.eql('building');
+    expect(res.body).to.have.property('state').to.be.eql('INITIALIZING');
   });
 });

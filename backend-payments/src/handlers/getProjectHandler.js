@@ -8,7 +8,9 @@ function handler() {
     log(`GET /projects/${data.publicId}`);
     const result = await getProjectService.process(data);
     const [statusCode, body] = getProjectHelper.format(result);
-    return reply.code(statusCode).send(body);
+    reply.code(statusCode)
+          .header('Content-Type', 'application/json')
+          .send(body);
   };
 }
 

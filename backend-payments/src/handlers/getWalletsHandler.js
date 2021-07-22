@@ -8,7 +8,9 @@ function handler() {
     const data = getAllWalletsHelper.parse(req);
     const result = await getAllWalletsService.process(data);
     const [statusCode, body] = getAllWalletsHelper.format(result);
-    return reply.code(statusCode).send(body);
+    reply.code(statusCode)
+          .header('Content-Type', 'application/json')
+          .send(body);
   };
 }
 

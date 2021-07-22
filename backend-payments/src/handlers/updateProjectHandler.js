@@ -8,7 +8,9 @@ function handler() {
     log(`PATCH /projects/${data.publicId}`);
     const result = await updateProjectService.process(data);
     let [statusCode, body] = updateProjectHelper.format(result);
-    reply.code(statusCode).send(body);
+    reply.code(statusCode)
+          .header('Content-Type', 'application/json')
+          .send(body);
   };
 }
 

@@ -8,7 +8,9 @@ function handler() {
     log(`POST /projects/${data.projectPublicId}/funds`);
     const result = await service.process(data);
     let [statusCode, body] = helper.format(result);
-    reply.code(statusCode).send(body);
+    reply.code(statusCode)
+          .header('Content-Type', 'application/json')
+          .send(body);
   };
 }
 

@@ -8,11 +8,12 @@ function parse(request) {
 
 function format(result) {
   code = 202;
-  body = result;
+  _body = result;
   if (projectRepr === null) {
     code = 404
-    body = { "status": "The project requested could not be found"}
+    _body = { "status": "The project requested could not be found"}
   }
+  body = JSON.stringify(_body);
   return [code, body]
 }
 

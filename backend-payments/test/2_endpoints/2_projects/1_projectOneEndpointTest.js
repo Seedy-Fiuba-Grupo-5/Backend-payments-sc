@@ -60,11 +60,12 @@ describe('Endpoint /projects/<id>: ',()=>{
       creationStatus = res.body['creationStatus'];
     }
 
+    console.log(res.body);
     expect(res.status).to.be.eql(200);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('privateId').to.be.a('number');
     expect(res.body).to.have.property('creationStatus').to.be.eql('done');
-    expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost);
+    expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost.map((i)=>i.toString()));
     expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
     expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
     expect(res.body).to.have.property('balance').to.be.eql('0.0');
@@ -123,7 +124,7 @@ describe('Endpoint /projects/<id>: ',()=>{
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('privateId').to.be.a('number');
     expect(res.body).to.have.property('creationStatus').to.be.eql('done');
-    expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost);
+    expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost.map((i)=>i.toString()));
     expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
     expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
     expect(res.body).to.have.property('balance').to.be.eql('0.0');

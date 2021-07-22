@@ -1,8 +1,21 @@
 const { ProjectDB } = require("../models/project");
 const { db } = require("../db");
 const utils = require('../../ethers/utils');
+const { log } = require("../../log");
+
+INITIALIZING = 'INITIALIZING';
+FUNDING = 'FUNDING';
+IN_PROGRESS = 'IN_PROGRESS';
+COMPLETED = 'COMPLETED';
+
+function projectDBLog(message) {
+  fullMessage = `ProjectDB: ${message}`;
+  log(fullMessage);
+}
 
 async function create(dataDict) {
+  projectDBLog(`Creating project with next data:`);
+  console.log(dataDict);
   return await ProjectDB.create(dataDict);
 }
 
@@ -14,6 +27,8 @@ async function get(publicId) {
       { transaction: t }
     );
     t.commit();
+    projectDBLog(`Getting project of publicId: ${publicId}`);
+    console.log(projectRepr.dataValues);
     return projectRepr;
   } catch (error) {
     t.rollback();
@@ -22,6 +37,9 @@ async function get(publicId) {
 }
 
 async function update(publicId, updatesDict) {
+  projectDBLog(`Updating project of publicId: ${publicId}`+
+                `\n\twith next data:`);
+  console.log(updatesDict);
   const t = await db.transaction();
   try {
     await ProjectDB.update(
@@ -38,6 +56,8 @@ async function update(publicId, updatesDict) {
 }
 
 async function addBalance(publicId, amountWeis) {
+  projectDBLog(`Adding to project of publicId: ${publicId}`+
+                `\n\tan amount of weis equal to: ${amountWeis}`);
   const t = await db.transaction();
   try {
     projectRepr = await ProjectDB.findByPk(publicId);
@@ -59,6 +79,10 @@ async function addBalance(publicId, amountWeis) {
 
 
 module.exports = {
+  INITIALIZING,
+  FUNDING,
+  IN_PROGRESS,
+  COMPLETED,
   get,
   create,
   update,

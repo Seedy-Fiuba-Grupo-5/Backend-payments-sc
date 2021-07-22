@@ -12,12 +12,13 @@ async function process(data) {
     stagesCost: data.stagesCost,
     ownerPublicId: data.ownerPublicId,
     reviewerPublicId: data.reviewerPublicId,
-    balance: null
+    balance: null,
+    state: projectsRepo.INITIALIZING
   };
   await projectsRepo.create(dataDict);
   await mineAProject.process(data.publicId);
   projectRepr = await projectsRepo.get(data.publicId);
-  return projectRepr;
+  return projectRepr.dataValues;
 }
 
 module.exports = { process };

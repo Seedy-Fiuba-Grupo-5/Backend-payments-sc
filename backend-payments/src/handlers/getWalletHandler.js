@@ -8,7 +8,9 @@ function handler() {
     log(`GET /wallets/${data.publicId}`);
     const result = await getWalletService.process(data);
     const [statusCode, body] = getWalletHelper.format(result);
-    return reply.code(statusCode).send(body);
+    reply.code(statusCode)
+          .header('Content-Type', 'application/json')
+          .send(body);
   };
 }
 
