@@ -20,6 +20,7 @@ async function create(dataDict) {
 }
 
 async function get(publicId) {
+  projectDBLog(`Getting project of publicId: ${publicId}`);
   const t = await db.transaction();
   try {
     projectRepr = await ProjectDB.findByPk(
@@ -27,8 +28,9 @@ async function get(publicId) {
       { transaction: t }
     );
     t.commit();
-    projectDBLog(`Getting project of publicId: ${publicId}`);
-    console.log(projectRepr.dataValues);
+    if (projectRepr != null) {    
+      console.log(projectRepr.dataValues);
+    }
     return projectRepr;
   } catch (error) {
     t.rollback();
@@ -62,7 +64,7 @@ async function addBalance(publicId, amountWeis) {
   try {
     projectRepr = await ProjectDB.findByPk(publicId);
     balanceEthers = projectRepr.dataValues.balance;
-    amountEthers = utils.weisToEthersString(amountWeis);
+    amountEthers = utils.weisToEthers(amountWeis);
     newBalanceEthers = utils.sumEthers(balanceEthers, amountEthers);
     await ProjectDB.update(
       { balance: newBalanceEthers },
