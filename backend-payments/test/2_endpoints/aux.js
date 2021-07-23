@@ -6,6 +6,8 @@ const {
   deployerMnemonic 
 } = require('../../src/config');
 
+// Utils
+
 function serverURL(){
   url = `http://0.0.0.0:${webPort}`;
   return url;
@@ -20,6 +22,32 @@ function requestHeaders(payload=false) {
   }
   return headers;
 }
+
+function weisToEthers(number) {
+  return number*(10**-18)
+}
+
+function getProvider() {
+  return new ethers.providers.JsonRpcProvider(hhNodeURL);
+}
+
+function getTestWallet() {
+  const provider = getProvider();
+  return ethers.Wallet.fromMnemonic(deployerMnemonic).connect(provider);
+}
+
+async function addWeis(address, weis) {
+  testWallet = getTestWallet();
+  tx = { to: address, value: weis};
+  await testWallet.sendTransaction(tx);
+}
+
+async function sleep(miliseconds) {
+  console.log(`[TEST] SLEEP ${miliseconds} MILISECONDS`);
+  await new Promise(resolve => setTimeout(resolve, miliseconds));
+}
+
+// Server interaction
 
 async function deleteDB(chai) {
   console.log("[TEST] RECREATE DB");
@@ -89,11 +117,6 @@ async function patchProject(chai, publicId, payload) {
   return res;
 }
 
-async function sleep(miliseconds) {
-  console.log(`[TEST] SLEEP ${miliseconds} MILISECONDS`);
-  await new Promise(resolve => setTimeout(resolve, miliseconds));
-}
-
 async function createFundingProject(chai, payload) {
   console.log(`[TEST] CREATE PROJECT IN FUNDING STATE`);
   res = await postNewProject(chai, payload);
@@ -105,24 +128,43 @@ async function createFundingProject(chai, payload) {
   return res;
 }
 
-function weisToEthers(number) {
-  return number*(10**-18)
+async function fundProject(chai, payload, projectPublicId) {
+  console.log(`[TEST] FUND PROJECT`);
+  const url = serverURL();
+  const route = `/projects/${projectPublicId}/funds`;
+  const headers = requestHeaders(true);
+  res = await chai.request(url)
+                    .post(route)
+                    .set(headers)
+                    .send(payload)
+                    .catch(function(err) {
+                      console.log('[TEST] Error while funding');
+                      throw err;
+                    });
+  return res;
 }
 
-function getProvider() {
-  return new ethers.providers.JsonRpcProvider(hhNodeURL);
+async function createInProgressProject(chai, projectPayload, funderRes) {
+  fundingProjectRes = await createFundingProject(chai, payload);
+  projectPublicId = fundingProjectRes.body['publicId'];
+  url = serverURL();
+  route = `/projects/${projectPublicId}/funds`;
+  headers = requestHeaders(true);
+  totalEthers = projectPayload.stagesCost.reduce(
+    (x,y) => { return (parseFloat(x) + parseFloat(y)).toString() });
+  funderPayload = {
+    "userPublicId": funderRes.body['publicId'],
+    "amountEthers": totalEthers
+  };
+  await fundProject(chai, funderPayload, projectPublicId);
+  let res;
+  do {
+    await sleep(1000);
+    res = await getProject(chai, projectPublicId);
+  } while (res.body['state'] != 'IN_PROGRESS');
+  return res;
 }
 
-function getTestWallet() {
-  const provider = getProvider();
-  return ethers.Wallet.fromMnemonic(deployerMnemonic).connect(provider);
-}
-
-async function addWeis(address, weis) {
-  testWallet = getTestWallet();
-  tx = { to: address, value: weis};
-  await testWallet.sendTransaction(tx);
-}
 
 module.exports = {
   serverURL,
@@ -134,6 +176,7 @@ module.exports = {
   postManyNewWallets,
   patchProject,
   createFundingProject,
+  createInProgressProject,
   weisToEthers,
   addWeis
 }
