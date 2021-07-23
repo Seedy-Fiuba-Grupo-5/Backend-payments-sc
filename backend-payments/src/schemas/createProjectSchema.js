@@ -52,6 +52,12 @@ function schema() {
             minItems: 1,
             items: { type: 'string' },
           },
+          stagesStates: {
+            description: 'The states of completeness of each stage',
+            type: 'array',
+            minItems: 1,
+            items: { type: 'boolean' },
+          },
           creationStatus: {
             description: "Project's creation status",
             type: 'string',
