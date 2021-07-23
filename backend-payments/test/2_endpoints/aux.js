@@ -83,6 +83,17 @@ async function postManyNewWallets(chai, quantity) {
   return walletsList;
 }
 
+async function getWallet(chai, publicId) {
+  console.log("[TEST] GET WALLET");
+  const url = serverURL();
+  const route = `/wallets/${publicId}`;
+  const headers = requestHeaders();
+  const res = await chai.request(url)
+                  .get(route)
+                  .set(headers);
+  return res;
+}
+
 async function postNewProject(chai, payload) {
   console.log("[TEST] POST NEW PROJECT");
   const url = serverURL();
@@ -170,15 +181,17 @@ async function createInProgressProject(chai, projectPayload, funderRes) {
 module.exports = {
   serverURL,
   requestHeaders,
+  weisToEthers,
+  addWeis,
+  sleep,
   deleteDB,
   postNewWallet,
+  postManyNewWallets,
+  getWallet,
   postNewProject,
   getProject,
-  postManyNewWallets,
   patchProject,
   createFundingProject,
   createInProgressProject,
-  weisToEthers,
-  addWeis,
-  sleep
-}
+  fundProject
+};

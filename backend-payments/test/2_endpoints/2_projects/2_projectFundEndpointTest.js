@@ -9,12 +9,15 @@ const expect = require('chai').expect;
 const {
   serverURL,
   requestHeaders,
-  deleteDB,
-  postManyNewWallets,
-  createFundingProject,
   weisToEthers,
   addWeis,
-  sleep
+  sleep,
+  deleteDB,
+  postManyNewWallets,
+  getWallet,
+  createFundingProject,
+  fundProject,
+  getProject
 } = require('../aux');
 
 chai.use(chaiHttp);
@@ -22,7 +25,11 @@ chai.use(chaiHttp);
 describe('Endpoint /projects/<id>/funds: ',()=>{
   let url = serverURL();
 
-  describe('Given a created project in FUNDING state', ()=>{
+  describe('GIVEN a created project in FUNDING state', ()=>{
+    let ownerRes, reviewerRes;
+    let projectPublicId = 1;
+    let stagesCost = [weisToEthers(2), weisToEthers(1), weisToEthers(3)];
+
     beforeEach(async function() {
       this.timeout(10000);
       // Recreate DB
@@ -30,15 +37,15 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
       headersPayload = requestHeaders(true);
       await deleteDB(chai);
       // Create FUNDING project
-      let [ownerRes, reviewerRes] = await postManyNewWallets(chai, 2);
+      [ownerRes, reviewerRes] = await postManyNewWallets(chai, 2);
       payload = {
         "publicId": 1,
         "ownerPublicId": ownerRes.body['publicId'],
         "reviewerPublicId": reviewerRes.body['publicId'],
-        "stagesCost": [weisToEthers(2), weisToEthers(1), weisToEthers(3)]
+        "stagesCost": stagesCost
       };
       fundingProjectRes = await createFundingProject(chai, payload);
-      route = `/projects/${fundingProjectRes.body['publicId']}/funds`;
+      route = `/projects/${projectPublicId}/funds`;
     });
 
     it( 'POST 1 wei should add 1 wei to the project balance, ' +
@@ -126,7 +133,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
       expect(res.body).to.have.property('transactionState').to.be.eql('mining');
     });
 
-    it( 'POST extactly total weis needed for a project should add that amount of weis to the project balance, ' +
+    it( 'POST exactly total weis needed for a project should add that amount of weis to the project balance, ' +
         'if the funder has enough ethers to make this transaction', async function () {
       let [funderRes] = await postManyNewWallets(chai, 1);
       fundWeis = 6;
@@ -231,7 +238,35 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
       expect(res.body).to.have.property('toPublicId').to.be.eql(fundingProjectRes.body['publicId']);
       expect(res.body).to.have.property('toType').to.be.eql('project');
       expect(res.body).to.have.property('transactionType').to.be.eql('fund');
-
     });
+
+    describe('WHEN the project reaches the IN_PROGRESS state', async function() {
+      let funderRes;
+      beforeEach(async function() {
+        // Timeout limit for this pre-test
+        this.timeout(10000);
+        // Fund until be IN_PROGRESS
+        [funderRes] = await postManyNewWallets(chai, 1);
+        fundWeis = 6; // stagesCost sum should be 6 weis
+        txCostWeis = 972976000000007;
+        totalWeis = fundWeis + txCostWeis;
+        addWeis(funderRes.body['address'], txCostWeis);
+        funderPayload = {
+          "userPublicId": funderRes.body['publicId'],
+          "amountEthers": weisToEthers(fundWeis)
+        };
+        await fundProject(chai, funderPayload, projectPublicId);
+        let res;
+        do {
+          await sleep(1000);
+          res = await getProject(chai, projectPublicId);
+        } while (res.body['state'] != 'IN_PROGRESS');
+      });
+      it('THEN the owner of the project should receive the funds of the first stage of it', async function(){
+        res = await getWallet(chai, ownerRes.body['publicId']);
+        expect(res).have.status(200);
+        expect(res.body).have.property('balance').to.be.eql(stagesCost[0]);
+      });
+    }); 
   });
 });
