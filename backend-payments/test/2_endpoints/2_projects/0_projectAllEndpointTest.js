@@ -6,10 +6,10 @@ const chaiHttp = require('chai-http');
 const expect = require('chai').expect;
 
 // Auxiliary
-const { 
-  serverURL, 
-  requestHeaders, 
-  deleteDB, 
+const {
+  serverURL,
+  requestHeaders,
+  deleteDB,
   postNewWallet
 } = require('../aux');
 
@@ -41,7 +41,6 @@ describe('Endpoint /projects: ', () => {
       "stagesCost": stagesCost,
       "publicId": publicId
     };
-    console.log(payload);
 		res = await chai.request(url)
                     .post(route)
                     .set(headersPayload)
@@ -74,7 +73,7 @@ describe('Endpoint /projects: ', () => {
                     .post(route)
                     .set(headersPayload)
                     .send(payload);
-    
+
     expect(res).to.have.status(202);
     expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
     expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);

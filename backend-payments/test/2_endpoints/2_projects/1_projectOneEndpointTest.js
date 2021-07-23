@@ -6,9 +6,9 @@ const chaiHttp = require('chai-http');
 const expect = require('chai').expect;
 
 // Auxiliary
-const { 
-  serverURL, 
-  requestHeaders, 
+const {
+  serverURL,
+  requestHeaders,
   deleteDB,
   postNewProject,
   getProject,
@@ -60,7 +60,6 @@ describe('Endpoint /projects/<id>: ',()=>{
       creationStatus = res.body['creationStatus'];
     }
 
-    console.log(res.body);
     expect(res.status).to.be.eql(200);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('privateId').to.be.a('number');
@@ -108,7 +107,7 @@ describe('Endpoint /projects/<id>: ',()=>{
       "reviewerPublicId": reviewerPublicId
     };
     var res = await patchProject(chai, publicId, payload);
-    
+
     expect(res.status).to.be.eql(202);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
@@ -147,7 +146,7 @@ describe('Endpoint /projects/<id>: ',()=>{
   //   await postNewProject(chai, payload);
 
   //   const route = `${parcialRoute}/${publicId}`;
-    
+
   //   otherReviewerPublicId = otherReviewerRes.body['publicId'];
   //   payload = {
   //     "reviewerPublicId": otherReviewerPublicId
