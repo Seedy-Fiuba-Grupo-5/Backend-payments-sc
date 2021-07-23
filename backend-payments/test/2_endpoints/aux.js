@@ -6,6 +6,11 @@ const {
   deployerMnemonic
 } = require('../../src/config');
 
+const {
+  sumEthers,
+  weisToEthers
+} = require('../../src/ethers/utils');
+
 // Utils
 
 function serverURL(){
@@ -21,11 +26,6 @@ function requestHeaders(payload=false) {
     headers['content-type'] = 'application/json';
   }
   return headers;
-}
-
-function weisToEthers(weis) {
-  bigNumberWeis = ethers.BigNumber.from(weis);
-  return ethers.utils.formatEther(bigNumberWeis);
 }
 
 function getProvider() {
@@ -150,7 +150,7 @@ async function fundProject(chai, payload, projectPublicId) {
                     .set(headers)
                     .send(payload)
                     .catch(function(err) {
-                      console.log('[TEST] Error while funding');
+                      console.log('[TEST] [ERROR] FUND');
                       throw err;
                     });
   return res;
@@ -162,8 +162,8 @@ async function createInProgressProject(chai, projectPayload, funderRes) {
   url = serverURL();
   route = `/projects/${projectPublicId}/funds`;
   headers = requestHeaders(true);
-  totalEthers = projectPayload.stagesCost.reduce(
-    (x,y) => { return (parseFloat(x) + parseFloat(y)).toString() });
+  totalEthers = projectPayload.stagesCost.reduce((e1,e2) => sumEthers(e1, e2));
+  console.log(totalEthers);
   funderPayload = {
     "userPublicId": funderRes.body['publicId'],
     "amountEthers": totalEthers

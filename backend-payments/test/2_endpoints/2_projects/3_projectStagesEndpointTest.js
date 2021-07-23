@@ -14,7 +14,8 @@ const {
   createInProgressProject,
   weisToEthers,
   addWeis,
-  getProject
+  getProject,
+  getWallet
 } = require('../aux');
 
 chai.use(chaiHttp);
@@ -25,6 +26,8 @@ describe('Endpoint /projects/<id>/stages/<stage_number>: ',()=>{
   describe('Given a created project in IN_PROGRESS state', ()=>{
     let ownerRes, reviewerRes, funderRes;
     let projectPublicId = 1;
+    let stagesCost = [weisToEthers(2), weisToEthers(1), weisToEthers(3)];
+    console.log(stagesCost);
 
     beforeEach(async function() {
       // Timeout limit for this pre-test
@@ -43,7 +46,7 @@ describe('Endpoint /projects/<id>/stages/<stage_number>: ',()=>{
         "publicId": projectPublicId,
         "ownerPublicId": ownerRes.body['publicId'],
         "reviewerPublicId": reviewerRes.body['publicId'],
-        "stagesCost": [weisToEthers(2), weisToEthers(1), weisToEthers(3)]
+        "stagesCost": stagesCost
       };
       fundWeis = 6;
       txCostWeis = 972976000000007;
@@ -58,39 +61,34 @@ describe('Endpoint /projects/<id>/stages/<stage_number>: ',()=>{
       expect(res.body).to.have.property('state').to.be.eql('IN_PROGRESS');
     });
 
-    // it( 'The owner of the project, should have' +
-    //     'if the funder has enough ethers to make this transaction', async function () {
-    //   let [funderRes] = await postManyNewWallets(chai, 1);
-    //   fundWeis = 7;
-    //   fundNeeded = 6;
-    //   costTxWeis = 972976000000007;
-    //   totalWeis = fundWeis + costTxWeis;
-    //   await addWeis(funderRes.body['address'], totalWeis);
+    it ('The owner of the project should have the funds of the first stage of it', async function () {
+      res = await getWallet(chai, ownerRes.body['publicId']);
+      expect(res.body).to.have.property('balance').to.be.eql(stagesCost[0]);
+    });
 
-    //   payload = {
-    //     "userPublicId": funderRes.body['publicId'],
-    //     "amountEthers": weisToEthers(fundWeis)
-    //   };
+  //   it( 'The reviewer of the project, should be able to set the second stage as complete '+
+  //       'if it has enough ethers to make this transaction', async function () {
+  //     costTxWeis = 1;
+  //     await addWeis(reviewerRes.body['address'], costTxWeis);
+  //     route = `projects/${projectPublicId}/stages/2`;
 
-    //   res = await chai.request(url)
-    //                   .post(route)
-    //                   .set(headersPayload)
-    //                   .send(payload)
-    //                   .catch(function(err) {
-    //                     console.log('DEBUG ERROR');
-    //                     throw err;
-    //                   });
+  //     res = await chai.request(url)
+  //                     .post(route)
+  //                     .set(headers)
+  //                     .catch(function(err) {
+  //                       console.log('DEBUG ERROR');
+  //                       throw err;
+  //                     });
 
-    //   expect(res.status).to.be.eql(202);
-    //   expect(res.body).to.have.property('amountEthers').to.be.eql(weisToEthers(fundWeis).toString());
-    //   expect(res.body).to.have.property('fromPublicId').to.be.eql(funderRes.body['publicId']);
-    //   expect(res.body).to.have.property('fromType').to.be.eql('user');
-    //   expect(res.body).to.have.property('toPublicId').to.be.eql(fundingProjectRes.body['publicId']);
-    //   expect(res.body).to.have.property('toType').to.be.eql('project');
-    //   expect(res.body).to.have.property('transactionType').to.be.eql('fund');
-    //   expect(res.body).to.have.property('transactionState').to.be.eql('mining');
-    //   // TERMINAR - VALIDAR QUE UNA VEZ TERMINADA LA TRANSACCION SOLO SE FOUNDEO LO NECEARIO
-    // });
+  //     expect(res.status).to.be.eql(202);
+  //     expect(res.body).to.have.property('amountEthers').to.be.eql(stagesCost[1]);
+  //     expect(res.body).to.have.property('fromPublicId').to.be.eql(projectPublicId);
+  //     expect(res.body).to.have.property('fromType').to.be.eql('project');
+  //     expect(res.body).to.have.property('toPublicId').to.be.eql(ownerRes.body['publicId']);
+  //     expect(res.body).to.have.property('toType').to.be.eql('user');
+  //     expect(res.body).to.have.property('transactionType').to.be.eql('stageCompleted');
+  //     expect(res.body).to.have.property('transactionState').to.be.eql('mining');
+  //   });
   });
 
   // Comment this and the DB will keep its last state
