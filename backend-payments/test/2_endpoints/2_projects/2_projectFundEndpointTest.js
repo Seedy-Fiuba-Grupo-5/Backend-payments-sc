@@ -13,7 +13,8 @@ const {
   postManyNewWallets,
   createFundingProject,
   weisToEthers,
-  addWeis
+  addWeis,
+  sleep
 } = require('../aux');
 
 chai.use(chaiHttp);
@@ -36,7 +37,6 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
         "reviewerPublicId": reviewerRes.body['publicId'],
         "stagesCost": [weisToEthers(2), weisToEthers(1), weisToEthers(3)]
       };
-      console.log(payload);
       fundingProjectRes = await createFundingProject(chai, payload);
       route = `/projects/${fundingProjectRes.body['publicId']}/funds`;
     });
@@ -203,7 +203,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
                       });
 
       expect(res.status).to.be.eql(202);
-      expect(res.body).to.have.property('amountEthers').to.be.eql(weisToEthers(fundNeeded).toString());
+      expect(res.body).to.have.property('amountEthers').to.be.eql(weisToEthers(fundWeis).toString());
       expect(res.body).to.have.property('fromPublicId').to.be.eql(funderRes.body['publicId']);
       expect(res.body).to.have.property('fromType').to.be.eql('user');
       expect(res.body).to.have.property('toPublicId').to.be.eql(fundingProjectRes.body['publicId']);
@@ -222,6 +222,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
                           throw err;
                         });
       } while (res.body['transactionState'] !== 'done');
+
       expect(res.body).to.have.property('transactionState').to.be.eql('done');
       expect(res.status).to.be.eql(200);
       expect(res.body).to.have.property('amountEthers').to.be.eql(weisToEthers(fundNeeded).toString());

@@ -179,5 +179,6 @@ module.exports = {
   createFundingProject,
   createInProgressProject,
   weisToEthers,
-  addWeis
+  addWeis,
+  sleep
 }
