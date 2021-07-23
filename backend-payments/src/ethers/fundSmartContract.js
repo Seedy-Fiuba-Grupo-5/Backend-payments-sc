@@ -1,6 +1,6 @@
 const sc = require('./smartContract');
 const walletsEthers = require("./wallets");
-const { ethersToWeis } = require('./utils');
+const { ethersToWeis, weisToEthers } = require('./utils');
 const transactionsRepo = require("../db/repositories/transactionsRepo");
 const projectsRepo = require("../db/repositories/projectsRepo");
 const { log } = require("../log");
@@ -37,8 +37,8 @@ async function fund(
           `\n\tfunderAddress: ${funderAddress}` +
           `\n\tfunds: ${funds} weis`
           );
-      updatesTransactionDict = { transactionState: 'done', amountEthers: funds};
-      projectsRepo.addBalance(projectPublicId, funds);
+      updatesTransactionDict = { transactionState: 'done', amountEthers: weisToEthers(funds)};
+      projectsRepo.addBalance(projectPublicId, weisToEthers(funds));
     } else {
       log(`Fund tx ${tx.hash}: failed`);
       updatesTransactionDict = { transactionState: 'failed'};
