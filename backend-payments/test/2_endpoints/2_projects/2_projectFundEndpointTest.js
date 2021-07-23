@@ -52,7 +52,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
         'if the funder has enough ethers to make this transaction', async function () {
       let [funderRes] = await postManyNewWallets(chai, 1);
       fundWeis = 1;
-      costTxWeis = 445040000000000;
+      costTxWeis = 445136000000001;
       totalWeis = fundWeis + costTxWeis;
       await addWeis(funderRes.body['address'], totalWeis);
 
@@ -84,7 +84,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
         'if the funders have enough ethers to make the transactions', async function () {
       let [funder1Res, funder2Res] = await postManyNewWallets(chai, 2);
       fundWeis = 1;
-      costTxWeis = 445040000000000;
+      costTxWeis = 445136000000001;
       totalWeis = fundWeis + costTxWeis;
       await addWeis(funder1Res.body['address'], totalWeis);
       await addWeis(funder2Res.body['address'], totalWeis);
@@ -137,7 +137,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
         'if the funder has enough ethers to make this transaction', async function () {
       let [funderRes] = await postManyNewWallets(chai, 1);
       fundWeis = 6;
-      costTxWeis = 910992000000006;
+      costTxWeis = 911112000000006;
       totalWeis = fundWeis + costTxWeis;
       await addWeis(funderRes.body['address'], totalWeis);
 
@@ -191,7 +191,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
       let [funderRes] = await postManyNewWallets(chai, 1);
       fundWeis = 7;
       fundNeeded = 6;
-      costTxWeis = 972976000000007;
+      costTxWeis = 973080000000007;
       totalWeis = fundWeis + costTxWeis;
       await addWeis(funderRes.body['address'], totalWeis);
 

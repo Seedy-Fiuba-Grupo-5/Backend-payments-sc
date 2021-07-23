@@ -1,6 +1,15 @@
 function schema() {
   return {
     description: 'Funds an existing project in FUNDING state',
+    params: {
+      type: 'object',
+      properties: {
+        publicId: {
+          description: 'The id of the project to fund',
+          type: 'number'
+        }
+      }
+    },
     headers: {
       type: 'object',
       properties: {

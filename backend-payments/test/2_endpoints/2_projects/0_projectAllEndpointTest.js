@@ -52,6 +52,8 @@ describe('Endpoint /projects: ', () => {
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
     expect(res.body).to.have.property('state').to.be.oneOf(['INITIALIZING', 'FUNDING']);
+    stagesStates = stagesCost.map(() => false);
+    expect(res.body).to.have.property('stagesStates').to.be.eql(stagesStates);
 	});
 
   it( 'POST should leave a new project in a "building" status when ' +
@@ -81,5 +83,7 @@ describe('Endpoint /projects: ', () => {
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('creationStatus').to.be.eql('building');
     expect(res.body).to.have.property('state').to.be.eql('INITIALIZING');
+    stagesStates = stagesCost.map(() => false);
+    expect(res.body).to.have.property('stagesStates').to.be.eql(stagesStates);
   });
 });

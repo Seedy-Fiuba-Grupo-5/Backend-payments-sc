@@ -10,6 +10,7 @@ async function process(data) {
     privateId: null,
     creationStatus: creationStatus,
     stagesCost: data.stagesCost,
+    stagesStates: data.stagesCost.map(()=>false),
     ownerPublicId: data.ownerPublicId,
     reviewerPublicId: data.reviewerPublicId,
     balance: null,

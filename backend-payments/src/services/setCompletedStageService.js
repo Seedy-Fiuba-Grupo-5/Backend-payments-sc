@@ -6,11 +6,11 @@ const { log } = require("../log");
 
 async function process(data) {
   log(`Setting stage ${data.stageNumber} of project ${data.projectPublicId} as completed`);
-
+  stageIndex = data.stageNumber - 1;
   projectInst = await projectsRepo.get(data.projectPublicId);
   walletInst = await walletsRepo.get(data.reviewerPublicId);
   transactionDict = {
-    amountEthers: projectInst.dataValues.stagesCost[data.stageNumber-1],
+    amountEthers: projectInst.dataValues.stagesCost[data.stageNumber],
     fromPublicId: data.projectPublicId,
     fromType: 'project',
     toPublicId: projectInst.dataValues.ownerPublicId,
@@ -22,7 +22,7 @@ async function process(data) {
 
   await setCompletedStage(
     projectInst.dataValues.privateId,
-    data.stageNumber,
+    stageIndex,
     walletInst.dataValues.privateKey,
     transactionInst.id,
     data.projectPublicId

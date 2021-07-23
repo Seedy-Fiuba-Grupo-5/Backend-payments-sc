@@ -15,7 +15,8 @@ const {
   weisToEthers,
   addWeis,
   getProject,
-  getWallet
+  getWallet,
+  setCompletedStage
 } = require('../aux');
 
 chai.use(chaiHttp);
@@ -66,11 +67,12 @@ describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
     });
 
     it( 'The reviewer of the project, should be able to set the second stage as complete '+
-        'if it has enough ethers to make this transaction', async function () {
-      costTxWeis = 560192000000000;
+        'if it has enough ethers to make this transaction, '+
+        'and the funds of the up to next stage should be released', async function () {
+      costTxWeis = 560288000000000;
       await addWeis(reviewerRes.body['address'], costTxWeis);
       route = `/projects/${projectPublicId}/stages`;
-      stageNumber = 2;
+      stageNumber = 1;
       payload = {
         "reviewerPublicId": reviewerRes.body['publicId'],
         "stageNumber": stageNumber
@@ -87,7 +89,7 @@ describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
                       });
 
       expect(res.status).to.be.eql(202);
-      expect(res.body).to.have.property('amountEthers').to.be.eql(stagesCost[stageNumber-1]);
+      expect(res.body).to.have.property('amountEthers').to.be.eql(stagesCost[stageNumber]);
       expect(res.body).to.have.property('fromPublicId').to.be.eql(projectPublicId);
       expect(res.body).to.have.property('fromType').to.be.eql('project');
       expect(res.body).to.have.property('toPublicId').to.be.eql(ownerRes.body['publicId']);
@@ -95,7 +97,36 @@ describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
       expect(res.body).to.have.property('transactionType').to.be.eql('stageCompleted');
       expect(res.body).to.have.property('transactionState').to.be.oneOf(['mining', 'done']);
     });
+
+    describe('WHEN the reviewer sets stage 1 as completed', ()=>{
+      stageNumber = 1
+      beforeEach(async function() {
+        // Timeout limit for this pre-test
+        this.timeout(10000);
+
+        // Aux headers
+        headers = requestHeaders();
+        headersPayload = requestHeaders(true);
+
+        costTxWeis = 560288000000000;
+        await addWeis(reviewerRes.body['address'], costTxWeis);
+        payload = {
+          "reviewerPublicId": reviewerRes.body['publicId'],
+          "stageNumber": stageNumber
+        };
+        res = await setCompletedStage(chai, payload, projectPublicId);
+      });
+
+      it('THEN the project should have until stage 1 marked as completed', async function () {
+        res = await getProject(chai, projectPublicId);
+        stagesStates = stagesCost.map((_, i) => i < stageNumber);
+        expect(res.status).to.be.eql(200);
+        expect(res.body).to.have.property('stagesStates').to.be.eql(stagesStates);
+      });
+    });
   });
+
+
 
   // Comment this and the DB will keep its last state
   after(async function() {
