@@ -13,7 +13,8 @@ const {
   postManyNewWallets,
   createFundingProject,
   weisToEthers,
-  addWeis
+  addWeis,
+  sleep
 } = require('../aux');
 
 chai.use(chaiHttp);
@@ -155,6 +156,27 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
       expect(res.body).to.have.property('toType').to.be.eql('project');
       expect(res.body).to.have.property('transactionType').to.be.eql('fund');
       expect(res.body).to.have.property('transactionState').to.be.eql('mining');
+
+      transactionId = res.body['id'];
+      while (res.body['transactionState'] === 'mining'){
+        this.timeout(10000);
+        res = await chai.request(url)
+                        .get(`/transactions/${transactionId}`)
+                        .set(headers)
+                        .catch(function(err) {
+                          console.log('DEBUG ERROR');
+                          throw err;
+                        });
+      }
+
+      expect(res.status).to.be.eql(200);
+      expect(res.body).to.have.property('amountEthers').to.be.eql(weisToEthers(fundWeis).toString());
+      expect(res.body).to.have.property('fromPublicId').to.be.eql(funderRes.body['publicId']);
+      expect(res.body).to.have.property('fromType').to.be.eql('user');
+      expect(res.body).to.have.property('toPublicId').to.be.eql(fundingProjectRes.body['publicId']);
+      expect(res.body).to.have.property('toType').to.be.eql('project');
+      expect(res.body).to.have.property('transactionType').to.be.eql('fund');
+      expect(res.body).to.have.property('transactionState').to.be.eql('done');
     });
 
     it( 'POST more than total weis needed for a project should add just the amount of weis needed for the project balance, ' +
@@ -188,7 +210,28 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
       expect(res.body).to.have.property('toType').to.be.eql('project');
       expect(res.body).to.have.property('transactionType').to.be.eql('fund');
       expect(res.body).to.have.property('transactionState').to.be.eql('mining');
-      // TERMINAR - VALIDAR QUE UNA VEZ TERMINADA LA TRANSACCION SOLO SE FOUNDEO LO NECEARIO
+
+      transactionId = res.body['id'];
+      do {
+        await sleep(1000);
+        res = await chai.request(url)
+                        .get(`/transactions/${transactionId}`)
+                        .set(headers)
+                        .catch(function(err) {
+                          console.log('DEBUG ERROR');
+                          throw err;
+                        });
+      } while (res.body['transactionState'] !== 'done');
+
+      expect(res.body).to.have.property('transactionState').to.be.eql('done');
+      expect(res.status).to.be.eql(200);
+      expect(res.body).to.have.property('amountEthers').to.be.eql(weisToEthers(fundNeeded).toString());
+      expect(res.body).to.have.property('fromPublicId').to.be.eql(funderRes.body['publicId']);
+      expect(res.body).to.have.property('fromType').to.be.eql('user');
+      expect(res.body).to.have.property('toPublicId').to.be.eql(fundingProjectRes.body['publicId']);
+      expect(res.body).to.have.property('toType').to.be.eql('project');
+      expect(res.body).to.have.property('transactionType').to.be.eql('fund');
+
     });
   });
 });
