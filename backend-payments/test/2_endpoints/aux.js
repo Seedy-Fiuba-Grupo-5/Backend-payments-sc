@@ -1,9 +1,9 @@
 const ethers = require("ethers");
-const { 
-  apiKey, 
-  webPort, 
-  hhNodeURL, 
-  deployerMnemonic 
+const {
+  apiKey,
+  webPort,
+  hhNodeURL,
+  deployerMnemonic
 } = require('../../src/config');
 
 // Utils
@@ -23,8 +23,9 @@ function requestHeaders(payload=false) {
   return headers;
 }
 
-function weisToEthers(number) {
-  return number*(10**-18)
+function weisToEthers(weis) {
+  bigNumberWeis = ethers.BigNumber.from(weis);
+  return ethers.utils.formatEther(bigNumberWeis);
 }
 
 function getProvider() {
@@ -74,7 +75,7 @@ async function postNewWallet(chai, publicId) {
 
 var publicUserId = 0
 async function postManyNewWallets(chai, quantity) {
-  var walletsList = [] 
+  var walletsList = []
   for (; walletsList.length < quantity;) {
     walletRes = await postNewWallet(chai, publicUserId++);
     walletsList.push(walletRes);
@@ -120,7 +121,7 @@ async function patchProject(chai, publicId, payload) {
 async function createFundingProject(chai, payload) {
   console.log(`[TEST] CREATE PROJECT IN FUNDING STATE`);
   res = await postNewProject(chai, payload);
-  const publicId = res.body['publicId']; 
+  const publicId = res.body['publicId'];
   while (res.body['creationStatus'] != 'done') {
     await sleep(1000);
     res = await getProject(chai, publicId);
