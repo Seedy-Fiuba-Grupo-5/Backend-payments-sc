@@ -7,10 +7,10 @@ const { log } = require("../log");
 
 
 async function fund(
-  amountEthers, 
-  funderPrivateKey, 
-  projectSCId, 
-  transcationId, 
+  amountEthers,
+  funderPrivateKey,
+  projectSCId,
+  transcationId,
   projectPublicId
   ) {
   log(`Mining 'fund' transaction ${transcationId}`);
@@ -23,16 +23,18 @@ async function fund(
   tx.wait(1).then(receipt => {
     console.log("Transaction mined");
     const firstEvent = receipt && receipt.events && receipt.events[0];
+    const secondEvent = receipt && receipt.events && receipt.events[1];
     // This could also be a ProjectStarted event
     console.log(firstEvent);
+    console.log(secondEvent);
     updatesTransactionDict = null;
     if (firstEvent && firstEvent.event === "ProjectFunded") {
       const projectId = firstEvent.args.projectId.toNumber();
       const funderAddress = firstEvent.args.funder.toString();
       const funds = firstEvent.args.funds.toNumber();
-      log(`Event 'ProjectFunded': ` + 
-          `\n\tprojectId: ${projectId}` + 
-          `\n\tfunderAddress: ${funderAddress}` + 
+      log(`Event 'ProjectFunded': ` +
+          `\n\tprojectId: ${projectId}` +
+          `\n\tfunderAddress: ${funderAddress}` +
           `\n\tfunds: ${funds} weis`
           );
       updatesTransactionDict = { transactionState: 'done', amountEthers: funds};
@@ -41,6 +43,15 @@ async function fund(
       log(`Fund tx ${tx.hash}: failed`);
       updatesTransactionDict = { transactionState: 'failed'};
     }
+
+    if (secondEvent && secondEvent.event === "ProjectStarted") {
+      log(`Event 'ProjectStarted': ` +
+          `\n\tprojectId: ${secondEvent.args}`
+          );
+      updatesProjectDict = { state: 'IN_PROGRESS'};
+      projectsRepo.update(projectPublicId, updatesProjectDict);
+    }
+
     transactionsRepo.update(transcationId, updatesTransactionDict);
   });
 }
