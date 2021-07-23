@@ -67,11 +67,12 @@ describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
     });
 
     it( 'The reviewer of the project, should be able to set the second stage as complete '+
-        'if it has enough ethers to make this transaction', async function () {
+        'if it has enough ethers to make this transaction, '+
+        'and the funds of the up to next stage should be released', async function () {
       costTxWeis = 560288000000000;
       await addWeis(reviewerRes.body['address'], costTxWeis);
       route = `/projects/${projectPublicId}/stages`;
-      stageNumber = 2;
+      stageNumber = 1;
       payload = {
         "reviewerPublicId": reviewerRes.body['publicId'],
         "stageNumber": stageNumber
@@ -88,7 +89,7 @@ describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
                       });
 
       expect(res.status).to.be.eql(202);
-      expect(res.body).to.have.property('amountEthers').to.be.eql(stagesCost[stageNumber-1]);
+      expect(res.body).to.have.property('amountEthers').to.be.eql(stagesCost[stageNumber]);
       expect(res.body).to.have.property('fromPublicId').to.be.eql(projectPublicId);
       expect(res.body).to.have.property('fromType').to.be.eql('project');
       expect(res.body).to.have.property('toPublicId').to.be.eql(ownerRes.body['publicId']);
@@ -97,7 +98,8 @@ describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
       expect(res.body).to.have.property('transactionState').to.be.oneOf(['mining', 'done']);
     });
 
-    describe('WHEN the reviewer sets stage 2 as completed', ()=>{
+    describe('WHEN the reviewer sets stage 1 as completed', ()=>{
+      stageNumber = 1
       beforeEach(async function() {
         // Timeout limit for this pre-test
         this.timeout(10000);
@@ -108,7 +110,6 @@ describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
 
         costTxWeis = 560288000000000;
         await addWeis(reviewerRes.body['address'], costTxWeis);
-        stageNumber = 2;
         payload = {
           "reviewerPublicId": reviewerRes.body['publicId'],
           "stageNumber": stageNumber
@@ -116,10 +117,9 @@ describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
         res = await setCompletedStage(chai, payload, projectPublicId);
       });
 
-      it( 'WHEN the reviewer set stage 2 as completed\n'+
-        'THEN the project should have until stage 2 marked as completed', async function () {
+      it('THEN the project should have until stage 1 marked as completed', async function () {
         res = await getProject(chai, projectPublicId);
-        stagesStates = stagesCost.map((_, i) => i < 2);
+        stagesStates = stagesCost.map((_, i) => i < stageNumber);
         expect(res.status).to.be.eql(200);
         expect(res.body).to.have.property('stagesStates').to.be.eql(stagesStates);
       });

@@ -78,7 +78,8 @@ async function addBalance(publicId, amountEthers) {
   }
 }
 
-async function setCompletedStage(publicId, stageNumber) {
+async function setCompletedStage(publicId, stageIndex) {
+  stageNumber = stageIndex + 1;
   projectDBLog(`Updating project of publicId: ${publicId}`+
               `\n\tsetting stages completed up to: ${stageNumber}`);
   const t = await db.transaction();

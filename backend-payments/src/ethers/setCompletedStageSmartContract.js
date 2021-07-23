@@ -1,21 +1,20 @@
 const { log } = require("../log");
 const sc = require('./smartContract');
 const walletsEthers = require("./wallets");
-const { weisToEthers } = require('./utils');
 const transactionsRepo = require("../db/repositories/transactionsRepo");
 const projectsRepo = require("../db/repositories/projectsRepo");
 
 async function setCompletedStage(
   projectSCId,
-  stageNumber,
+  stageIndex,
   reviewerPrivateKey,
   transcationId,
   projectPublicId
   ) {
-  log(`Mining 'fund' transaction ${transcationId}`);
+  log(`Mining 'SetCompletedStage' transaction of id ${transcationId}`);
   const reviewerWallet = walletsEthers.getFromPrivateKey(reviewerPrivateKey);
   const seedyFiubaContract = await sc.getContract(reviewerWallet);
-  const tx = await seedyFiubaContract.setCompletedStage(projectSCId, stageNumber);
+  const tx = await seedyFiubaContract.setCompletedStage(projectSCId, stageIndex);
 
   await transactionsRepo.update(transcationId, {transactionState: 'mining'});
 
@@ -25,7 +24,7 @@ async function setCompletedStage(
     const secondEvent = receipt && receipt.events && receipt.events[1];
     console.log(firstEvent);
     console.log(secondEvent);
-    
+
     updatesTransactionDict = null;
     if (firstEvent && firstEvent.event === "StageCompleted") {
       const projectId = firstEvent.args.projectId.toNumber();
@@ -35,7 +34,7 @@ async function setCompletedStage(
           `\n\tstageCompleted: ${stageCompleted}`
           );
       updatesTransactionDict = { transactionState: 'done' };
-      projectsRepo.setCompletedStage(projectPublicId, stageCompleted);
+      projectsRepo.setCompletedStage(projectPublicId, stageIndex);
     } else {
       log(`StageCompleted tx ${tx.hash}: failed`);
       updatesTransactionDict = { transactionState: 'failed'};
