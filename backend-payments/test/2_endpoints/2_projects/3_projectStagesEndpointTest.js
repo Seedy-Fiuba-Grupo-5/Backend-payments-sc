@@ -68,7 +68,7 @@ describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
 
     it( 'The reviewer of the project, should be able to set the second stage as complete '+
         'if it has enough ethers to make this transaction', async function () {
-      costTxWeis = 560192000000000;
+      costTxWeis = 560288000000000;
       await addWeis(reviewerRes.body['address'], costTxWeis);
       route = `/projects/${projectPublicId}/stages`;
       stageNumber = 2;
@@ -106,7 +106,7 @@ describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
         headers = requestHeaders();
         headersPayload = requestHeaders(true);
 
-        costTxWeis = 560192000000000;
+        costTxWeis = 560288000000000;
         await addWeis(reviewerRes.body['address'], costTxWeis);
         stageNumber = 2;
         payload = {
