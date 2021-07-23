@@ -1,54 +1,54 @@
 const { log } = require("../log");
 const sc = require('./smartContract');
 const walletsEthers = require("./wallets");
-const { ethersToWeis, weisToEthers } = require('./utils');
+const { weisToEthers } = require('./utils');
 const transactionsRepo = require("../db/repositories/transactionsRepo");
 const projectsRepo = require("../db/repositories/projectsRepo");
 
-async function fund(
-  amountEthers,
-  funderPrivateKey,
+async function setCompletedStage(
   projectSCId,
+  stageNumber,
+  reviewerPrivateKey,
   transcationId,
   projectPublicId
   ) {
   log(`Mining 'fund' transaction ${transcationId}`);
-  const funderWallet = walletsEthers.getFromPrivateKey(funderPrivateKey);
-  const seedyFiubaContract = await sc.getContract(funderWallet);
-  let overrides = { value: ethersToWeis(amountEthers) };
-  const tx = await seedyFiubaContract.fund(projectSCId, overrides);
+  const reviewerWallet = walletsEthers.getFromPrivateKey(reviewerPrivateKey);
+  const seedyFiubaContract = await sc.getContract(reviewerWallet);
+  const tx = await seedyFiubaContract.setCompletedStage(projectSCId, stageNumber);
+
   await transactionsRepo.update(transcationId, {transactionState: 'mining'});
 
   tx.wait(1).then(receipt => {
     console.log("Transaction mined");
     const firstEvent = receipt && receipt.events && receipt.events[0];
     const secondEvent = receipt && receipt.events && receipt.events[1];
-    // This could also be a ProjectStarted event
     console.log(firstEvent);
     console.log(secondEvent);
+    
     updatesTransactionDict = null;
-    if (firstEvent && firstEvent.event === "ProjectFunded") {
+    if (firstEvent && firstEvent.event === "StageCompleted") {
       const projectId = firstEvent.args.projectId.toNumber();
-      const funderAddress = firstEvent.args.funder.toString();
-      const funds = firstEvent.args.funds.toNumber();
-      log(`Event 'ProjectFunded': ` +
+      const stageCompleted = firstEvent.args.stageCompleted.toNumber();
+      log(`Event 'StateCompleted': ` +
           `\n\tprojectId: ${projectId}` +
-          `\n\tfunderAddress: ${funderAddress}` +
-          `\n\tfunds: ${funds} weis`
+          `\n\tstageCompleted: ${stageCompleted}`
           );
-      updatesTransactionDict = { transactionState: 'done', amountEthers: weisToEthers(funds)};
-      projectsRepo.addBalance(projectPublicId, weisToEthers(funds));
+      updatesTransactionDict = { transactionState: 'done' };
+      // Add and update stagesCostCompleted array
+      // projectsRepo.addBalance(projectPublicId, weisToEthers(funds));
+      // What should we do with project Balance ?
     } else {
-      log(`Fund tx ${tx.hash}: failed`);
+      log(`StageCompleted tx ${tx.hash}: failed`);
       updatesTransactionDict = { transactionState: 'failed'};
     }
 
-    if (secondEvent && secondEvent.event === "ProjectStarted") {
+    if (secondEvent && secondEvent.event === "ProjectCompleted") {
       const projectId = secondEvent.args.projectId.toNumber();
-      log(`Event 'ProjectStarted': ` +
+      log(`Event 'ProjectCompleted': ` +
           `\n\tprojectId: ${projectId}`
           );
-      updatesProjectDict = { state: projectsRepo.IN_PROGRESS};
+      updatesProjectDict = { state: projectsRepo.COMPLETED};
       projectsRepo.update(projectPublicId, updatesProjectDict);
     }
 
@@ -56,4 +56,4 @@ async function fund(
   });
 }
 
-module.exports = { fund };
+module.exports = { setCompletedStage };

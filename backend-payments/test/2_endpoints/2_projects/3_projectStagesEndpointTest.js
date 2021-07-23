@@ -20,14 +20,13 @@ const {
 
 chai.use(chaiHttp);
 
-describe('Endpoint /projects/<id>/stages/<stage_number>: ',()=>{
+describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
   let url = serverURL();
 
   describe('Given a created project in IN_PROGRESS state', ()=>{
     let ownerRes, reviewerRes, funderRes;
     let projectPublicId = 1;
     let stagesCost = [weisToEthers(2), weisToEthers(1), weisToEthers(3)];
-    console.log(stagesCost);
 
     beforeEach(async function() {
       // Timeout limit for this pre-test
@@ -66,29 +65,36 @@ describe('Endpoint /projects/<id>/stages/<stage_number>: ',()=>{
       expect(res.body).to.have.property('balance').to.be.eql(stagesCost[0]);
     });
 
-  //   it( 'The reviewer of the project, should be able to set the second stage as complete '+
-  //       'if it has enough ethers to make this transaction', async function () {
-  //     costTxWeis = 1;
-  //     await addWeis(reviewerRes.body['address'], costTxWeis);
-  //     route = `projects/${projectPublicId}/stages/2`;
+    it( 'The reviewer of the project, should be able to set the second stage as complete '+
+        'if it has enough ethers to make this transaction', async function () {
+      costTxWeis = 560192000000000;
+      await addWeis(reviewerRes.body['address'], costTxWeis);
+      route = `/projects/${projectPublicId}/stages`;
+      stageNumber = 2;
+      payload = {
+        "reviewerPublicId": reviewerRes.body['publicId'],
+        "stageNumber": stageNumber
+      }
 
-  //     res = await chai.request(url)
-  //                     .post(route)
-  //                     .set(headers)
-  //                     .catch(function(err) {
-  //                       console.log('DEBUG ERROR');
-  //                       throw err;
-  //                     });
+      res = await chai.request(url)
+                      .post(route)
+                      .set(headersPayload)
+                      .send(payload)
+                      .catch(function(err) {
+                        console.log('DEBUG ERROR');
+                        console.log(err);
+                        throw err;
+                      });
 
-  //     expect(res.status).to.be.eql(202);
-  //     expect(res.body).to.have.property('amountEthers').to.be.eql(stagesCost[1]);
-  //     expect(res.body).to.have.property('fromPublicId').to.be.eql(projectPublicId);
-  //     expect(res.body).to.have.property('fromType').to.be.eql('project');
-  //     expect(res.body).to.have.property('toPublicId').to.be.eql(ownerRes.body['publicId']);
-  //     expect(res.body).to.have.property('toType').to.be.eql('user');
-  //     expect(res.body).to.have.property('transactionType').to.be.eql('stageCompleted');
-  //     expect(res.body).to.have.property('transactionState').to.be.eql('mining');
-  //   });
+      expect(res.status).to.be.eql(202);
+      expect(res.body).to.have.property('amountEthers').to.be.eql(stagesCost[stageNumber-1]);
+      expect(res.body).to.have.property('fromPublicId').to.be.eql(projectPublicId);
+      expect(res.body).to.have.property('fromType').to.be.eql('project');
+      expect(res.body).to.have.property('toPublicId').to.be.eql(ownerRes.body['publicId']);
+      expect(res.body).to.have.property('toType').to.be.eql('user');
+      expect(res.body).to.have.property('transactionType').to.be.eql('stageCompleted');
+      expect(res.body).to.have.property('transactionState').to.be.oneOf(['mining', 'done']);
+    });
   });
 
   // Comment this and the DB will keep its last state

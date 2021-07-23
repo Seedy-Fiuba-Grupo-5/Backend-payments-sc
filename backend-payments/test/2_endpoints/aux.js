@@ -163,7 +163,6 @@ async function createInProgressProject(chai, projectPayload, funderRes) {
   route = `/projects/${projectPublicId}/funds`;
   headers = requestHeaders(true);
   totalEthers = projectPayload.stagesCost.reduce((e1,e2) => sumEthers(e1, e2));
-  console.log(totalEthers);
   funderPayload = {
     "userPublicId": funderRes.body['publicId'],
     "amountEthers": totalEthers
