@@ -57,14 +57,13 @@ async function update(publicId, updatesDict) {
   }
 }
 
-async function addBalance(publicId, amountWeis) {
+async function addBalance(publicId, amountEthers) {
   projectDBLog(`Adding to project of publicId: ${publicId}`+
                 `\n\tan amount of weis equal to: ${amountWeis}`);
   const t = await db.transaction();
   try {
     projectRepr = await ProjectDB.findByPk(publicId);
     balanceEthers = projectRepr.dataValues.balance;
-    amountEthers = utils.weisToEthers(amountWeis);
     newBalanceEthers = utils.sumEthers(balanceEthers, amountEthers);
     await ProjectDB.update(
       { balance: newBalanceEthers },
