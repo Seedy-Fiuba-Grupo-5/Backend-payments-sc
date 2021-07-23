@@ -78,6 +78,26 @@ async function addBalance(publicId, amountEthers) {
   }
 }
 
+async function setCompletedStage(publicId, stageNumber) {
+  projectDBLog(`Updating project of publicId: ${publicId}`+
+              `\n\tsetting stages completed up to: ${stageNumber}`);
+  const t = await db.transaction();
+  try {
+    projectRepr = await ProjectDB.findByPk(publicId);
+    newStagesStates = projectRepr.dataValues.stagesCost.map((_,i) => i < stageNumber);
+    await ProjectDB.update(
+      { stagesStates: newStagesStates },
+      {
+        where: { publicId: publicId },
+        transaction: t
+      });
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    throw error;
+  }
+}
+
 
 module.exports = {
   INITIALIZING,
@@ -87,5 +107,6 @@ module.exports = {
   get,
   create,
   update,
-  addBalance
+  addBalance,
+  setCompletedStage
 };

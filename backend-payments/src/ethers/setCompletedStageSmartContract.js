@@ -35,9 +35,7 @@ async function setCompletedStage(
           `\n\tstageCompleted: ${stageCompleted}`
           );
       updatesTransactionDict = { transactionState: 'done' };
-      // Add and update stagesCostCompleted array
-      // projectsRepo.addBalance(projectPublicId, weisToEthers(funds));
-      // What should we do with project Balance ?
+      projectsRepo.setCompletedStage(projectPublicId, stageCompleted);
     } else {
       log(`StageCompleted tx ${tx.hash}: failed`);
       updatesTransactionDict = { transactionState: 'failed'};

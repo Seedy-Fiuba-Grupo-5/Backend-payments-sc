@@ -176,6 +176,33 @@ async function createInProgressProject(chai, projectPayload, funderRes) {
   return res;
 }
 
+async function getTransaction(chai, transactionId) {
+  console.log('[TEST] GET TRANSACTION');
+  const url = serverURL();
+  const route = `/transactions/${transactionId}`;
+  const headers = requestHeaders();
+  res = await chai.request(url)
+                  .get(route)
+                  .set(headers);
+  return res;
+}
+
+async function setCompletedStage(chai, payload, projectPublicId) {
+  console.log('[TEST] SET COMPLETED STAGE');
+  const url = serverURL();
+  const route = `/projects/${projectPublicId}/stages`;
+  const headers = requestHeaders(true);
+  res = await chai.request(url)
+                  .post(route)
+                  .set(headers)
+                  .send(payload);
+  transactionId = res.body['id'];
+  do {
+    await sleep(1000);
+    res = await getTransaction(chai, transactionId);
+  } while (res.body['transactionState'] != 'done');
+  return res;
+}
 
 module.exports = {
   serverURL,
@@ -187,10 +214,12 @@ module.exports = {
   postNewWallet,
   postManyNewWallets,
   getWallet,
+  getTransaction,
   postNewProject,
   getProject,
   patchProject,
   createFundingProject,
   createInProgressProject,
-  fundProject
+  fundProject,
+  setCompletedStage
 };
