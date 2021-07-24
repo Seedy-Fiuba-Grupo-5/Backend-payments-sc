@@ -12,10 +12,10 @@ function format(result) {
   _body = result;
   if (result.transactionState === 'NOT_FUNDING') {
     code = 409;
-    _body = {status: 'NOT_FUNDING'}
+    _body = {status: 'NOT_FUNDING'};
   } else if (result.transactionState === 'PROJECT_NOT_FOUND') {
     code = 404;
-    _body = {status: 'The project requested could not be found'}
+    _body = {status: 'The project requested could not be found'};
   }
   body = JSON.stringify(_body);
   return [code, body]

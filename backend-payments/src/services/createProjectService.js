@@ -1,4 +1,5 @@
 const projectsRepo = require("../db/repositories/projectsRepo");
+const walletsRepo = require("../db/repositories/walletsRepo");
 const mineAProject = require("./mineCreateProjectService");
 const { log } = require("../log");
 
@@ -16,6 +17,21 @@ async function process(data) {
     balance: null,
     state: projectsRepo.INITIALIZING
   };
+
+  ownerWallet = await walletsRepo.get(data.ownerPublicId);
+  if (ownerWallet === null) {
+    log('Owner Wallet not found');
+    return null
+  }
+  log(`Owner Wallet found`);
+
+  reviewerWallet = await walletsRepo.get(data.reviewerPublicId);
+  if (data.reviewerPublicId > 0 && reviewerWallet === null) {
+    log('Reviewer Wallet not found');
+    return null
+  }
+  log(`Reviewer Wallet found (if reviewer id was greater than 0)`);
+
   await projectsRepo.create(dataDict);
   await mineAProject.process(data.publicId);
   projectRepr = await projectsRepo.get(data.publicId);

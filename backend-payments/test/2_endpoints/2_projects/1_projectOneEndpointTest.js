@@ -86,7 +86,7 @@ describe('Endpoint /projects/<id>: ',()=>{
       .catch( function(err) {
         expect(err.status).to.be.eql(404);
         expect(err.response.body).to.have.property('status')
-          .to.be.eql('The project requested could not be found');
+          .to.be.eql('The project or the reviewer\'s wallet requested could not be found');
       });
   });
 
