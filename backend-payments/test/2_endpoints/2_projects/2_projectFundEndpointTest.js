@@ -306,7 +306,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
                         .send(payload)
                         .catch(function(err) {
                           expect(err.status).to.be.eql(409);
-                          expect(err.response.body).to.have.property('status').to.be.eql('NOT_FUNDING');
+                          expect(err.response.body).to.have.property('status').to.be.eql('The project is not in FUNDING state');
                         });
 
       });
