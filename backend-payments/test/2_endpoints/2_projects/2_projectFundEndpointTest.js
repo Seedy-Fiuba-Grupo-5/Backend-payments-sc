@@ -240,6 +240,27 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
       expect(res.body).to.have.property('transactionType').to.be.eql('fund');
     });
 
+    it ('POST should return an error when the funder does not have enough ethers to make the transaction', async function() {
+      let [funderRes] = await postManyNewWallets(chai, 1);
+      fundWeis = 5;
+      totalWeis = fundWeis;
+      await addWeis(funderRes.body['address'], totalWeis);
+
+      payload = {
+        "userPublicId": funderRes.body['publicId'],
+        "amountEthers": weisToEthers(fundWeis)
+      };
+
+      await chai.request(url)
+                .post(route)
+                .set(headersPayload)
+                .send(payload)
+                .catch(function(err) {
+                  expect(err).to.have.status(409);
+                  expect(err.response.body).to.have.property('status');
+                });
+    });
+
     describe('WHEN the project reaches the IN_PROGRESS state', async function() {
       let funderRes;
       beforeEach(async function() {

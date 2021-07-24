@@ -7,16 +7,22 @@ function parse(request) {
   return data;
 }
 
+function _format(transactionState) {
+  
+  if (! transactionState in responses)
+  return responses[transactionState];
+}
+
 function format(result) {
-  code = 202;
-  _body = result;
-  if (result.transactionState === 'NOT_FUNDING') {
-    code = 409;
-    _body = {status: 'NOT_FUNDING'}
-  } else if (result.transactionState === 'PROJECT_NOT_FOUND') {
-    code = 404;
-    _body = {status: 'The project requested could not be found'}
-  }
+  responses = {
+    'building': [202, result],
+    'mining': [202, result],
+    'done': [202, result],
+    'NOT_FUNDING': [409, {'status': 'The project is not in FUNDING state'}],
+    'NOT_ENOUGH_BALANCE': [409, {'status': 'The sender has not enough balance to make this transaction'}],
+    'PROJECT_NOT_FOUND': [404, {'status': 'The project requested could not be found'}]
+  };
+  let [code, _body] = responses[result.transactionState]; 
   body = JSON.stringify(_body);
   return [code, body]
 }

@@ -15,6 +15,7 @@ async function process(data) {
     transactionType: 'fund',
     transactionState: 'building'
   };
+  let errorMsg = '';
   projectRepr = await projectsRepo.get(data.projectPublicId);
   if (!projectRepr) {
     transactionRepr = {
@@ -23,13 +24,13 @@ async function process(data) {
   } else if(projectRepr.state === 'FUNDING') {
     transactionRepr = await transactionRepo.create(dataDict);
     walletRepr = await walletsRepo.get(data.userPublicId);
-    await fund(
-      data.amountEthers,
-      walletRepr.dataValues.privateKey,
-      projectRepr.dataValues.privateId,
-      transactionRepr.id,
-      data.projectPublicId
-      );
+    errorMsg = await fund(
+                data.amountEthers,
+                walletRepr.dataValues.privateKey,
+                projectRepr.dataValues.privateId,
+                transactionRepr.id,
+                data.projectPublicId
+                );
     transactionRepr = await transactionRepo.get(transactionRepr.id);
   } else {
     transactionRepr = {
