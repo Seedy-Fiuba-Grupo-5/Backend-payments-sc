@@ -30,7 +30,7 @@ async function fund(
     if (firstEvent && firstEvent.event === "ProjectFunded") {
       const projectId = firstEvent.args.projectId.toNumber();
       const funderAddress = firstEvent.args.funder.toString();
-      const funds = firstEvent.args.funds.toNumber();
+      const funds = firstEvent.args.funds; // Do not convert BigNumber to Number
       log(`Event 'ProjectFunded': ` +
           `\n\tprojectId: ${projectId}` +
           `\n\tfunderAddress: ${funderAddress}` +
