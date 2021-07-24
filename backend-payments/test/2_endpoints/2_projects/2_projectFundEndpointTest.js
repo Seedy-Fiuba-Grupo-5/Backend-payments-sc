@@ -267,6 +267,49 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
         expect(res).have.status(200);
         expect(res.body).have.property('balance').to.be.eql(stagesCost[0]);
       });
+
+      it('THEN try to fund it should fail with status code 409', async function(){
+        let [funderRes] = await postManyNewWallets(chai, 1);
+        fundWeis = 1;
+        costTxWeis = 445136000000001;
+        totalWeis = fundWeis + costTxWeis;
+        await addWeis(funderRes.body['address'], totalWeis);
+
+        payload = {
+          "userPublicId": funderRes.body['publicId'],
+          "amountEthers": weisToEthers(fundWeis)
+        };
+        res = await chai.request(url)
+                        .post(route)
+                        .set(headersPayload)
+                        .send(payload)
+                        .catch(function(err) {
+                          expect(err.status).to.be.eql(409);
+                        });
+
+      });
+
+      it('THEN try to fund an unexisting proyect should fail with status code 404', async function(){
+        let [funderRes] = await postManyNewWallets(chai, 1);
+        fundWeis = 1;
+        costTxWeis = 445136000000001;
+        totalWeis = fundWeis + costTxWeis;
+        await addWeis(funderRes.body['address'], totalWeis);
+
+        payload = {
+          "userPublicId": funderRes.body['publicId'],
+          "amountEthers": weisToEthers(fundWeis)
+        };
+        res = await chai.request(url)
+                        .post(`/projects/100000/funds`)
+                        .set(headersPayload)
+                        .send(payload)
+                        .catch(function(err) {
+                          expect(err.status).to.be.eql(404);
+                        });
+
+      });
+
     });
   });
 });

@@ -44,6 +44,24 @@ function schema() {
           transactionType: { type: 'string', enum: ['fund'] },
           transactionState: { type: 'string', enum: ['mining', 'done'] }
         }
+      },
+      404: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'string',
+            example: 'The project requested could not be found'
+          }
+        }
+      },
+      409: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'string',
+            example: 'NOT_FUNDING'
+          }
+        }
       }
     },
     required: ['Authorization', 'publicId']
