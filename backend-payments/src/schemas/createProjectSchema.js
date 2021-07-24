@@ -75,6 +75,15 @@ function schema() {
             enum: ['INITIALIZING', 'FUNDING', 'IN_PROGRESS', 'COMPLETED']
           }
         }
+      },
+      404: {
+        type: 'object',
+        properties: {
+          status: {
+            type: 'string',
+            example: 'Either owner or Reviewer wallet requested could not be found'
+          }
+        }
       }
     }
   };

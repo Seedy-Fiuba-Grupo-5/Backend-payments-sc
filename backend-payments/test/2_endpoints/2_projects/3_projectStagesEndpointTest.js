@@ -66,7 +66,7 @@ describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
       expect(res.body).to.have.property('balance').to.be.eql(stagesCost[0]);
     });
 
-    it( 'The reviewer of the project, should be able to set the second stage as complete '+
+    it( 'The reviewer of the project, should be able to set the first stage as complete '+
         'if it has enough ethers to make this transaction, '+
         'and the funds of the up to next stage should be released', async function () {
       costTxWeis = 560288000000000;
@@ -90,6 +90,38 @@ describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
 
       expect(res.status).to.be.eql(202);
       expect(res.body).to.have.property('amountEthers').to.be.eql(stagesCost[stageNumber]);
+      expect(res.body).to.have.property('fromPublicId').to.be.eql(projectPublicId);
+      expect(res.body).to.have.property('fromType').to.be.eql('project');
+      expect(res.body).to.have.property('toPublicId').to.be.eql(ownerRes.body['publicId']);
+      expect(res.body).to.have.property('toType').to.be.eql('user');
+      expect(res.body).to.have.property('transactionType').to.be.eql('stageCompleted');
+      expect(res.body).to.have.property('transactionState').to.be.oneOf(['mining', 'done']);
+    });
+
+        it( 'The reviewer of the project, should be able to set the second stage as complete '+
+        'if it has enough ethers to make this transaction, '+
+        'and the funds of the up to next stage should be released', async function () {
+      costTxWeis = 560288000000000;
+      await addWeis(reviewerRes.body['address'], costTxWeis);
+      route = `/projects/${projectPublicId}/stages`;
+      stageNumber = 2;
+      payload = {
+        "reviewerPublicId": reviewerRes.body['publicId'],
+        "stageNumber": stageNumber
+      }
+
+      res = await chai.request(url)
+                      .post(route)
+                      .set(headersPayload)
+                      .send(payload)
+                      .catch(function(err) {
+                        console.log('DEBUG ERROR');
+                        console.log(err);
+                        throw err;
+                      });
+
+      expect(res.status).to.be.eql(202);
+      expect(res.body).to.have.property('amountEthers').to.be.eql(weisToEthers(4));
       expect(res.body).to.have.property('fromPublicId').to.be.eql(projectPublicId);
       expect(res.body).to.have.property('fromType').to.be.eql('project');
       expect(res.body).to.have.property('toPublicId').to.be.eql(ownerRes.body['publicId']);

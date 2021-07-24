@@ -2,6 +2,7 @@ const walletsRepo = require('../db/repositories/walletsRepo');
 const projectsRepo = require("../db/repositories/projectsRepo");
 const transactionsRepo = require("../db/repositories/transactionsRepo");
 const { setCompletedStage } = require('../smartContract/setCompletedStageSmartContract');
+const {calculateAmountEthersOfStagesWithCompleted} = require('../ethers/utilsEthers');
 const { log } = require("../log");
 
 async function process(data) {
@@ -10,7 +11,7 @@ async function process(data) {
   projectInst = await projectsRepo.get(data.projectPublicId);
   walletInst = await walletsRepo.get(data.reviewerPublicId);
   transactionDict = {
-    amountEthers: projectInst.dataValues.stagesCost[data.stageNumber],
+    amountEthers: calculateAmountEthersOfStagesWithCompleted(projectInst, data.stageNumber),
     fromPublicId: data.projectPublicId,
     fromType: 'project',
     toPublicId: projectInst.dataValues.ownerPublicId,

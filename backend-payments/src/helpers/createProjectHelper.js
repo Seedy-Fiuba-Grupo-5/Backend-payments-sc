@@ -11,11 +11,16 @@ function parse(request) {
 
 function format(result) {
   code = 202;
-  body = JSON.stringify(result);
+  _body = result;
+  if (result === null) {
+    code = 404;
+    _body = { "status": "Either owner or Reviewer wallet requested could not be found"};
+  }
+  body = JSON.stringify(_body);
   return [code, body]
 }
 
-module.exports = { 
+module.exports = {
   parse,
   format
 };
