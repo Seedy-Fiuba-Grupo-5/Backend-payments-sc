@@ -7,12 +7,6 @@ function parse(request) {
   return data;
 }
 
-function _format(transactionState) {
-
-  if (! transactionState in responses)
-  return responses[transactionState];
-}
-
 function format(result) {
   responses = {
     'building': [202, result],
