@@ -1,5 +1,5 @@
 const walletsRepo = require('../db/repositories/walletsRepo');
-const walletsEthers = require('../ethers/wallets');
+const walletsEthers = require('../ethers/walletsEthers');
 const { log } = require("../log");
 
 async function process(data) {

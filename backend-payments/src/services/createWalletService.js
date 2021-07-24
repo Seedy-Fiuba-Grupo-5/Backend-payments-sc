@@ -1,4 +1,4 @@
-const walletsEther = require("../ethers/wallets");
+const walletsEther = require("../ethers/walletsEthers");
 const walletsRepo = require("../db/repositories/walletsRepo");
 const { log } = require("../log");
 

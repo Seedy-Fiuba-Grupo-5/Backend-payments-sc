@@ -9,7 +9,7 @@ const {
 const {
   sumEthers,
   weisToEthers
-} = require('../../src/ethers/utils');
+} = require('../../src/ethers/utilsEthers');
 
 // Utils
 

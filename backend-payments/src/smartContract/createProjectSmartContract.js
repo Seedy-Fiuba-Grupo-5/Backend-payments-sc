@@ -2,7 +2,7 @@ const BigNumber = require("bignumber.js");
 const ethers = require("ethers");
 const { contractAddress, contractAbi } = require("../config");
 const projectsRepo = require("../db/repositories/projectsRepo");
-const { ethersToWeis } = require("../ethers/utils");
+const { ethersToWeis } = require("../ethers/utilsEthers");
 
 async function getContract(wallet) {
   return new ethers.Contract(contractAddress, contractAbi, wallet);

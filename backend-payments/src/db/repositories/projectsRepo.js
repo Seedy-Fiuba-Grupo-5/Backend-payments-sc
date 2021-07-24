@@ -1,6 +1,6 @@
 const { ProjectDB } = require("../models/project");
 const { db } = require("../db");
-const utils = require('../../ethers/utils');
+const utils = require('../../ethers/utilsEthers');
 const { log } = require("../../log");
 
 INITIALIZING = 'INITIALIZING';
