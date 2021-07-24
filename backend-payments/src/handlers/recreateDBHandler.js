@@ -2,16 +2,21 @@ const { db } = require("../db/db");
 const { nodeENV } = require("../config");
 const { log } = require('../log');
 
+function recreateDBLog(message) {
+  fullMessage = `Recreate DB: ${message}`;
+  log(fullMessage);
+}
+
 function handler() {
-  return async function (req, reply) {
+  return async function (_req, reply) {
     log(`DELETE /db`);
     if(nodeENV === 'development'){
-      log(`Recreating database`);
+      recreateDBLog(`Work in progress ...`);
       await db.sync({ force: true });
       reply.code(204);
       return;
     }
-    log(`NOT Recreating database`);
+    recreateDBLog(`Disable => Failed`);
     reply.code(405);
   };
 }

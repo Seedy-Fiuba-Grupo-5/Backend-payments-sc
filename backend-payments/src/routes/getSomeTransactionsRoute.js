@@ -1,6 +1,6 @@
 const { preHandler } = require("../handlers/authPreHandler");
-const { handler } = require("../handlers/getTransactionsHandler");
-const { schema } = require("../schemas/getTransactionsShema");
+const { handler } = require("../handlers/getSomeTransactionsHandler");
+const { schema } = require("../schemas/getSomeTransactionsShema");
 
 function route() {
   return {
