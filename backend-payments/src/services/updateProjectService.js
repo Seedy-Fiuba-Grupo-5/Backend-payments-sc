@@ -1,5 +1,5 @@
 const projectsRepo = require("../db/repositories/projectsRepo");
-const mineAProject = require("./mineAProject");
+const mineAProject = require("./mineCreateProjectService");
 const { log } = require("../log");
 
 async function process(data) {

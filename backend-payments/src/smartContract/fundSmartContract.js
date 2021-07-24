@@ -1,7 +1,7 @@
 const { log } = require("../log");
 const sc = require('./smartContract');
-const walletsEthers = require("./wallets");
-const { ethersToWeis, weisToEthers } = require('./utils');
+const walletsEthers = require("../ethers/wallets");
+const { ethersToWeis, weisToEthers } = require('../ethers/utils');
 const transactionsRepo = require("../db/repositories/transactionsRepo");
 const projectsRepo = require("../db/repositories/projectsRepo");
 
@@ -23,7 +23,6 @@ async function fund(
     console.log("Transaction mined");
     const firstEvent = receipt && receipt.events && receipt.events[0];
     const secondEvent = receipt && receipt.events && receipt.events[1];
-    // This could also be a ProjectStarted event
     console.log(firstEvent);
     console.log(secondEvent);
     updatesTransactionDict = null;

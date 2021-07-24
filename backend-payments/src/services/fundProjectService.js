@@ -1,7 +1,7 @@
 const walletsRepo = require('../db/repositories/walletsRepo');
 const projectsRepo = require("../db/repositories/projectsRepo");
 const transactionRepo = require("../db/repositories/transactionsRepo");
-const { fund } = require('../ethers/fundSmartContract');
+const { fund } = require('../smartContract/fundSmartContract');
 const { log } = require("../log");
 
 async function process(data) {

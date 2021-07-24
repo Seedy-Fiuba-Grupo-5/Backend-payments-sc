@@ -1,6 +1,6 @@
 const { log } = require("../log");
 const sc = require('./smartContract');
-const walletsEthers = require("./wallets");
+const walletsEthers = require("../ethers/wallets");
 const transactionsRepo = require("../db/repositories/transactionsRepo");
 const projectsRepo = require("../db/repositories/projectsRepo");
 
