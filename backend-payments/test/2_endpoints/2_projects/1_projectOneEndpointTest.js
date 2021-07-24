@@ -68,6 +68,7 @@ describe('Endpoint /projects/<id>: ',()=>{
     expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
     expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
     expect(res.body).to.have.property('balance').to.be.eql('0.0');
+    expect(res.body).to.have.property('state').to.be.eql('FUNDING');
   });
 
   it('PATCH should return 404 if the project does not exists', async function () {
@@ -127,6 +128,7 @@ describe('Endpoint /projects/<id>: ',()=>{
     expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
     expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
     expect(res.body).to.have.property('balance').to.be.eql('0.0');
+    expect(res.body).to.have.property('state').to.be.eql('FUNDING');
   });
 
   // it( 'PATCH should return 409 while trying asign a reviewer id ' +
