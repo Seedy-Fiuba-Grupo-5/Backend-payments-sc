@@ -1,4 +1,4 @@
-const { ProjectDB } = require("../models/project");
+const { ProjectDB } = require("../models/projectModel");
 const { db } = require("../db");
 const utils = require('../../ethers/utilsEthers');
 const { log } = require("../../log");
@@ -28,7 +28,7 @@ async function get(publicId) {
       { transaction: t }
     );
     t.commit();
-    if (projectRepr != null) {    
+    if (projectRepr != null) {
       console.log(projectRepr.dataValues);
     }
     return projectRepr;

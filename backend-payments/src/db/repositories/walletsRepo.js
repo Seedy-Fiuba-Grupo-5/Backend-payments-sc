@@ -1,5 +1,5 @@
 const { db } = require("../db");
-const { WalletDB } = require("../models/wallet");
+const { WalletDB } = require("../models/walletModel");
 
 async function create(dataDict) {
   walletRepr = await WalletDB.create(dataDict);

@@ -1,4 +1,4 @@
-const { TransactionDB } = require("../models/transaction");
+const { TransactionDB } = require("../models/transactionModel");
 const { db } = require("../db");
 const { log } = require("../../log");
 
