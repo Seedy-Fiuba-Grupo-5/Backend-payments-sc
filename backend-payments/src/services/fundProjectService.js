@@ -15,17 +15,27 @@ async function process(data) {
     transactionType: 'fund',
     transactionState: 'building'
   };
-  transactionRepr = await transactionRepo.create(dataDict);
   projectRepr = await projectsRepo.get(data.projectPublicId);
-  walletRepr = await walletsRepo.get(data.userPublicId);
-  await fund(
-    data.amountEthers,
-    walletRepr.dataValues.privateKey,
-    projectRepr.dataValues.privateId,
-    transactionRepr.id,
-    data.projectPublicId
-    );
-  transactionRepr = await transactionRepo.get(transactionRepr.id);
+  if (!projectRepr) {
+    transactionRepr = {
+      transactionState: 'PROJECT_NOT_FOUND'
+    }
+  } else if(projectRepr.state === 'FUNDING') {
+    transactionRepr = await transactionRepo.create(dataDict);
+    walletRepr = await walletsRepo.get(data.userPublicId);
+    await fund(
+      data.amountEthers,
+      walletRepr.dataValues.privateKey,
+      projectRepr.dataValues.privateId,
+      transactionRepr.id,
+      data.projectPublicId
+      );
+    transactionRepr = await transactionRepo.get(transactionRepr.id);
+  } else {
+    transactionRepr = {
+      transactionState: 'NOT_FUNDING'
+    }
+  }
   return transactionRepr;
 }
 
