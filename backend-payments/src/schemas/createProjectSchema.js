@@ -50,18 +50,18 @@ function schema() {
           stagesCost: {
             type: 'array',
             minItems: 1,
-            items: { type: 'string' },
+            items: { type: 'string' }
           },
           stagesStates: {
             description: 'The states of completeness of each stage',
             type: 'array',
             minItems: 1,
-            items: { type: 'boolean' },
+            items: { type: 'boolean' }
           },
           creationStatus: {
             description: "Project's creation status",
             type: 'string',
-            enum: ['building', 'mining', 'done'],
+            enum: ['building', 'mining', 'done']
           },
           privateId: {
             description: "Project's id in smart contract",

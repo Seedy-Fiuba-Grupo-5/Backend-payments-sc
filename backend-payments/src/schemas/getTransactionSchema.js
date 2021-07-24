@@ -4,10 +4,10 @@ function schema() {
     params: {
       type: 'object',
       properties: {
-        publicId: {
-          type: 'integer',
+        transactionId: {
+          type: 'number',
           description: 'The transaction id'
-        },
+        }
       },
     },
     headers: {
