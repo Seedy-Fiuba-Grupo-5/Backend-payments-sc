@@ -12,14 +12,15 @@ function format(result) {
     'building': [202, result],
     'mining': [202, result],
     'done': [202, result],
-    'NOT_ENOUGH_BALANCE': [409, {'status': 'The current balance is not enough to make this transaction'}]
+    'NOT_ENOUGH_BALANCE': [409, {'status': 'The current balance is not enough to make this transaction'}],
+    'NOT_IN_PROGRESS': [405, {'status': 'The project must be IN_PROGRESS state in order to execute this action'}]
   };
   let [code, _body] = responses[result.transactionState];
   body = JSON.stringify(_body);
   return [code, body]
 }
 
-module.exports = { 
+module.exports = {
   parse,
   format
 };
