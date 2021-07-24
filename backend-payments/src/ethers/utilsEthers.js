@@ -17,8 +17,19 @@ function sumEthers(e1, e2) {
   return totalEthers;
 }
 
+function calculateAmountEthersOfStagesWithCompleted(projectInst, stageNumber) {
+  amountEthers = '0';
+  for(var i=1; i<= stageNumber; i++) {
+    if (!projectInst.dataValues.stagesStates[i]) {
+      amountEthers = sumEthers(amountEthers, projectInst.dataValues.stagesCost[i])
+    }
+  }
+  return amountEthers;
+}
+
 module.exports = {
   weisToEthers,
   ethersToWeis,
-  sumEthers
+  sumEthers,
+  calculateAmountEthersOfStagesWithCompleted
 };
