@@ -48,8 +48,26 @@ async function update(id, updatesDict) {
   }
 }
 
+async function find(queryDict) {
+  const t = await db.transaction();
+  try {
+    someTransactionsRepr = await TransactionDB.findAll(
+      {
+        where: queryDict,
+        transaction: t
+      }
+      );
+    await t.commit();
+    return someTransactionsRepr;
+  } catch (error) {
+    await t.rollback();
+    throw error;
+  }
+}
+
 module.exports = {
   create,
   get,
-  update
+  update,
+  find
 }

@@ -267,6 +267,6 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
         expect(res).have.status(200);
         expect(res.body).have.property('balance').to.be.eql(stagesCost[0]);
       });
-    }); 
+    });
   });
 });
