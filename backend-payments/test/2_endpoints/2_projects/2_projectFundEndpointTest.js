@@ -332,7 +332,23 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
                         });
 
       });
-
+    });
+    it ('THEN it should return an error if a reviewer tries set an stage as completed', async function() {
+      route = `/projects/${projectPublicId}/stages`;
+      stageNumber = 1;
+      payload = {
+        "reviewerPublicId": reviewerRes.body['publicId'],
+        "stageNumber": stageNumber
+      };
+      res = await chai.request(url)
+                      .post(route)
+                      .set(headersPayload)
+                      .send(payload)
+                      .catch(function(err) {
+                        expect(err).to.have.status(405);
+                        expect(err.response.body).to.have.property('status');
+                      });
+      expect(res).to.be.eql(undefined);
     });
   });
 });
