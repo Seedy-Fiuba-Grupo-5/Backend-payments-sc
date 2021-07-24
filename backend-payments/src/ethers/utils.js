@@ -6,8 +6,7 @@ function weisToEthers(weis) {
 }
 
 function ethersToWeis(ethersString) {
-  ethersStringFixed = parseFloat(ethersString).toFixed(18);
-  return ethers.utils.parseEther(ethersStringFixed).toString();
+  return ethers.utils.parseEther(ethersString).toString();
 }
 
 function sumEthers(e1, e2) {
