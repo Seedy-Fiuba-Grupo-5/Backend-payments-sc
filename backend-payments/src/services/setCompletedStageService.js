@@ -4,12 +4,20 @@ const transactionsRepo = require("../db/repositories/transactionsRepo");
 const { setCompletedStage } = require('../smartContract/setCompletedStageSmartContract');
 const {calculateAmountEthersOfStagesWithCompleted} = require('../ethers/utilsEthers');
 const { log } = require("../log");
+const {IN_PROGRESS} = require('../db/repositories/projectsRepo')
 
 async function process(data) {
   log(`Setting stage ${data.stageNumber} of project ${data.projectPublicId} as completed`);
   stageIndex = data.stageNumber - 1;
   projectInst = await projectsRepo.get(data.projectPublicId);
   walletInst = await walletsRepo.get(data.reviewerPublicId);
+
+  if (projectInst.dataValues.state !== IN_PROGRESS) {
+   log('Tried to set a stage as completed in a project which state isn\'t in progress');
+   console.log(projectInst.dataValues.state);
+   return null;
+  }
+
   transactionDict = {
     amountEthers: calculateAmountEthersOfStagesWithCompleted(projectInst, data.stageNumber),
     fromPublicId: data.projectPublicId,

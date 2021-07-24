@@ -9,11 +9,16 @@ function parse(request) {
 
 function format(result) {
   code = 202;
-  body = JSON.stringify(result);
+  _body = result;
+  if (result === null) {
+    code = 405;
+    _body = { "status": "Method not Allowed: Project status must be IN_PROGRESS in order to execute this action"};
+  }
+  body = JSON.stringify(_body);
   return [code, body]
 }
 
-module.exports = { 
+module.exports = {
   parse,
   format
 };
