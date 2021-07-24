@@ -21,15 +21,16 @@ async function fund(
   } catch(error) {
     errorBodyParsed = JSON.parse(error.body);
     message = errorBodyParsed.error.message;
-    console.log(`Transaction ${transcationId} failed:`);
-    console.log(message);
+    log(`Transaction ${transcationId} failed:`);
+    log(message);
     await transactionsRepo.update(transcationId, { transactionState: 'NOT_ENOUGH_BALANCE' });
     return;
   }
   await transactionsRepo.update(transcationId, { transactionState: 'mining' });
-  console.log(`Transaction ${transcationId} in progress ...`);
+  log(`Transaction ${transcationId} in progress ...`);
+  
   tx.wait(1).then(receipt => {
-    console.log(`Transaction ${transcationId} mined`);
+    log(`Transaction ${transcationId} mined`);
     const firstEvent = receipt && receipt.events && receipt.events[0];
     const secondEvent = receipt && receipt.events && receipt.events[1];
     console.log(firstEvent);

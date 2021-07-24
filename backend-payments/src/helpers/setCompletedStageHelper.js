@@ -8,8 +8,14 @@ function parse(request) {
 }
 
 function format(result) {
-  code = 202;
-  body = JSON.stringify(result);
+  responses = {
+    'building': [202, result],
+    'mining': [202, result],
+    'done': [202, result],
+    'NOT_ENOUGH_BALANCE': [409, {'status': 'The current balance is not enough to make this transaction'}]
+  };
+  let [code, _body] = responses[result.transactionState];
+  body = JSON.stringify(_body);
   return [code, body]
 }
 

@@ -14,7 +14,7 @@ function format(result) {
     'done': [202, result],
     'PROJECT_NOT_FOUND': [404, {'status': 'The project requested could not be found'}],
     'NOT_FUNDING': [409, {'status': 'The project is not in FUNDING state'}],
-    'NOT_ENOUGH_BALANCE': [409, {'status': 'The sender has not enough balance to make this transaction'}]
+    'NOT_ENOUGH_BALANCE': [409, {'status': 'The current balance is not enough to make this transaction'}]
   };
   let [code, _body] = responses[result.transactionState];
   body = JSON.stringify(_body);

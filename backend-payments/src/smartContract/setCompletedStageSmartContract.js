@@ -14,7 +14,17 @@ async function setCompletedStage(
   log(`Mining 'SetCompletedStage' transaction of id ${transcationId}`);
   const reviewerWallet = walletsEthers.getFromPrivateKey(reviewerPrivateKey);
   const seedyFiubaContract = await sc.getContract(reviewerWallet);
-  const tx = await seedyFiubaContract.setCompletedStage(projectSCId, stageIndex);
+  let tx;
+  try {
+    tx = await seedyFiubaContract.setCompletedStage(projectSCId, stageIndex);
+  } catch(error) {
+    errorBodyParsed = JSON.parse(error.body);
+    message = errorBodyParsed.error.message;
+    log(`Transaction ${transcationId} failed`);
+    log(message);
+    await transactionsRepo.update(transcationId, { transactionState: 'NOT_ENOUGH_BALANCE' });
+    return;
+  }
 
   await transactionsRepo.update(transcationId, {transactionState: 'mining'});
 

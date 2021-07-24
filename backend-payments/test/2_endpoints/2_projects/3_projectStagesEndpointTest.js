@@ -98,9 +98,9 @@ describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
       expect(res.body).to.have.property('transactionState').to.be.oneOf(['mining', 'done']);
     });
 
-        it( 'The reviewer of the project, should be able to set the second stage as complete '+
-        'if it has enough ethers to make this transaction, '+
-        'and the funds of the up to next stage should be released', async function () {
+    it( 'The reviewer of the project, should be able to set the second stage as complete '+
+    'if it has enough ethers to make this transaction, '+
+    'and the funds of the up to next stage should be released', async function () {
       costTxWeis = 560288000000000;
       await addWeis(reviewerRes.body['address'], costTxWeis);
       route = `/projects/${projectPublicId}/stages`;
@@ -155,6 +155,24 @@ describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
         expect(res.status).to.be.eql(200);
         expect(res.body).to.have.property('stagesStates').to.be.eql(stagesStates);
       });
+    });
+
+    it ('THEN it should return an error if the reviewer has not enough ethers to make the transaction', async function() {
+      route = `/projects/${projectPublicId}/stages`;
+      stageNumber = 1;
+      payload = {
+        "reviewerPublicId": reviewerRes.body['publicId'],
+        "stageNumber": stageNumber
+      };
+      res = await chai.request(url)
+                      .post(route)
+                      .set(headersPayload)
+                      .send(payload)
+                      .catch(function(err) {
+                        expect(err).to.have.status(409);
+                        expect(err.response.body).to.have.property('status');
+                      });
+      expect(res).to.be.eql(undefined);
     });
   });
 
