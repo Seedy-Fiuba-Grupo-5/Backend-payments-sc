@@ -134,6 +134,31 @@ describe('Endpoint /projects: ', () => {
     expect(res).to.be.eql(undefined);
 	});
 
+  it('POST should return an error when the stages costs '+
+      'are not valid', async () => {
+    let [ownerRes, reviewerRes] = await postManyNewWallets(chai, 2);
+    const ownerPublicId = ownerRes.body['publicId'];
+    const reviwerPublicId = reviewerRes.body['publicId'];
+    const stagesCost = ['not', 'valid', 'stages', 'costs'];
+    const publicId = 1;
+    const payload = {
+      "ownerPublicId": ownerPublicId,
+      "reviewerPublicId": reviwerPublicId,
+      "stagesCost": stagesCost,
+      "publicId": publicId
+    };
+		res = await chai.request(url)
+                    .post(route)
+                    .set(headersPayload)
+                    .send(JSON.stringify(payload))
+                    .catch(function(err){
+                      expect(err).to.have.status(400);
+                      expect(err.response.body).to.have.property('status');
+                    });
+    expect(res).to.be.eql(undefined);
+	});
+
+
   // Comment this and the DB will keep its last state
   after(async function() {
     // Clean DB

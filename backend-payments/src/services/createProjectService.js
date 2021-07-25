@@ -2,6 +2,8 @@ const projectsRepo = require("../db/repositories/projectsRepo");
 const walletsRepo = require("../db/repositories/walletsRepo");
 const mineAProject = require("./mineCreateProjectService");
 const { log } = require("../log");
+const { ethers } = require("ethers");
+const { ethersToWeis } = require("../ethers/utilsEthers");
 
 async function process(data) {
   ownerWallet = await walletsRepo.get(data.ownerPublicId);
@@ -17,6 +19,13 @@ async function process(data) {
     return {creationStatus: 'REVIEWER_NOT_FOUND'};
   }
   log(`Reviewer wallet found (if reviewer id was greater than 0)`);
+
+  try {
+    stagesCost.map((s)=>ethersToWeis(s));
+  } catch(error) {
+    log('Invalid stages costs');
+    return {creationStatus: 'INVALID_STAGES_COSTS'}
+  }
 
   log(`Building project ${data.publicId}`);
   const creationStatus = "building";
