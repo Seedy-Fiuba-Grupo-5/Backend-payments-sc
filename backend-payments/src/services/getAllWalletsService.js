@@ -2,9 +2,9 @@ const { log } = require("../log");
 const walletsRepo = require('../db/repositories/walletsRepo');
 
 async function process(_data) {
+  log('Looking for all wallets')
   allInst = await walletsRepo.getAll();
-  result = allInst;
-  return result;
+  return allInst;
 }
 
 module.exports = { process };
