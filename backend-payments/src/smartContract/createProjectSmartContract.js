@@ -23,15 +23,17 @@ async function createProject(
     message = errorBodyParsed.error.message;
     log('Deployer wallet is out of ethers');
     log(message);
+    updatesDict = { creationStatus: 'failed' };
+    await projectsRepo.update(publicId, updatesDict);
     return;
   }
-  
+
   log('Creation project transaction in progress ...')
   await projectsRepo.update(publicId, {creationStatus: 'mining'});
   tx.wait(1).then(receipt => {
     console.log("Transaction mined");
     const firstEvent = receipt && receipt.events && receipt.events[0];
-    
+
     let updatesDict = null;
     if (firstEvent && firstEvent.event === "ProjectCreated") {
       console.log(firstEvent);

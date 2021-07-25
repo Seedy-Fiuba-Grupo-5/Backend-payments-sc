@@ -16,7 +16,8 @@ function format(result) {
     'done': [202, result],
     'OWNER_NOT_FOUND': [404, {'status': 'The owner requested could not be found'}],
     'REVIEWER_NOT_FOUND': [404, {'status': 'The reviewer requested could not be found'}],
-    'INVALID_STAGES_COSTS': [400, {'status': 'The stages cost should represent amounts of ethers'}]
+    'INVALID_STAGES_COSTS': [400, {'status': 'The stages cost should represent amounts of ethers'}],
+    'failed': [503, {'status': 'The system needs to reload ethers'}]
   };
   let [code, _body] = responses[result.creationStatus];
   body = JSON.stringify(_body);

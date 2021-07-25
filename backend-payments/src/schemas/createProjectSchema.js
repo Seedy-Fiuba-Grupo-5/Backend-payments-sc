@@ -93,6 +93,15 @@ function schema() {
             type: 'string'
           }
         }
+      },
+      503: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'The server needs to reaload ethers',
+            type: 'string'
+          }
+        }
       }
     }
   };
