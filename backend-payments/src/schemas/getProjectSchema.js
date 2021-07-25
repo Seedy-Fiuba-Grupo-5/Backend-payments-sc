@@ -54,9 +54,18 @@ function schema() {
             enum: ['INITIALIZING', 'FUNDING', 'IN_PROGRESS', 'COMPLETED']
           }
         }
+      },
+      404: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'Project not found',
+            type: 'string'
+          }
+        }
       }
     },
-    required: ['Authorization']
+    required: ['publicId', 'Authorization']
   };
 }
 

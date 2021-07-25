@@ -71,6 +71,18 @@ describe('Endpoint /projects/<id>: ',()=>{
     expect(res.body).to.have.property('state').to.be.eql('FUNDING');
   });
 
+  it('GET should return an error if project does not exist', async function () {
+    const route = `${parcialRoute}/9999`;
+    res = await chai.request(url)
+                    .get(route)
+                    .set(headers)
+                    .catch(function(err) {
+                      expect(err).to.have.status('404');
+                      expect(err).to.have.property('status');
+                    });
+    expect(res).to.be.eql(undefined);
+  });
+
   it('PATCH should return 404 if the project does not exists', async function () {
     const publicId = 999999;
     const route = `${parcialRoute}/${publicId}`;

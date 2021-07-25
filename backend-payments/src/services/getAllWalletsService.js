@@ -1,9 +1,9 @@
-const walletsRepo = require('../db/repositories/walletsRepo');
 const { log } = require("../log");
+const walletsRepo = require('../db/repositories/walletsRepo');
 
 async function process(_data) {
-  allRepr = await walletsRepo.getAll();
-  result = allRepr;
+  allInst = await walletsRepo.getAll();
+  result = allInst;
   return result;
 }
 
