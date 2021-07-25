@@ -1,6 +1,6 @@
+const { log } = require("../log");
 const walletsEther = require("../ethers/walletsEthers");
 const walletsRepo = require("../db/repositories/walletsRepo");
-const { log } = require("../log");
 
 async function process(data) {
   wallet = await walletsEther.create(data.publicId);
@@ -9,11 +9,11 @@ async function process(data) {
     address: wallet.address,
     privateKey: wallet.privateKey
   }
-  walletRepr = await walletsRepo.create(dataDict);
+  walletInst = await walletsRepo.create(dataDict);
   const result = {
-    publicId: walletRepr.publicId,
-    address: walletRepr.address,
-    privateKey: walletRepr.privateKey
+    publicId: walletInst.publicId,
+    address: walletInst.address,
+    privateKey: walletInst.privateKey
   };
   return result;
 }

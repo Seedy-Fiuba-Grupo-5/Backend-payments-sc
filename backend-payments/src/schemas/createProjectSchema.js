@@ -76,12 +76,21 @@ function schema() {
           }
         }
       },
+      400: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'Invalid stages costs',
+            type: 'string'
+          }
+        }
+      },
       404: {
         type: 'object',
         properties: {
           status: {
-            type: 'string',
-            example: 'Either owner or Reviewer wallet requested could not be found'
+            description: 'Owner not found / Reviewer not found',
+            type: 'string'
           }
         }
       }

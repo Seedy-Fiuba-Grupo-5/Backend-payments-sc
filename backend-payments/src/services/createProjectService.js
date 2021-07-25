@@ -1,8 +1,7 @@
+const { log } = require("../log");
 const projectsRepo = require("../db/repositories/projectsRepo");
 const walletsRepo = require("../db/repositories/walletsRepo");
 const mineAProject = require("./mineCreateProjectService");
-const { log } = require("../log");
-const { ethers } = require("ethers");
 const { ethersToWeis } = require("../ethers/utilsEthers");
 
 async function process(data) {
@@ -24,7 +23,7 @@ async function process(data) {
     stagesCost.map((s)=>ethersToWeis(s));
   } catch(error) {
     log('Invalid stages costs');
-    return {creationStatus: 'INVALID_STAGES_COSTS'}
+    return {creationStatus: 'INVALID_STAGES_COSTS'};
   }
 
   log(`Building project ${data.publicId}`);
