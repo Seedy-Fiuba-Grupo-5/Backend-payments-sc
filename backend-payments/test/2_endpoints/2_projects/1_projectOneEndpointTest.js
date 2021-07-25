@@ -85,8 +85,7 @@ describe('Endpoint /projects/<id>: ',()=>{
       .send(payload)
       .catch( function(err) {
         expect(err.status).to.be.eql(404);
-        expect(err.response.body).to.have.property('status')
-          .to.be.eql('The project or the reviewer\'s wallet requested could not be found');
+        expect(err.response.body).to.have.property('status');
       });
   });
 
@@ -129,6 +128,37 @@ describe('Endpoint /projects/<id>: ',()=>{
     expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
     expect(res.body).to.have.property('balance').to.be.eql('0.0');
     expect(res.body).to.have.property('state').to.be.eql('FUNDING');
+  });
+
+  it( 'PATCH should return 404 when trying asign a reviewer id that does not have an associated wallet' +
+      'when the project creation status is not "building"', async function () {
+    const publicId = 1;
+    let [ownerRes] = await postManyNewWallets(chai, 1);
+    const ownerPublicId = ownerRes.body['publicId'];
+    const stagesCost = [2, 1, 3];
+    var payload = {
+      "publicId": publicId,
+      "ownerPublicId": ownerPublicId,
+      "reviewerPublicId": -1,
+      "stagesCost": stagesCost
+    };
+    await postNewProject(chai, payload);
+
+    const route = `${parcialRoute}/${publicId}`;
+
+    payload = {
+      "reviewerPublicId": 9999
+    };
+    res = await chai.request(url)
+                    .patch(route)
+                    .set(headersPayload)
+                    .send(payload)
+                    .catch(function(err) {
+                      expect(err).to.have.status(404);
+                      expect(err.response.body).to.have.property('status')
+                    })
+    expect(res).to.be.eql(undefined);
+
   });
 
   // it( 'PATCH should return 404 when trying asign a reviewer id that does not have an associated wallet' +

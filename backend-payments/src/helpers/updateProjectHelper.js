@@ -7,14 +7,16 @@ function parse(request) {
 }
 
 function format(result) {
-  code = 202;
-  _body = result;
-  if (result === null) {
-    code = 404;
-    _body = { "status": "The project or the reviewer's wallet requested could not be found"};
-  }
+  responses = {
+    'building': [202, result],
+    'mining': [202, result],
+    'done': [202, result],
+    'PROJECT_NOT_FOUND': [404, {'status': 'The project requested could not be found'}],
+    'REVIEWER_NOT_FOUND': [404, {'status': 'The reviewer requested could not be found'}]
+  };
+  let [code, _body] = responses[result.creationStatus];
   body = JSON.stringify(_body);
-  return [code, body]
+  return [code, body];
 }
 
 module.exports = {
