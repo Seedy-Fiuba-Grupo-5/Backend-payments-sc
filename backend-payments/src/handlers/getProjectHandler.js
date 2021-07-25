@@ -11,7 +11,7 @@ function handler() {
   return async function (req, reply) {
     const data = getProjectHelper.parse(req);
     log(`GET /projects/${data.publicId}`);
-    getProjectLog('Parse data');
+    getProjectLog('Parsed data');
     console.log(data);
     const result = await getProjectService.process(data);
     getProjectLog('Result:');

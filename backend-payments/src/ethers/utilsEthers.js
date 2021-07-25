@@ -18,8 +18,9 @@ function sumEthers(e1, e2) {
 }
 
 function calculateAmountEthersOfStagesWithCompleted(projectInst, stageNumber) {
+  stagesCostLength = projectInst.dataValues.stagesCost.length;
   amountEthers = '0';
-  for(var i=1; i<= stageNumber; i++) {
+  for(var i=1; i <= stageNumber && i < stagesCostLength; i++) {
     if (!projectInst.dataValues.stagesStates[i]) {
       amountEthers = sumEthers(amountEthers, projectInst.dataValues.stagesCost[i])
     }

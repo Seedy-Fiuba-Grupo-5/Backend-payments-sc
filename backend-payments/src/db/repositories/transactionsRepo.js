@@ -35,6 +35,9 @@ async function get(id) {
 }
 
 async function update(id, updatesDict) {
+  transactionDBLog(`Updating transaction of id: ${id}`+
+                    `\n\twith next data:`);
+  console.log(updatesDict);
   const t = await db.transaction();
   try {
     await TransactionDB.update(

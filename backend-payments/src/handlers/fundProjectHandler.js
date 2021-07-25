@@ -11,7 +11,7 @@ function handler() {
   return async function (req, reply) {
     const data = helper.parse(req);
     log(`POST /projects/${data.projectPublicId}/funds`);
-    fundProjectLog('Parse data:');
+    fundProjectLog('Parsed data:');
     console.log(data);
     const result = await service.process(data);
     fundProjectLog('Result:');

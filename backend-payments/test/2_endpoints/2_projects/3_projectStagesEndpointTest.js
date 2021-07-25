@@ -229,6 +229,21 @@ describe('Endpoint /projects/<id>/stages: ',()=>{
                       });
       expect(res).to.be.eql(undefined);
     });
+
+    it( 'THEN reviewer should be able to set the last stage as completed'+
+        'and the project should change to COMPLETED state', async function() {
+      costTxWeis = 560288000000000;
+      await addWeis(reviewerRes.body['address'], costTxWeis);
+      payload = {
+        "reviewerPublicId": reviewerRes.body['publicId'],
+        "stageNumber": stagesCost.length
+      };
+      await setCompletedStage(chai, payload, projectPublicId);
+      res = await getProject(chai, projectPublicId);
+
+      expect(res.body).to.have.property('state').to.be.eql('COMPLETED');
+
+    });
   });
 
   // Comment this and the DB will keep its last state
