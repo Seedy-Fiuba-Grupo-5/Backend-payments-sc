@@ -13,7 +13,7 @@ function format(result) {
     'mining': [202, result],
     'done': [202, result],
     'PROJECT_NOT_FOUND': [404, {'status': 'The project requested could not be found'}],
-    'NOT_FUNDING': [409, {'status': 'The project is not in FUNDING state'}],
+    'NOT_FUNDING': [405, {'status': 'The project must be in FUNDING state to execute this action'}],
     'NOT_ENOUGH_BALANCE': [409, {'status': 'The current balance is not enough to make this transaction'}]
   };
   let [code, _body] = responses[result.transactionState];

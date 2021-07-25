@@ -305,10 +305,10 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
                         .set(headersPayload)
                         .send(payload)
                         .catch(function(err) {
-                          expect(err.status).to.be.eql(409);
-                          expect(err.response.body).to.have.property('status').to.be.eql('The project is not in FUNDING state');
+                          expect(err.status).to.be.eql(405);
+                          expect(err.response.body).to.have.property('status');
                         });
-
+        expect(res).to.be.eql(undefined);
       });
 
       it('THEN try to fund an unexisting proyect should fail with status code 404', async function(){
@@ -330,7 +330,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
                           expect(err.status).to.be.eql(404);
                           expect(err.response.body).to.have.property('status').to.be.eql('The project requested could not be found');
                         });
-
+        expect(res).to.be.eql(undefined);
       });
     });
     it ('THEN it should return an error if a reviewer tries set an stage as completed', async function() {
@@ -350,5 +350,11 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
                       });
       expect(res).to.be.eql(undefined);
     });
+  });
+
+  // Comment this and the DB will keep its last state
+  after(async function() {
+    // Clean DB
+    await deleteDB(chai);
   });
 });

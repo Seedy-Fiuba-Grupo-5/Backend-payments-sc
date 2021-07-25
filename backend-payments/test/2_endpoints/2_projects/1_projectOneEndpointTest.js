@@ -131,9 +131,8 @@ describe('Endpoint /projects/<id>: ',()=>{
     expect(res.body).to.have.property('state').to.be.eql('FUNDING');
   });
 
-  // it( 'PATCH should return 409 while trying asign a reviewer id ' +
+  // it( 'PATCH should return 404 when trying asign a reviewer id that does not have an associated wallet' +
   //     'when the project creation status is not "building"', async function () {
-  //   console.log("[DEBUG] CURRENT TEST");
   //   const publicId = 1;
   //   let [ownerRes, aReviewerRes, otherReviewerRes] = postManyNewWallets(chai, 3);
   //   const ownerPublicId = ownerRes.body['publicId'];
@@ -177,4 +176,10 @@ describe('Endpoint /projects/<id>: ',()=>{
   //   expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
   //   expect(res.body).to.have.property('balance').to.be.eql('0.0');
   // });
+
+  // Comment this and the DB will keep its last state
+  after(async function() {
+    // Clean DB
+    await deleteDB(chai);
+  });
 });

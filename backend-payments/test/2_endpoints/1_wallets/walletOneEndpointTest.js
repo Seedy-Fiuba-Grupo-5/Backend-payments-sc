@@ -62,4 +62,10 @@ describe('Endpoint /wallets/<id>: ',()=>{
     const ethersLoad = ethers.utils.formatEther(weisLoad);
     expect(res.body).to.have.property('balance').to.be.eql( ethersLoad );
 	});
+
+  // Comment this and the DB will keep its last state
+  after(async function() {
+    // Clean DB
+    await deleteDB(chai);
+  });
 });

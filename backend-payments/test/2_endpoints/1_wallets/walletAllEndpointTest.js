@@ -65,4 +65,10 @@ describe('Endpoint /wallets: ', () => {
       expect(res.body[index]).to.have.property('privateKey').to.be.a('string');
     }
 	});
+
+  // Comment this and the DB will keep its last state
+  after(async function() {
+    // Clean DB
+    await deleteDB(chai);
+  });
 });

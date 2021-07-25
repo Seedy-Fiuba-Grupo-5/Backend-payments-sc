@@ -86,4 +86,10 @@ describe('Endpoint /projects: ', () => {
     stagesStates = stagesCost.map(() => false);
     expect(res.body).to.have.property('stagesStates').to.be.eql(stagesStates);
   });
+
+  // Comment this and the DB will keep its last state
+  after(async function() {
+    // Clean DB
+    await deleteDB(chai);
+  });
 });
