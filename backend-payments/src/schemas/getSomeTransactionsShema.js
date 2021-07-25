@@ -59,6 +59,15 @@ function schema() {
           transactionType: { type: 'string' },
           transactionState: { type: 'string' },
         }
+      },
+      400: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'Some query params are wrong',
+            type: 'string'
+          }
+        }
       }
     },
     required: ['Authorization']

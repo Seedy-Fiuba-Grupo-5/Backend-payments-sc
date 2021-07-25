@@ -32,9 +32,18 @@ function schema() {
           transactionType: { type: 'string' },
           transactionState: { type: 'string' },
         }
+      },
+      404: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'Transaction not found',
+            type: 'string'
+          }
+        }
       }
     },
-    required: ['Authorization']
+    required: ['transactionId', 'Authorization']
   };
 }
 

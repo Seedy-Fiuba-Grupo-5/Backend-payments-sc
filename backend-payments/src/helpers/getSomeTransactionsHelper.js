@@ -7,7 +7,12 @@ function parse(request) {
 
 function format(result) {
   code = 200;
-  body = JSON.stringify(result);
+  _body = result;
+  if (result === null) {
+    code = 400;
+    _body = {'status': 'Some query params are wrong'};
+  }
+  body = JSON.stringify(_body);
   return [code, body]
 }
 
