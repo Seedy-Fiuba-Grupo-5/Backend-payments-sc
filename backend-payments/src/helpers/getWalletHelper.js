@@ -7,7 +7,12 @@ function parse(request) {
 
 function format(result) {
   code = 200;
-  body = result;
+  _body = result
+  if (result === 'WALLET_NOT_FOUND') {
+    code = 404;
+    _body = {'status': 'The requested wallet could not be found'}
+  }
+  body = JSON.stringify(_body);
   return [code, body]
 }
 

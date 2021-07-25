@@ -3,11 +3,11 @@ function schema() {
     description: 'Creates a new project',
     headers: {
       type: 'object',
-      properties: { 
-        Authorization: { 
+      properties: {
+        Authorization: {
           description: 'Example: Bearer 12345',
           type: 'string',
-        } 
+        }
       }
     },
     body: {
@@ -29,38 +29,18 @@ function schema() {
           description: 'Sorted array of cost (ether) by stage',
           type: 'array',
           minItems: 1,
-          items: { type: 'number' }
+          items: { type: 'string' }
         }
       }
     },
     required: [
-      'Authorization', 
-      'publicId', 
-      'ownerPublicId', 
-      'reviewerPublicId', 
+      'Authorization',
+      'publicId',
+      'ownerPublicId',
+      'reviewerPublicId',
       'stagesCost'
     ],
     response: {
-      201: {
-        type: 'object',
-        properties: {
-          publicId: { type: 'number' },
-          ownerPublicId: { type: 'number' },
-          reviewerPublicId: { example: -1 },
-          stagesCost: {
-            type: 'array',
-            minItems: 1,
-            items: { type: 'number' },
-          },
-          creationStatus: {
-            description: "Project's creation status",
-            type: 'string',
-            enum: ["building"]
-          },
-          privateId: { example: -1 },
-          balance: { example: '' }
-        }
-      },
       202: {
         type: 'object',
         properties: {
@@ -70,19 +50,57 @@ function schema() {
           stagesCost: {
             type: 'array',
             minItems: 1,
-            items: { type: 'number' },
+            items: { type: 'string' }
+          },
+          stagesStates: {
+            description: 'The states of completeness of each stage',
+            type: 'array',
+            minItems: 1,
+            items: { type: 'boolean' }
           },
           creationStatus: {
             description: "Project's creation status",
             type: 'string',
-            enum: ['mining', 'done'],
+            enum: ['building', 'mining', 'done']
           },
           privateId: {
             description: "Project's id in smart contract",
             type: 'number',
             nullable: true
           },
-          balance: { type: 'string', nullable: true }
+          balance: { type: 'string', nullable: true },
+          state: {
+            description: 'The current state of the project',
+            type: 'string',
+            enum: ['INITIALIZING', 'FUNDING', 'IN_PROGRESS', 'COMPLETED']
+          }
+        }
+      },
+      400: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'Invalid stages costs',
+            type: 'string'
+          }
+        }
+      },
+      404: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'Owner not found / Reviewer not found',
+            type: 'string'
+          }
+        }
+      },
+      503: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'The server needs to reaload ethers',
+            type: 'string'
+          }
         }
       }
     }

@@ -1,7 +1,7 @@
 const projectsRepo = require('../db/repositories/projectsRepo');
 const walletsRepo = require('../db/repositories/walletsRepo');
-const walletsEther = require('../ethers/wallets');
-const sc = require('../ethers/contractInteraction');
+const walletsEther = require('../ethers/walletsEthers');
+const sc = require('../smartContract/createProjectSmartContract');
 const { log } = require('../log');
 
 async function process(publicId) {

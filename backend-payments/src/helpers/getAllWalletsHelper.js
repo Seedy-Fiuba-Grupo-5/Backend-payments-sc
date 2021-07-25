@@ -5,7 +5,7 @@ function parse(_request) {
 
 function format(result) {
   code = 200;
-  body = result;
+  body = JSON.stringify(result);
   return [code, body]
 }
 

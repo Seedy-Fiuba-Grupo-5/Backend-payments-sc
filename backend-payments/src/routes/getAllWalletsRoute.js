@@ -1,5 +1,5 @@
 const { preHandler } = require('../handlers/authPreHandler');
-const { handler } = require("../handlers/getWalletsHandler");
+const { handler } = require("../handlers/getAllWalletsHandler");
 const { schema } = require('../schemas/getAllWalletsSchema');
 
 function route() {

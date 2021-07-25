@@ -1,14 +1,18 @@
-const walletsRepo = require('../db/repositories/walletsRepo');
-const walletsEthers = require('../ethers/wallets');
 const { log } = require("../log");
+const walletsRepo = require('../db/repositories/walletsRepo');
+const walletsEthers = require('../ethers/walletsEthers');
 
 async function process(data) {
-  repr = await walletsRepo.get(data.publicId);
-  balance = await walletsEthers.balance(repr.dataValues.address);
+  walletInst = await walletsRepo.get(data.publicId);
+  if (walletInst === null) {
+    log('Wallet not found');
+    return 'WALLET_NOT_FOUND';
+  }
+  balance = await walletsEthers.balance(walletInst.dataValues.address);
   result = {
-    publicId: repr.dataValues.publicId,
-    address: repr.dataValues.address,
-    privateKey: repr.dataValues.privateKey,
+    publicId: walletInst.dataValues.publicId,
+    address: walletInst.dataValues.address,
+    privateKey: walletInst.dataValues.privateKey,
     balance: balance
   }
   return result;

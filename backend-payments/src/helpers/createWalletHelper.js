@@ -7,8 +7,8 @@ function parse(request) {
 
 function format(result) {
   code = 201;
-  body = result;
-  return [code, body]
+  body = JSON.stringify(result);
+  return [code, body];
 }
 
 module.exports = { 

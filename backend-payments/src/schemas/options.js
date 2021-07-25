@@ -12,7 +12,7 @@ const options = {
       description: 'Find more info here'
     },
     basePath: '/',
-    schemes: ['http'],
+    schemes: ['http', 'https'],
     consumes: ['application/json'],
     produces: ['application/json']
   }

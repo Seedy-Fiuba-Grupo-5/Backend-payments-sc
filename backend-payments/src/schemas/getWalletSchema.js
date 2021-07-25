@@ -28,6 +28,15 @@ function schema() {
           privateKey: { type: 'string' },
           balance: { type: 'string' }
         }
+      },
+      404: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'Wallet not found',
+            type: 'string'
+          }
+        }
       }
     },
     required: ['Authorization']

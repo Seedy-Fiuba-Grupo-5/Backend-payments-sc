@@ -6,9 +6,15 @@ function parse(request) {
 }
 
 function format(result) {
-  code = 200;
-  body = result;
-  return [code, body]
+  responses = {
+    'building': [200, result],
+    'mining': [200, result],
+    'done': [200, result],
+    'PROJECT_NOT_FOUND': [404, {'status': 'The project requested could not be found'}]
+  };
+  let [code, _body] = responses[result.creationStatus];
+  body = JSON.stringify(result);
+  return [code, body];
 }
 
 module.exports = { 
