@@ -16,6 +16,12 @@ async function process(data) {
     return { transactionState: 'NOT_FUNDING'};
   }
 
+  walletInst = await walletsRepo.get(data.userPublicId);
+  if (walletInst == null) {
+    log('Funder wallet not found');
+    return { transactionState: 'FUNDER_NOT_FOUND' };
+  }
+
   log(`Funding project ${data.projectPublicId}`);
   const dataDict = {
     amountEthers: data.amountEthers,
@@ -26,9 +32,7 @@ async function process(data) {
     transactionType: 'fund',
     transactionState: 'building'
   };
-
   transactionInst = await transactionsRepo.create(dataDict);
-  walletInst = await walletsRepo.get(data.userPublicId);
   await fund(
     data.amountEthers,
     walletInst.dataValues.privateKey,

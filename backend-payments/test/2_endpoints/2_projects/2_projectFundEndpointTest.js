@@ -251,7 +251,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
         "amountEthers": weisToEthers(fundWeis)
       };
 
-      await chai.request(url)
+      res = await chai.request(url)
                 .post(route)
                 .set(headersPayload)
                 .send(payload)
@@ -259,6 +259,25 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
                   expect(err).to.have.status(409);
                   expect(err.response.body).to.have.property('status');
                 });
+      expect(res).to.be.eql(undefined);
+    });
+
+    it ('POST should return an error when the funder wallet does not exist', async function() {
+      fundWeis = 5;
+      payload = {
+        "userPublicId": 9999,
+        "amountEthers": weisToEthers(fundWeis)
+      };
+
+      res = await chai.request(url)
+                .post(route)
+                .set(headersPayload)
+                .send(payload)
+                .catch(function(err) {
+                  expect(err).to.have.status(404);
+                  expect(err.response.body).to.have.property('status');
+                });
+      expect(res).to.be.eql(undefined);
     });
 
     describe('WHEN the project reaches the IN_PROGRESS state', async function() {
