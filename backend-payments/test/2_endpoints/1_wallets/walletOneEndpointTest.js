@@ -63,6 +63,19 @@ describe('Endpoint /wallets/<id>: ',()=>{
     expect(res.body).to.have.property('balance').to.be.eql( ethersLoad );
 	});
 
+  it('GET should return an error when the wallet does not exists', async () => {
+    route = `${parcialRoute}/9999`;
+
+		res = await chai.request(url)
+                    .get(route)
+                    .set(headers)
+                    .catch(function (err) {
+                      expect(err).to.have.status(404);
+                      expect(err).to.have.property('status');
+                    });
+    expect(res).to.be.eql(undefined);
+	});
+
   // Comment this and the DB will keep its last state
   after(async function() {
     // Clean DB
