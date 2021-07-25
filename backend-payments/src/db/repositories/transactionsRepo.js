@@ -10,7 +10,9 @@ function transactionDBLog(message) {
 async function create(dataDict) {
   transactionDBLog(`Creating transaction with next data:`);
   console.log(dataDict);
-  return await TransactionDB.create(dataDict);
+  inst = await TransactionDB.create(dataDict);
+  console.log(inst);
+  return inst;
 }
 
 async function get(id) {

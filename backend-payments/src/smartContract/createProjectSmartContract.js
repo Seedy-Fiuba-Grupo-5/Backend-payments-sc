@@ -1,17 +1,7 @@
-const BigNumber = require("bignumber.js");
-const ethers = require("ethers");
-const { contractAddress, contractAbi } = require("../config");
+const sc = require('./smartContract');
 const projectsRepo = require("../db/repositories/projectsRepo");
 const { ethersToWeis } = require("../ethers/utilsEthers");
-
-async function getContract(wallet) {
-  return new ethers.Contract(contractAddress, contractAbi, wallet);
-};
-
-function toWei(number) {
-  const WEIS_IN_ETHER = BigNumber(10).pow(18);
-  return BigNumber(number).times(WEIS_IN_ETHER).toFixed();
-};
+const { log } = require('../log');
 
 async function createProject(
   deployerWallet,
@@ -20,28 +10,52 @@ async function createProject(
   projectReviewerAddress,
   publicId
 ) {
-  const seedyFiubaContract = await getContract(deployerWallet);
-  const tx = await seedyFiubaContract.createProject(
-                    stagesCost.map(ethersToWeis),
-                    projectOwnerAddress,
-                    projectReviewerAddress);
+  const seedyFiubaContract = await sc.getContract(deployerWallet);
+  let tx;
+  try {
+    tx = await seedyFiubaContract.createProject(
+      stagesCost.map(ethersToWeis),
+      projectOwnerAddress,
+      projectReviewerAddress
+    );
+  } catch(error) {
+    errorBodyParsed = JSON.parse(error.body);
+    message = errorBodyParsed.error.message;
+    log('Deployer wallet is out of ethers');
+    log(message);
+    return;
+  }
+  
+  log('Creation project transaction in progress ...')
   await projectsRepo.update(publicId, {creationStatus: 'mining'});
   tx.wait(1).then(receipt => {
     console.log("Transaction mined");
     const firstEvent = receipt && receipt.events && receipt.events[0];
-    console.log(firstEvent);
+    
+    let updatesDict = null;
     if (firstEvent && firstEvent.event === "ProjectCreated") {
+      console.log(firstEvent);
       const projectId = firstEvent.args.projectId.toNumber();
+      const ownerAddress = firstEvent.args.owner.toString();
+      const reviewerAddress = firstEvent.args.reviewer.toString();
+      const totalAmountNeeded = firstEvent.args.totalAmountNeeded; // Do not convert BigNumber to Number
+      log(`Event 'ProjectCreated': ` +
+          `\n\tprojectId: ${projectId}` +
+          `\n\townerAddress: ${ownerAddress}` +
+          `\n\treviewerAddress: ${reviewerAddress}` +
+          `\n\ttotalAmounNeeded: ${totalAmountNeeded} weis`
+          );
       updatesDict = {
         privateId: projectId,
         balance: '0.0',
         creationStatus: 'done',
         state: projectsRepo.FUNDING
       };
-      projectsRepo.update(publicId, updatesDict);
     } else {
-      console.error(`Project not created in tx ${tx.hash}`);
+      log(`Project not created in tx ${tx.hash}`);
+      updatesDict = { creationStatus: 'failed' };
     }
+    projectsRepo.update(publicId, updatesDict);
   });
 };
 

@@ -32,11 +32,10 @@ async function setCompletedStage(
     console.log("Transaction mined");
     const firstEvent = receipt && receipt.events && receipt.events[0];
     const secondEvent = receipt && receipt.events && receipt.events[1];
-    console.log(firstEvent);
-    console.log(secondEvent);
 
     updatesTransactionDict = null;
     if (firstEvent && firstEvent.event === "StageCompleted") {
+      console.log(firstEvent);
       const projectId = firstEvent.args.projectId.toNumber();
       const stageCompleted = firstEvent.args.stageCompleted.toNumber();
       log(`Event 'StateCompleted': ` +
@@ -51,6 +50,7 @@ async function setCompletedStage(
     }
 
     if (secondEvent && secondEvent.event === "ProjectCompleted") {
+      console.log(secondEvent);
       const projectId = secondEvent.args.projectId.toNumber();
       log(`Event 'ProjectCompleted': ` +
           `\n\tprojectId: ${projectId}`

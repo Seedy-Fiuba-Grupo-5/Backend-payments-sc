@@ -62,8 +62,17 @@ function schema() {
         type: 'object',
         properties: {
           status: {
-            type: 'string',
-            example: 'The project requested could not be found'
+            description: 'Project not found / Reviewer not found',
+            type: 'string'
+          }
+        }
+      },
+      409: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'There is already a reviewer asigned',
+            type: 'string'
           }
         }
       }

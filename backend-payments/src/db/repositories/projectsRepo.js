@@ -16,7 +16,9 @@ function projectDBLog(message) {
 async function create(dataDict) {
   projectDBLog(`Creating project with next data:`);
   console.log(dataDict);
-  return await ProjectDB.create(dataDict);
+  inst = await ProjectDB.create(dataDict);
+  console.log(inst);
+  return inst;
 }
 
 async function get(publicId) {

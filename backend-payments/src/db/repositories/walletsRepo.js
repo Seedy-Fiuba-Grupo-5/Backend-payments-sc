@@ -1,20 +1,33 @@
-const { db } = require("../db");
 const { WalletDB } = require("../models/walletModel");
+const { db } = require("../db");
+const { log } = require("../../log");
+
+async function walletDBLog(message) {
+  fullMessage = `WalletDB: ${message}`;
+  log(fullMessage);
+}
 
 async function create(dataDict) {
-  walletRepr = await WalletDB.create(dataDict);
-  return walletRepr;
+  walletDBLog('Creating wallet with next data:');
+  console.log(dataDict);
+  walletInst = await WalletDB.create(dataDict);
+  console.log(walletInst);
+  return walletInst;
 }
 
 async function get(publicId) {
+  walletDBLog(`Getting wallet of public id: ${publicId}`);
   const t = await db.transaction();
   try {
-    walletRepr = await WalletDB.findByPk(
+    walletInst = await WalletDB.findByPk(
       publicId,
       { transaction: t }
     );
     t.commit();
-    return walletRepr;
+    if (walletInst !== null) {
+      console.log(walletInst);
+    }
+    return walletInst;
   } catch (error) {
     t.rollback();
     throw error;
@@ -22,13 +35,14 @@ async function get(publicId) {
 }
 
 async function getAll() {
+  walletDBLog(`Getting all wallets`);
   const t = await db.transaction();
   try {
-    allWalletRepr = await WalletDB.findAll(
+    allWalletInst = await WalletDB.findAll(
       { transaction: t }
     );
     t.commit();
-    return allWalletRepr;
+    return allWalletInst;
   } catch (error) {
     t.rollback();
     throw error;

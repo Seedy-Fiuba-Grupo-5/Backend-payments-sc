@@ -33,10 +33,10 @@ async function fund(
     log(`Transaction ${transcationId} mined`);
     const firstEvent = receipt && receipt.events && receipt.events[0];
     const secondEvent = receipt && receipt.events && receipt.events[1];
-    console.log(firstEvent);
-    console.log(secondEvent);
+    
     updatesTransactionDict = null;
     if (firstEvent && firstEvent.event === "ProjectFunded") {
+      console.log(firstEvent);
       const projectId = firstEvent.args.projectId.toNumber();
       const funderAddress = firstEvent.args.funder.toString();
       const funds = firstEvent.args.funds; // Do not convert BigNumber to Number
@@ -53,6 +53,7 @@ async function fund(
     }
 
     if (secondEvent && secondEvent.event === "ProjectStarted") {
+      console.log(secondEvent);
       const projectId = secondEvent.args.projectId.toNumber();
       log(`Event 'ProjectStarted': ` +
           `\n\tprojectId: ${projectId}`
