@@ -33,6 +33,12 @@ async function process(data) {
   }
 
   stageIndex = data.stageNumber - 1;
+
+  if (projectInst.dataValues.stagesStates[stageIndex]) {
+    log('This stage was already completed');
+    return { transactionState: 'STAGE_ALREADY_COMPLETED' };
+  }
+
   transactionDict = {
     amountEthers: calculateAmountEthersOfStagesWithCompleted(projectInst, data.stageNumber),
     fromPublicId: data.projectPublicId,

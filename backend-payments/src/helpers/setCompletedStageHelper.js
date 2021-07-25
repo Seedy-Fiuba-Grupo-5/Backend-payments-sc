@@ -16,7 +16,8 @@ function format(result) {
     'INVALID_REVIEWER': [403, {'status': 'Only the reviewer of the project can set stages as completed'}],
     'PROJECT_NOT_FOUND': [404, {'status': 'The project requested could not be found'}],
     'NOT_IN_PROGRESS': [405, {'status': 'The project must be IN_PROGRESS state in order to execute this action'}],
-    'NOT_ENOUGH_BALANCE': [409, {'status': 'The current balance is not enough to make this transaction'}]
+    'NOT_ENOUGH_BALANCE': [409, {'status': 'The current balance is not enough to make this transaction'}],
+    'STAGE_ALREADY_COMPLETED': [409, {'status': 'This stage has already been set as completed'}]
   };
   let [code, _body] = responses[result.transactionState];
   body = JSON.stringify(_body);
