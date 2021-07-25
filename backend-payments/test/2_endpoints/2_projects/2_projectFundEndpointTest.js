@@ -280,6 +280,24 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
       expect(res).to.be.eql(undefined);
     });
 
+    it ('POST should return an error when the amount of ethers is invalid', async function() {
+      let [funderRes] = await postManyNewWallets(chai, 1);
+      payload = {
+        "userPublicId": funderRes.body['publicId'],
+        "amountEthers": 'not a valid amount of ethers'
+      };
+
+      res = await chai.request(url)
+                .post(route)
+                .set(headersPayload)
+                .send(payload)
+                .catch(function(err) {
+                  expect(err).to.have.status(400);
+                  expect(err.response.body).to.have.property('status');
+                });
+      expect(res).to.be.eql(undefined);
+    });
+
     describe('WHEN the project reaches the IN_PROGRESS state', async function() {
       let funderRes;
       beforeEach(async function() {

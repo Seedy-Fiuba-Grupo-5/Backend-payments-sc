@@ -45,12 +45,30 @@ function schema() {
           transactionState: { type: 'string', enum: ['mining', 'done'] }
         }
       },
+      400: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'Invalid amount of ethers',
+            type: 'string'
+          }
+        }
+      },
       404: {
         type: 'object',
         properties: {
           status: {
-            type: 'string',
-            example: 'The project requested could not be found'
+            description: 'Project not found / Funder not found',
+            type: 'string'
+          }
+        }
+      },
+      405: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'Project not in FUNDING state',
+            type: 'string'
           }
         }
       },
@@ -58,8 +76,8 @@ function schema() {
         type: 'object',
         properties: {
           status: {
-            type: 'string',
-            example: 'NOT_FUNDING'
+            description: 'There is not enough balance in funder wallet to execute the transaction',
+            type: 'string'
           }
         }
       }
