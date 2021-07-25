@@ -131,8 +131,8 @@ describe('Endpoint /projects/<id>/stages: ',()=>{
     });
 
     describe('WHEN the reviewer sets stage 1 as completed', ()=>{
-      stageNumber = 1
       beforeEach(async function() {
+        stageNumber = 1
         // Timeout limit for this pre-test
         this.timeout(10000);
 
@@ -150,6 +150,7 @@ describe('Endpoint /projects/<id>/stages: ',()=>{
       });
 
       it('THEN the project should have until stage 1 marked as completed', async function () {
+        stageNumber = 1;
         res = await getProject(chai, projectPublicId);
         stagesStates = stagesCost.map((_, i) => i < stageNumber);
         expect(res.status).to.be.eql(200);
@@ -174,9 +175,61 @@ describe('Endpoint /projects/<id>/stages: ',()=>{
                       });
       expect(res).to.be.eql(undefined);
     });
+
+    it ('THEN it should return an error when try to set an stage completed of an unexistent project', async function() {
+      route = `/projects/9999/stages`;
+      stageNumber = 1;
+      payload = {
+        "reviewerPublicId": reviewerRes.body['publicId'],
+        "stageNumber": stageNumber
+      };
+      res = await chai.request(url)
+                      .post(route)
+                      .set(headersPayload)
+                      .send(payload)
+                      .catch(function(err) {
+                        expect(err).to.have.status(404);
+                        expect(err.response.body).to.have.property('status');
+                      });
+      expect(res).to.be.eql(undefined);
+    });
+
+    it ('THEN it should return an error when reviewer does not match the reviewer of the project', async function() {
+      route = `/projects/${projectPublicId}/stages`;
+      stageNumber = 1;
+      payload = {
+        "reviewerPublicId": reviewerRes.body['publicId']+100,
+        "stageNumber": stageNumber
+      };
+      res = await chai.request(url)
+                      .post(route)
+                      .set(headersPayload)
+                      .send(payload)
+                      .catch(function(err) {
+                        expect(err).to.have.status(403);
+                        expect(err.response.body).to.have.property('status');
+                      });
+      expect(res).to.be.eql(undefined);
+    });
+
+    it ('THEN it should return an error when trying to set an stage out of bounds', async function() {
+      route = `/projects/${projectPublicId}/stages`;
+      stageNumber = 9999;
+      payload = {
+        "reviewerPublicId": reviewerRes.body['publicId'],
+        "stageNumber": stageNumber
+      };
+      res = await chai.request(url)
+                      .post(route)
+                      .set(headersPayload)
+                      .send(payload)
+                      .catch(function(err) {
+                        expect(err).to.have.status(400);
+                        expect(err.response.body).to.have.property('status');
+                      });
+      expect(res).to.be.eql(undefined);
+    });
   });
-
-
 
   // Comment this and the DB will keep its last state
   after(async function() {

@@ -45,7 +45,52 @@ function schema() {
           transactionType: { type: 'string', enum: ['stageCompleted'] },
           transactionState: { type: 'string', enum: ['mining', 'done'] }
         }
-      }
+      },
+      400: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'Stage number should be between 1 and stages cost array length',
+            type: 'string'
+          }
+        }
+      },
+      403: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'Wrong reviewer',
+            type: 'string'
+          }
+        }
+      },
+      404: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'Project not found',
+            type: 'string'
+          }
+        }
+      },
+      405: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'Project is not in IN_PROGRESS state',
+            type: 'string'
+          }
+        }
+      },
+      409: {
+        type: 'object',
+        properties: {
+          status: {
+            description: 'Reviewer does not have enough balance to execute the transaction',
+            type: 'string'
+          }
+        }
+      },
     }
   };
 }
