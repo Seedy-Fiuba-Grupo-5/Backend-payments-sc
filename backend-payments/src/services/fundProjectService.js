@@ -1,10 +1,21 @@
+const { log } = require("../log");
 const walletsRepo = require('../db/repositories/walletsRepo');
 const projectsRepo = require("../db/repositories/projectsRepo");
-const transactionRepo = require("../db/repositories/transactionsRepo");
+const transactionsRepo = require("../db/repositories/transactionsRepo");
 const { fund } = require('../smartContract/fundSmartContract');
-const { log } = require("../log");
 
 async function process(data) {
+  projectInst = await projectsRepo.get(data.projectPublicId);
+  if (!projectInst) {
+    log('Project not found');
+    return { transactionState: 'PROJECT_NOT_FOUND'};
+  }
+  
+  if (projectInst.state !== 'FUNDING') {
+    log('Project not in FUNDING state');
+    return { transactionState: 'NOT_FUNDING'};
+  }
+
   log(`Funding project ${data.projectPublicId}`);
   const dataDict = {
     amountEthers: data.amountEthers,
@@ -15,29 +26,18 @@ async function process(data) {
     transactionType: 'fund',
     transactionState: 'building'
   };
-  let errorMsg = '';
-  projectRepr = await projectsRepo.get(data.projectPublicId);
-  if (!projectRepr) {
-    transactionRepr = {
-      transactionState: 'PROJECT_NOT_FOUND'
-    }
-  } else if(projectRepr.state === 'FUNDING') {
-    transactionRepr = await transactionRepo.create(dataDict);
-    walletRepr = await walletsRepo.get(data.userPublicId);
-    errorMsg = await fund(
-                data.amountEthers,
-                walletRepr.dataValues.privateKey,
-                projectRepr.dataValues.privateId,
-                transactionRepr.id,
-                data.projectPublicId
-                );
-    transactionRepr = await transactionRepo.get(transactionRepr.id);
-  } else {
-    transactionRepr = {
-      transactionState: 'NOT_FUNDING'
-    }
-  }
-  return transactionRepr;
+
+  transactionInst = await transactionsRepo.create(dataDict);
+  walletInst = await walletsRepo.get(data.userPublicId);
+  await fund(
+    data.amountEthers,
+    walletInst.dataValues.privateKey,
+    projectInst.dataValues.privateId,
+    transactionInst.id,
+    data.projectPublicId
+    );
+  transactionInst = await transactionsRepo.get(transactionInst.id);
+  return transactionInst.dataValues;
 }
 
 module.exports = { process };
