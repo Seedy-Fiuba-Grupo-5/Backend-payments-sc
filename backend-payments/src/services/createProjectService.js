@@ -13,10 +13,10 @@ async function process(data) {
 
   reviewerWallet = await walletsRepo.get(data.reviewerPublicId);
   if (data.reviewerPublicId >= 0 && reviewerWallet === null) {
-    log('Reviewer Wallet not found');
-    return null
+    log('Reviewer wallet not found');
+    return {creationStatus: 'REVIEWER_NOT_FOUND'};
   }
-  log(`Reviewer Wallet found (if reviewer id was greater than 0)`);
+  log(`Reviewer wallet found (if reviewer id was greater than 0)`);
 
   log(`Building project ${data.publicId}`);
   const creationStatus = "building";
