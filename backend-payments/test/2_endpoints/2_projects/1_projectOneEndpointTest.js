@@ -161,51 +161,37 @@ describe('Endpoint /projects/<id>: ',()=>{
 
   });
 
-  // it( 'PATCH should return 404 when trying asign a reviewer id that does not have an associated wallet' +
-  //     'when the project creation status is not "building"', async function () {
-  //   const publicId = 1;
-  //   let [ownerRes, aReviewerRes, otherReviewerRes] = postManyNewWallets(chai, 3);
-  //   const ownerPublicId = ownerRes.body['publicId'];
-  //   const reviewerPublicId = aReviewerRes.body['publicId'];
-  //   const stagesCost = [2, 1, 3];
-  //   var payload = {
-  //     "publicId": publicId,
-  //     "ownerPublicId": ownerPublicId,
-  //     "reviewerPublicId": reviewerPublicId,
-  //     "stagesCost": stagesCost
-  //   };
-  //   await postNewProject(chai, payload);
+  it( 'PATCH should return 409 when trying asign a reviewer '+
+      'id when the project already has a reviewer', async function () {
+    const publicId = 1;
+    let [ownerRes, aReviewerRes, otherReviewerRes] = await postManyNewWallets(chai, 3);
+    const ownerPublicId = ownerRes.body['publicId'];
+    const reviewerPublicId = aReviewerRes.body['publicId'];
+    const stagesCost = [2, 1, 3];
+    var payload = {
+      "publicId": publicId,
+      "ownerPublicId": ownerPublicId,
+      "reviewerPublicId": reviewerPublicId,
+      "stagesCost": stagesCost
+    };
+    await postNewProject(chai, payload);
 
-  //   const route = `${parcialRoute}/${publicId}`;
+    const route = `${parcialRoute}/${publicId}`;
 
-  //   otherReviewerPublicId = otherReviewerRes.body['publicId'];
-  //   payload = {
-  //     "reviewerPublicId": otherReviewerPublicId
-  //   };
-  //   var res = await chai.request(url)
-  //                       .patch(route)
-  //                       .set(headersPayload)
-  //                       .send(payload);
-  //   expect(res.status).to.be.eql(202);
-  //   expect(res.body).to.have.property('publicId').to.be.eql(publicId);
-  //   expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
-
-  //   var creationStatus = res.body['creationStatus'];
-  //   while (creationStatus === 'mining') {
-  //     this.timeout(1000);
-  //     res = await getProject(chai, publicId);
-  //     creationStatus = res.body['creationStatus'];
-  //   }
-
-  //   expect(res.status).to.be.eql(200);
-  //   expect(res.body).to.have.property('publicId').to.be.eql(publicId);
-  //   expect(res.body).to.have.property('privateId').to.be.a('number');
-  //   expect(res.body).to.have.property('creationStatus').to.be.eql('done');
-  //   expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost);
-  //   expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
-  //   expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
-  //   expect(res.body).to.have.property('balance').to.be.eql('0.0');
-  // });
+    otherReviewerPublicId = otherReviewerRes.body['publicId'];
+    payload = {
+      "reviewerPublicId": otherReviewerPublicId
+    };
+    res = await chai.request(url)
+                    .patch(route)
+                    .set(headersPayload)
+                    .send(payload)
+                    .catch(function(err){
+                      expect(err).to.have.status(409);
+                      expect(err.response.body).have.property('status');
+                    });
+    expect(res).to.be.eql(undefined);
+  });
 
   // Comment this and the DB will keep its last state
   after(async function() {

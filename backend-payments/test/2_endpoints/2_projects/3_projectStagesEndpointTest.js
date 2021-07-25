@@ -21,7 +21,7 @@ const {
 
 chai.use(chaiHttp);
 
-describe('Endpoint /projects/<id>/stages/<stageNumber>: ',()=>{
+describe('Endpoint /projects/<id>/stages: ',()=>{
   let url = serverURL();
 
   describe('Given a created project in IN_PROGRESS state', ()=>{
