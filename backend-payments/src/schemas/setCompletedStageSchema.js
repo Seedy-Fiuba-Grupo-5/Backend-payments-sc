@@ -86,7 +86,7 @@ function schema() {
         type: 'object',
         properties: {
           status: {
-            description: 'Reviewer does not have enough balance to execute the transaction',
+            description: 'Not enough balance / Stage already completed',
             type: 'string'
           }
         }

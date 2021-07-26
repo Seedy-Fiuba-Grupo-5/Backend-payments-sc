@@ -38,7 +38,7 @@ async function setCompletedStage(
       console.log(firstEvent);
       const projectId = firstEvent.args.projectId.toNumber();
       const stageCompleted = firstEvent.args.stageCompleted.toNumber();
-      log(`Event 'StateCompleted': ` +
+      log(`Event 'StageCompleted': ` +
           `\n\tprojectId: ${projectId}` +
           `\n\tstageCompleted: ${stageCompleted}`
           );
