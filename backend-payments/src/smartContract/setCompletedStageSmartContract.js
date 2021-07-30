@@ -18,10 +18,8 @@ async function setCompletedStage(
   try {
     tx = await seedyFiubaContract.setCompletedStage(projectSCId, stageIndex);
   } catch(error) {
-    errorBodyParsed = JSON.parse(error.body);
-    message = errorBodyParsed.error.message;
-    log(`Transaction ${transcationId} failed`);
-    log(message);
+    log(`Set completed stage transaction ${transcationId} failed:`);
+    console.log(error);
     await transactionsRepo.update(transcationId, { transactionState: 'NOT_ENOUGH_BALANCE' });
     return;
   }
