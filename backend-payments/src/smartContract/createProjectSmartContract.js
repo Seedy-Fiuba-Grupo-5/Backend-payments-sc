@@ -52,7 +52,7 @@ async function createProject(
         state: projectsRepo.FUNDING
       };
     } else {
-      log(`Project not created in tx ${tx.hash}`);
+      log(`Project creation failed:\n\ttx hash: ${tx.hash}`);
       updatesDict = { creationStatus: 'failed' };
     }
     projectsRepo.update(publicId, updatesDict);
