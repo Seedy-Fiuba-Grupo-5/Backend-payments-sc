@@ -52,7 +52,7 @@ describe('Endpoint /projects: ', () => {
     expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost.map((i)=>i.toString()));
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
-    expect(res.body).to.have.property('state').to.be.oneOf(['INITIALIZING', 'FUNDING']);
+    expect(res.body).to.have.property('state').to.be.oneOf(['INITIALIZING', 'Funding']);
     stagesStates = stagesCost.map(() => false);
     expect(res.body).to.have.property('stagesStates').to.be.eql(stagesStates);
 	});

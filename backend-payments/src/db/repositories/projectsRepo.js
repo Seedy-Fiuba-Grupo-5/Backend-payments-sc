@@ -4,7 +4,7 @@ const utils = require('../../ethers/utilsEthers');
 const { log } = require("../../log");
 
 INITIALIZING = 'INITIALIZING';
-FUNDING = 'FUNDING';
+FUNDING = 'Funding';
 IN_PROGRESS = 'IN_PROGRESS';
 COMPLETED = 'COMPLETED';
 

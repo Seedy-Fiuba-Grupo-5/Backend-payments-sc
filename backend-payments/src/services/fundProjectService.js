@@ -11,8 +11,8 @@ async function process(data) {
     log('Project not found');
     return { transactionState: 'PROJECT_NOT_FOUND'};
   }
-  
-  if (projectInst.state !== 'FUNDING') {
+
+  if (projectInst.state !== 'Funding') {
     log('Project not in FUNDING state');
     return { transactionState: 'NOT_FUNDING'};
   }
