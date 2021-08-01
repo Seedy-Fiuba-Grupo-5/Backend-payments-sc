@@ -261,7 +261,7 @@ describe('Endpoint /projects/<id>/stages: ',()=>{
       await setCompletedStage(chai, payload, projectPublicId);
       res = await getProject(chai, projectPublicId);
 
-      expect(res.body).to.have.property('state').to.be.eql('COMPLETED');
+      expect(res.body).to.have.property('state').to.be.eql('Completed');
 
     });
   });
