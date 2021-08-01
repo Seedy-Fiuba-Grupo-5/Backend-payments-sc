@@ -10,7 +10,7 @@ function parse(request) {
 function format(result) {
   responses = {
     'building': [202, result],
-    'mining': [202, result],
+    'Mining': [202, result],
     'Done': [202, result],
     'INVALID_STAGE_NUMBER': [400, {'status': 'The stage number should be between 1 and stages cost array length'}],
     'INVALID_REVIEWER': [403, {'status': 'Only the reviewer of the project can set stages as completed'}],

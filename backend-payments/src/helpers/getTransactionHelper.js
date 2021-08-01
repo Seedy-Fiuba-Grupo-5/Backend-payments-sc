@@ -8,7 +8,7 @@ function parse(request) {
 function format(result) {
   responses = {
     'building': [200, result],
-    'mining': [200, result],
+    'Mining': [200, result],
     'Done': [200, result],
     'TRANSACTION_NOT_FOUND': [404, {'status': 'The requested transaction could not be found'}]
   };

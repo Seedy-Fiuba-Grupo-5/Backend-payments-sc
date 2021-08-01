@@ -50,10 +50,10 @@ describe('Endpoint /projects/<id>: ',()=>{
                     .set(headers);
     expect(res.status).to.be.eql(200);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
-    expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'Done']);
+    expect(res.body).to.have.property('creationStatus').to.be.oneOf(['Mining', 'Done']);
 
     let creationStatus = res.body['creationStatus'];
-    while (creationStatus === 'mining') {
+    while (creationStatus === 'Mining') {
       this.timeout(1000);
       // This is a shortcut to the request described above
       res = await getProject(chai, publicId)
@@ -122,10 +122,10 @@ describe('Endpoint /projects/<id>: ',()=>{
 
     expect(res.status).to.be.eql(202);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
-    expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'Done']);
+    expect(res.body).to.have.property('creationStatus').to.be.oneOf(['Mining', 'Done']);
 
     var creationStatus = res.body['creationStatus'];
-    while (creationStatus === 'mining') {
+    while (creationStatus === 'Mining') {
       this.timeout(1000);
       res = await getProject(chai, publicId);
       creationStatus = res.body['creationStatus'];

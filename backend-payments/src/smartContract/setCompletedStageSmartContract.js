@@ -24,7 +24,7 @@ async function setCompletedStage(
     return;
   }
 
-  await transactionsRepo.update(transcationId, {transactionState: 'mining'});
+  await transactionsRepo.update(transcationId, {transactionState: 'Mining'});
 
   tx.wait(1).then(receipt => {
     console.log("Transaction mined");

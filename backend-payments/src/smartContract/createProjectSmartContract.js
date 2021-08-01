@@ -27,7 +27,7 @@ async function createProject(
   }
 
   log('Creation project transaction in progress ...')
-  await projectsRepo.update(publicId, {creationStatus: 'mining'});
+  await projectsRepo.update(publicId, {creationStatus: 'Mining'});
   tx.wait(1).then(receipt => {
     console.log("Transaction mined");
     const firstEvent = receipt && receipt.events && receipt.events[0];

@@ -24,7 +24,7 @@ async function fund(
     await transactionsRepo.update(transcationId, { transactionState: 'Not enough balance' });
     return;
   }
-  await transactionsRepo.update(transcationId, { transactionState: 'mining' });
+  await transactionsRepo.update(transcationId, { transactionState: 'Mining' });
   log(`Transaction ${transcationId} in progress ...`);
 
   tx.wait(1).then(receipt => {

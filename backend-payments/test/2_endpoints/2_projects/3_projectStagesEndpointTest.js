@@ -95,7 +95,7 @@ describe('Endpoint /projects/<id>/stages: ',()=>{
       expect(res.body).to.have.property('toPublicId').to.be.eql(ownerRes.body['publicId']);
       expect(res.body).to.have.property('toType').to.be.eql('user');
       expect(res.body).to.have.property('transactionType').to.be.eql('stageCompleted');
-      expect(res.body).to.have.property('transactionState').to.be.oneOf(['mining', 'Done']);
+      expect(res.body).to.have.property('transactionState').to.be.oneOf(['Mining', 'Done']);
     });
 
     it( 'The reviewer of the project, should be able to set the second stage as complete '+
@@ -127,7 +127,7 @@ describe('Endpoint /projects/<id>/stages: ',()=>{
       expect(res.body).to.have.property('toPublicId').to.be.eql(ownerRes.body['publicId']);
       expect(res.body).to.have.property('toType').to.be.eql('user');
       expect(res.body).to.have.property('transactionType').to.be.eql('stageCompleted');
-      expect(res.body).to.have.property('transactionState').to.be.oneOf(['mining', 'Done']);
+      expect(res.body).to.have.property('transactionState').to.be.oneOf(['Mining', 'Done']);
     });
 
     describe('WHEN the reviewer sets stage 1 as completed', ()=>{
