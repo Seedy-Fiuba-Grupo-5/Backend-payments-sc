@@ -5,7 +5,7 @@ const { log } = require("../../log");
 
 INITIALIZING = 'INITIALIZING';
 FUNDING = 'Funding';
-IN_PROGRESS = 'IN_PROGRESS';
+IN_PROGRESS = 'In progress';
 COMPLETED = 'COMPLETED';
 
 function projectDBLog(message) {

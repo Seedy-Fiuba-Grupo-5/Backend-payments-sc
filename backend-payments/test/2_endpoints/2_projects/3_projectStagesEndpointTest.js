@@ -58,7 +58,7 @@ describe('Endpoint /projects/<id>/stages: ',()=>{
 
     it ('The project should be IN_PROGRESS state', async function () {
       res = await getProject(chai, projectPublicId);
-      expect(res.body).to.have.property('state').to.be.eql('IN_PROGRESS');
+      expect(res.body).to.have.property('state').to.be.eql('In progress');
     });
 
     it ('The owner of the project should have the funds of the first stage of it', async function () {

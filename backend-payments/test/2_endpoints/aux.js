@@ -172,7 +172,7 @@ async function createInProgressProject(chai, projectPayload, funderRes) {
   do {
     await sleep(1000);
     res = await getProject(chai, projectPublicId);
-  } while (res.body['state'] != 'IN_PROGRESS');
+  } while (res.body['state'] != 'In progress');
   return res;
 }
 

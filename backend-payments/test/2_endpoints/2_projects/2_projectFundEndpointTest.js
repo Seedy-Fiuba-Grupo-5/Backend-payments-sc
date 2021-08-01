@@ -318,7 +318,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
         do {
           await sleep(1000);
           res = await getProject(chai, projectPublicId);
-        } while (res.body['state'] != 'IN_PROGRESS');
+        } while (res.body['state'] != 'In progress');
       });
       it('THEN the owner of the project should receive the funds of the first stage of it', async function(){
         res = await getWallet(chai, ownerRes.body['publicId']);
