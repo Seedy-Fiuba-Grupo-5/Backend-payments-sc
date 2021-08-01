@@ -38,7 +38,7 @@ async function process(data) {
     toPublicId: data.projectPublicId,
     toType: 'project',
     transactionType: 'fund',
-    transactionState: 'building'
+    transactionState: 'Building'
   };
   transactionInst = await transactionsRepo.create(dataDict);
   await fund(

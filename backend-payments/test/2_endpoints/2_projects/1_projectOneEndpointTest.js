@@ -143,7 +143,7 @@ describe('Endpoint /projects/<id>: ',()=>{
   });
 
   it( 'PATCH should return 404 when trying asign a reviewer id that does not have an associated wallet' +
-      'when the project creation status is not "building"', async function () {
+      'when the project creation status is not "Building"', async function () {
     const publicId = 1;
     let [ownerRes] = await postManyNewWallets(chai, 1);
     const ownerPublicId = ownerRes.body['publicId'];

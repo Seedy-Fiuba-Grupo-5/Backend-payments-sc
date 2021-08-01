@@ -57,7 +57,7 @@ describe('Endpoint /projects: ', () => {
     expect(res.body).to.have.property('stagesStates').to.be.eql(stagesStates);
 	});
 
-  it( 'POST should leave a new project in a "building" status when ' +
+  it( 'POST should leave a new project in a "Building" status when ' +
       'the reviewer wallet public id is not specified', async () => {
     const publicUserId = 0;
     const ownerRes = await postNewWallet(chai, publicUserId);
@@ -82,7 +82,7 @@ describe('Endpoint /projects: ', () => {
     expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
     expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost.map((i)=>i.toString()));
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
-    expect(res.body).to.have.property('creationStatus').to.be.eql('building');
+    expect(res.body).to.have.property('creationStatus').to.be.eql('Building');
     expect(res.body).to.have.property('state').to.be.eql('Initializing');
     stagesStates = stagesCost.map(() => false);
     expect(res.body).to.have.property('stagesStates').to.be.eql(stagesStates);

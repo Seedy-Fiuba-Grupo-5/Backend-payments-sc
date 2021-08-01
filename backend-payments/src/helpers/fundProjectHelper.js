@@ -9,7 +9,7 @@ function parse(request) {
 
 function format(result) {
   responses = {
-    'building': [202, result],
+    'Building': [202, result],
     'Mining': [202, result],
     'Done': [202, result],
     'INVALID_AMOUNT_ETHERS': [400, {'status': 'The amount of ethers should be valid'}],

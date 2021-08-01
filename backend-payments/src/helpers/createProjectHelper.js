@@ -11,7 +11,7 @@ function parse(request) {
 
 function format(result) {
   responses = {
-    'building': [202, result],
+    'Building': [202, result],
     'Mining': [202, result],
     'Done': [202, result],
     'OWNER_NOT_FOUND': [404, {'status': 'The owner requested could not be found'}],
