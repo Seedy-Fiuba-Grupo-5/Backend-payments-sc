@@ -19,10 +19,8 @@ async function fund(
   try {
     tx = await seedyFiubaContract.fund(projectSCId, overrides);
   } catch(error) {
-    errorBodyParsed = JSON.parse(error.body);
-    message = errorBodyParsed.error.message;
-    log(`Transaction ${transcationId} failed:`);
-    log(message);
+    log(`Fund transaction ${transcationId} failed:`);
+    console.log(error);
     await transactionsRepo.update(transcationId, { transactionState: 'NOT_ENOUGH_BALANCE' });
     return;
   }
@@ -48,7 +46,7 @@ async function fund(
       updatesTransactionDict = { transactionState: 'done', amountEthers: weisToEthers(funds)};
       projectsRepo.addBalance(projectPublicId, weisToEthers(funds));
     } else {
-      log(`Transaciont ${transcationId} failed: ???`);
+      log(`Fund transaction failed:\n\ttx hash: ${tx.hash}\n\ttx id: ${transcationId}`);
       updatesTransactionDict = { transactionState: 'failed'};
     }
 

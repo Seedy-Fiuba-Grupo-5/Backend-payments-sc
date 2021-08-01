@@ -19,10 +19,8 @@ async function createProject(
       projectReviewerAddress
     );
   } catch(error) {
-    errorBodyParsed = JSON.parse(error.body);
-    message = errorBodyParsed.error.message;
-    log('Deployer wallet is out of ethers');
-    log(message);
+    log(`Project creation transaction failed:`);
+    console.log(error);
     updatesDict = { creationStatus: 'failed' };
     await projectsRepo.update(publicId, updatesDict);
     return;
@@ -54,7 +52,7 @@ async function createProject(
         state: projectsRepo.FUNDING
       };
     } else {
-      log(`Project not created in tx ${tx.hash}`);
+      log(`Project creation failed:\n\ttx hash: ${tx.hash}`);
       updatesDict = { creationStatus: 'failed' };
     }
     projectsRepo.update(publicId, updatesDict);
