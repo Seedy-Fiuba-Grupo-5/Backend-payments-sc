@@ -21,13 +21,13 @@ async function createProject(
   } catch(error) {
     log(`Project creation transaction failed:`);
     console.log(error);
-    updatesDict = { creationStatus: 'failed' };
+    updatesDict = { creationStatus: 'Failed' };
     await projectsRepo.update(publicId, updatesDict);
     return;
   }
 
   log('Creation project transaction in progress ...')
-  await projectsRepo.update(publicId, {creationStatus: 'mining'});
+  await projectsRepo.update(publicId, {creationStatus: 'Mining'});
   tx.wait(1).then(receipt => {
     console.log("Transaction mined");
     const firstEvent = receipt && receipt.events && receipt.events[0];
@@ -48,12 +48,12 @@ async function createProject(
       updatesDict = {
         privateId: projectId,
         balance: '0.0',
-        creationStatus: 'done',
+        creationStatus: 'Done',
         state: projectsRepo.FUNDING
       };
     } else {
       log(`Project creation failed:\n\ttx hash: ${tx.hash}`);
-      updatesDict = { creationStatus: 'failed' };
+      updatesDict = { creationStatus: 'Failed' };
     }
     projectsRepo.update(publicId, updatesDict);
   });

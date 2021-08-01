@@ -8,7 +8,7 @@ const { IN_PROGRESS } = require('../db/repositories/projectsRepo')
 
 async function process(data) {
   log(`Setting stage ${data.stageNumber} of project ${data.projectPublicId} as completed`);
-  
+
   projectInst = await projectsRepo.get(data.projectPublicId);
   if (projectInst === null) {
     log('Project not found');
@@ -46,7 +46,7 @@ async function process(data) {
     toPublicId: projectInst.dataValues.ownerPublicId,
     toType: 'user',
     transactionType: 'stageCompleted',
-    transactionState: 'building'
+    transactionState: 'Building'
   };
   transactionInst = await transactionsRepo.create(transactionDict);
 

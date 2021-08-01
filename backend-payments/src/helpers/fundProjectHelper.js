@@ -9,14 +9,14 @@ function parse(request) {
 
 function format(result) {
   responses = {
-    'building': [202, result],
-    'mining': [202, result],
-    'done': [202, result],
+    'Building': [202, result],
+    'Mining': [202, result],
+    'Done': [202, result],
     'INVALID_AMOUNT_ETHERS': [400, {'status': 'The amount of ethers should be valid'}],
     'PROJECT_NOT_FOUND': [404, {'status': 'The project requested could not be found'}],
     'FUNDER_NOT_FOUND': [404, {'status': 'The funder requested could not be found'}],
     'NOT_FUNDING': [405, {'status': 'The project must be in "Funding" state'}],
-    'NOT_ENOUGH_BALANCE': [409, {'status': 'Not enough balance'}]
+    'Not enough balance': [409, {'status': 'Not enough balance'}]
   };
   let [code, _body] = responses[result.transactionState];
   body = JSON.stringify(_body);

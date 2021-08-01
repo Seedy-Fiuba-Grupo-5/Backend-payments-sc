@@ -3,10 +3,10 @@ const { db } = require("../db");
 const utils = require('../../ethers/utilsEthers');
 const { log } = require("../../log");
 
-INITIALIZING = 'INITIALIZING';
-FUNDING = 'FUNDING';
-IN_PROGRESS = 'IN_PROGRESS';
-COMPLETED = 'COMPLETED';
+INITIALIZING = 'Initializing';
+FUNDING = 'Funding';
+IN_PROGRESS = 'In progress';
+COMPLETED = 'Completed';
 
 function projectDBLog(message) {
   fullMessage = `ProjectDB: ${message}`;

@@ -20,11 +20,11 @@ async function setCompletedStage(
   } catch(error) {
     log(`Set completed stage transaction ${transcationId} failed:`);
     console.log(error);
-    await transactionsRepo.update(transcationId, { transactionState: 'NOT_ENOUGH_BALANCE' });
+    await transactionsRepo.update(transcationId, { transactionState: 'Not enough balance' });
     return;
   }
 
-  await transactionsRepo.update(transcationId, {transactionState: 'mining'});
+  await transactionsRepo.update(transcationId, {transactionState: 'Mining'});
 
   tx.wait(1).then(receipt => {
     console.log("Transaction mined");
@@ -40,11 +40,11 @@ async function setCompletedStage(
           `\n\tprojectId: ${projectId}` +
           `\n\tstageCompleted: ${stageCompleted}`
           );
-      updatesTransactionDict = { transactionState: 'done' };
+      updatesTransactionDict = { transactionState: 'Done' };
       projectsRepo.setCompletedStage(projectPublicId, stageIndex);
     } else {
       log(`Set completed stage transaction failed:\n\ttx hash: ${tx.hash}\n\ttx id: ${transcationId} `);
-      updatesTransactionDict = { transactionState: 'failed'};
+      updatesTransactionDict = { transactionState: 'Failed'};
     }
 
     if (secondEvent && secondEvent.event === "ProjectCompleted") {
