@@ -141,15 +141,12 @@ describe('Endpoint /projects/<id>/stages: ',()=>{
         headersPayload = requestHeaders(true);
 
         costTxWeis = 560288000000000;
-        console.log('-2');
         await addWeis(reviewerRes.body['address'], costTxWeis);
         payload = {
           "reviewerPublicId": reviewerRes.body['publicId'],
           "stageNumber": stageNumber
         };
-        console.log('-1');
         res = await setCompletedStage(chai, payload, projectPublicId);
-        console.log('0');
       });
 
       it('THEN the project should have until stage 1 marked as completed', async function () {
@@ -161,7 +158,6 @@ describe('Endpoint /projects/<id>/stages: ',()=>{
       });
 
       it('THEN it should not be able to set it as completed again', async function () {
-        console.log('1');
         stageNumber = 1;
         costTxWeis = 560288000000000;
         await addWeis(reviewerRes.body['address'], costTxWeis);
@@ -170,20 +166,15 @@ describe('Endpoint /projects/<id>/stages: ',()=>{
           "stageNumber": stageNumber
         };
         route = `/projects/${projectPublicId}/stages`;
-        console.log('2');
         res = await chai.request(url)
                         .post(route)
                         .set(headersPayload)
                         .send(payload)
                         .catch(function (err) {
-                          console.log('3');
                           expect(err).to.have.status(409);
-                          console.log('4');
                           expect(err.response.body).to.have.property('status');
                         });
-        console.log('5');
         expect(res).to.be.eql(undefined);
-        console.log('6');
       });
     });
 
