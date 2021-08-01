@@ -21,17 +21,17 @@ async function fund(
   } catch(error) {
     log(`Fund transaction ${transcationId} failed:`);
     console.log(error);
-    await transactionsRepo.update(transcationId, { transactionState: 'NOT_ENOUGH_BALANCE' });
+    await transactionsRepo.update(transcationId, { transactionState: 'Not enough balance' });
     return;
   }
   await transactionsRepo.update(transcationId, { transactionState: 'mining' });
   log(`Transaction ${transcationId} in progress ...`);
-  
+
   tx.wait(1).then(receipt => {
     log(`Transaction ${transcationId} mined`);
     const firstEvent = receipt && receipt.events && receipt.events[0];
     const secondEvent = receipt && receipt.events && receipt.events[1];
-    
+
     updatesTransactionDict = null;
     if (firstEvent && firstEvent.event === "ProjectFunded") {
       console.log(firstEvent);

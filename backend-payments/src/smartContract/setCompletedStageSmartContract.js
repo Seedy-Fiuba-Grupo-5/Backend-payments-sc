@@ -20,7 +20,7 @@ async function setCompletedStage(
   } catch(error) {
     log(`Set completed stage transaction ${transcationId} failed:`);
     console.log(error);
-    await transactionsRepo.update(transcationId, { transactionState: 'NOT_ENOUGH_BALANCE' });
+    await transactionsRepo.update(transcationId, { transactionState: 'Not enough balance' });
     return;
   }
 
