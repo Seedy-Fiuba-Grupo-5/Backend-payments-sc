@@ -133,7 +133,7 @@ async function createFundingProject(chai, payload) {
   console.log(`[TEST] CREATE PROJECT IN FUNDING STATE`);
   res = await postNewProject(chai, payload);
   const publicId = res.body['publicId'];
-  while (res.body['creationStatus'] != 'done') {
+  while (res.body['creationStatus'] != 'Done') {
     await sleep(1000);
     res = await getProject(chai, publicId);
   }
@@ -200,7 +200,7 @@ async function setCompletedStage(chai, payload, projectPublicId) {
   do {
     await sleep(1000);
     res = await getTransaction(chai, transactionId);
-  } while (res.body['transactionState'] != 'done');
+  } while (res.body['transactionState'] != 'Done');
   return res;
 }
 

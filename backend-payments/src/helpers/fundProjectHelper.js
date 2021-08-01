@@ -11,7 +11,7 @@ function format(result) {
   responses = {
     'building': [202, result],
     'mining': [202, result],
-    'done': [202, result],
+    'Done': [202, result],
     'INVALID_AMOUNT_ETHERS': [400, {'status': 'The amount of ethers should be valid'}],
     'PROJECT_NOT_FOUND': [404, {'status': 'The project requested could not be found'}],
     'FUNDER_NOT_FOUND': [404, {'status': 'The funder requested could not be found'}],

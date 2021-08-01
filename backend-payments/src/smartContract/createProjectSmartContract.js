@@ -48,7 +48,7 @@ async function createProject(
       updatesDict = {
         privateId: projectId,
         balance: '0.0',
-        creationStatus: 'done',
+        creationStatus: 'Done',
         state: projectsRepo.FUNDING
       };
     } else {

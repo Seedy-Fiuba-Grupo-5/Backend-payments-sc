@@ -43,7 +43,7 @@ function schema() {
           toPublicId: { type: 'number' },
           toType: { type: 'string', enum: ['user'] },
           transactionType: { type: 'string', enum: ['stageCompleted'] },
-          transactionState: { type: 'string', enum: ['mining', 'done'] }
+          transactionState: { type: 'string', enum: ['mining', 'Done'] }
         }
       },
       400: {

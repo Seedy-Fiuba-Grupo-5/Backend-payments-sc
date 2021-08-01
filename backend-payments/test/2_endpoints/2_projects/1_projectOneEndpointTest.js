@@ -50,7 +50,7 @@ describe('Endpoint /projects/<id>: ',()=>{
                     .set(headers);
     expect(res.status).to.be.eql(200);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
-    expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
+    expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'Done']);
 
     let creationStatus = res.body['creationStatus'];
     while (creationStatus === 'mining') {
@@ -63,7 +63,7 @@ describe('Endpoint /projects/<id>: ',()=>{
     expect(res.status).to.be.eql(200);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('privateId').to.be.a('number');
-    expect(res.body).to.have.property('creationStatus').to.be.eql('done');
+    expect(res.body).to.have.property('creationStatus').to.be.eql('Done');
     expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost.map((i)=>i.toString()));
     expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
     expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
@@ -122,7 +122,7 @@ describe('Endpoint /projects/<id>: ',()=>{
 
     expect(res.status).to.be.eql(202);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
-    expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
+    expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'Done']);
 
     var creationStatus = res.body['creationStatus'];
     while (creationStatus === 'mining') {
@@ -134,7 +134,7 @@ describe('Endpoint /projects/<id>: ',()=>{
     expect(res.status).to.be.eql(200);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('privateId').to.be.a('number');
-    expect(res.body).to.have.property('creationStatus').to.be.eql('done');
+    expect(res.body).to.have.property('creationStatus').to.be.eql('Done');
     expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost.map((i)=>i.toString()));
     expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
     expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);

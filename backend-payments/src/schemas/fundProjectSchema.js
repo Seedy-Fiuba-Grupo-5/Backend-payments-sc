@@ -42,7 +42,7 @@ function schema() {
           toPublicId: { type: 'number' },
           toType: { type: 'string', enum: ['project'] },
           transactionType: { type: 'string', enum: ['fund'] },
-          transactionState: { type: 'string', enum: ['mining', 'done'] }
+          transactionState: { type: 'string', enum: ['mining', 'Done'] }
         }
       },
       400: {

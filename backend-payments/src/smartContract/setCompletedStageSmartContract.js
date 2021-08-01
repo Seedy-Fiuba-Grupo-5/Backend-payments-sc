@@ -40,7 +40,7 @@ async function setCompletedStage(
           `\n\tprojectId: ${projectId}` +
           `\n\tstageCompleted: ${stageCompleted}`
           );
-      updatesTransactionDict = { transactionState: 'done' };
+      updatesTransactionDict = { transactionState: 'Done' };
       projectsRepo.setCompletedStage(projectPublicId, stageIndex);
     } else {
       log(`Set completed stage transaction failed:\n\ttx hash: ${tx.hash}\n\ttx id: ${transcationId} `);

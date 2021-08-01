@@ -43,7 +43,7 @@ async function fund(
           `\n\tfunderAddress: ${funderAddress}` +
           `\n\tfunds: ${funds} weis`
           );
-      updatesTransactionDict = { transactionState: 'done', amountEthers: weisToEthers(funds)};
+      updatesTransactionDict = { transactionState: 'Done', amountEthers: weisToEthers(funds)};
       projectsRepo.addBalance(projectPublicId, weisToEthers(funds));
     } else {
       log(`Fund transaction failed:\n\ttx hash: ${tx.hash}\n\ttx id: ${transcationId}`);

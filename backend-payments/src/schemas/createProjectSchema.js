@@ -61,7 +61,7 @@ function schema() {
           creationStatus: {
             description: "Project's creation status",
             type: 'string',
-            enum: ['building', 'mining', 'done']
+            enum: ['building', 'mining', 'Done']
           },
           privateId: {
             description: "Project's id in smart contract",
