@@ -21,17 +21,17 @@ async function fund(
   } catch(error) {
     log(`Fund transaction ${transcationId} failed:`);
     console.log(error);
-    await transactionsRepo.update(transcationId, { transactionState: 'NOT_ENOUGH_BALANCE' });
+    await transactionsRepo.update(transcationId, { transactionState: 'Not enough balance' });
     return;
   }
-  await transactionsRepo.update(transcationId, { transactionState: 'mining' });
+  await transactionsRepo.update(transcationId, { transactionState: 'Mining' });
   log(`Transaction ${transcationId} in progress ...`);
-  
+
   tx.wait(1).then(receipt => {
     log(`Transaction ${transcationId} mined`);
     const firstEvent = receipt && receipt.events && receipt.events[0];
     const secondEvent = receipt && receipt.events && receipt.events[1];
-    
+
     updatesTransactionDict = null;
     if (firstEvent && firstEvent.event === "ProjectFunded") {
       console.log(firstEvent);
@@ -43,11 +43,11 @@ async function fund(
           `\n\tfunderAddress: ${funderAddress}` +
           `\n\tfunds: ${funds} weis`
           );
-      updatesTransactionDict = { transactionState: 'done', amountEthers: weisToEthers(funds)};
+      updatesTransactionDict = { transactionState: 'Done', amountEthers: weisToEthers(funds)};
       projectsRepo.addBalance(projectPublicId, weisToEthers(funds));
     } else {
       log(`Fund transaction failed:\n\ttx hash: ${tx.hash}\n\ttx id: ${transcationId}`);
-      updatesTransactionDict = { transactionState: 'failed'};
+      updatesTransactionDict = { transactionState: 'Failed'};
     }
 
     if (secondEvent && secondEvent.event === "ProjectStarted") {

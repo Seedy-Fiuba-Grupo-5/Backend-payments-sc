@@ -50,10 +50,10 @@ describe('Endpoint /projects/<id>: ',()=>{
                     .set(headers);
     expect(res.status).to.be.eql(200);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
-    expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
+    expect(res.body).to.have.property('creationStatus').to.be.oneOf(['Mining', 'Done']);
 
     let creationStatus = res.body['creationStatus'];
-    while (creationStatus === 'mining') {
+    while (creationStatus === 'Mining') {
       this.timeout(1000);
       // This is a shortcut to the request described above
       res = await getProject(chai, publicId)
@@ -63,12 +63,12 @@ describe('Endpoint /projects/<id>: ',()=>{
     expect(res.status).to.be.eql(200);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('privateId').to.be.a('number');
-    expect(res.body).to.have.property('creationStatus').to.be.eql('done');
+    expect(res.body).to.have.property('creationStatus').to.be.eql('Done');
     expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost.map((i)=>i.toString()));
     expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
     expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
     expect(res.body).to.have.property('balance').to.be.eql('0.0');
-    expect(res.body).to.have.property('state').to.be.eql('FUNDING');
+    expect(res.body).to.have.property('state').to.be.eql('Funding');
   });
 
   it('GET should return an error if project does not exist', async function () {
@@ -122,10 +122,10 @@ describe('Endpoint /projects/<id>: ',()=>{
 
     expect(res.status).to.be.eql(202);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
-    expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
+    expect(res.body).to.have.property('creationStatus').to.be.oneOf(['Mining', 'Done']);
 
     var creationStatus = res.body['creationStatus'];
-    while (creationStatus === 'mining') {
+    while (creationStatus === 'Mining') {
       this.timeout(1000);
       res = await getProject(chai, publicId);
       creationStatus = res.body['creationStatus'];
@@ -134,16 +134,16 @@ describe('Endpoint /projects/<id>: ',()=>{
     expect(res.status).to.be.eql(200);
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('privateId').to.be.a('number');
-    expect(res.body).to.have.property('creationStatus').to.be.eql('done');
+    expect(res.body).to.have.property('creationStatus').to.be.eql('Done');
     expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost.map((i)=>i.toString()));
     expect(res.body).to.have.property('ownerPublicId').to.be.eql(ownerPublicId);
     expect(res.body).to.have.property('reviewerPublicId').to.be.eql(reviewerPublicId);
     expect(res.body).to.have.property('balance').to.be.eql('0.0');
-    expect(res.body).to.have.property('state').to.be.eql('FUNDING');
+    expect(res.body).to.have.property('state').to.be.eql('Funding');
   });
 
   it( 'PATCH should return 404 when trying asign a reviewer id that does not have an associated wallet' +
-      'when the project creation status is not "building"', async function () {
+      'when the project creation status is not "Building"', async function () {
     const publicId = 1;
     let [ownerRes] = await postManyNewWallets(chai, 1);
     const ownerPublicId = ownerRes.body['publicId'];

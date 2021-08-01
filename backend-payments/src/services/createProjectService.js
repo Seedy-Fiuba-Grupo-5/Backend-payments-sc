@@ -27,7 +27,7 @@ async function process(data) {
   }
 
   log(`Building project ${data.publicId}`);
-  const creationStatus = "building";
+  const creationStatus = 'Building';
   const dataDict = {
     publicId: data.publicId,
     privateId: null,

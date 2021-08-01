@@ -77,7 +77,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
       expect(res.body).to.have.property('toPublicId').to.be.eql(fundingProjectRes.body['publicId']);
       expect(res.body).to.have.property('toType').to.be.eql('project');
       expect(res.body).to.have.property('transactionType').to.be.eql('fund');
-      expect(res.body).to.have.property('transactionState').to.be.eql('mining');
+      expect(res.body).to.have.property('transactionState').to.be.eql('Mining');
     });
 
     it( 'POST 1 wei from 1 user and another wei from another user should add 2 wei to the project balance, ' +
@@ -113,7 +113,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
       expect(res.body).to.have.property('toPublicId').to.be.eql(fundingProjectRes.body['publicId']);
       expect(res.body).to.have.property('toType').to.be.eql('project');
       expect(res.body).to.have.property('transactionType').to.be.eql('fund');
-      expect(res.body).to.have.property('transactionState').to.be.eql('mining');
+      expect(res.body).to.have.property('transactionState').to.be.eql('Mining');
 
       res = await chai.request(url)
                       .post(route)
@@ -130,7 +130,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
       expect(res.body).to.have.property('toPublicId').to.be.eql(fundingProjectRes.body['publicId']);
       expect(res.body).to.have.property('toType').to.be.eql('project');
       expect(res.body).to.have.property('transactionType').to.be.eql('fund');
-      expect(res.body).to.have.property('transactionState').to.be.eql('mining');
+      expect(res.body).to.have.property('transactionState').to.be.eql('Mining');
     });
 
     it( 'POST exactly total weis needed for a project should add that amount of weis to the project balance, ' +
@@ -162,10 +162,10 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
       expect(res.body).to.have.property('toPublicId').to.be.eql(fundingProjectRes.body['publicId']);
       expect(res.body).to.have.property('toType').to.be.eql('project');
       expect(res.body).to.have.property('transactionType').to.be.eql('fund');
-      expect(res.body).to.have.property('transactionState').to.be.eql('mining');
+      expect(res.body).to.have.property('transactionState').to.be.eql('Mining');
 
       transactionId = res.body['id'];
-      while (res.body['transactionState'] === 'mining'){
+      while (res.body['transactionState'] === 'Mining'){
         this.timeout(10000);
         res = await chai.request(url)
                         .get(`/transactions/${transactionId}`)
@@ -183,7 +183,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
       expect(res.body).to.have.property('toPublicId').to.be.eql(fundingProjectRes.body['publicId']);
       expect(res.body).to.have.property('toType').to.be.eql('project');
       expect(res.body).to.have.property('transactionType').to.be.eql('fund');
-      expect(res.body).to.have.property('transactionState').to.be.eql('done');
+      expect(res.body).to.have.property('transactionState').to.be.eql('Done');
     });
 
     it( 'POST more than total weis needed for a project should add just the amount of weis needed for the project balance, ' +
@@ -216,7 +216,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
       expect(res.body).to.have.property('toPublicId').to.be.eql(fundingProjectRes.body['publicId']);
       expect(res.body).to.have.property('toType').to.be.eql('project');
       expect(res.body).to.have.property('transactionType').to.be.eql('fund');
-      expect(res.body).to.have.property('transactionState').to.be.eql('mining');
+      expect(res.body).to.have.property('transactionState').to.be.eql('Mining');
 
       transactionId = res.body['id'];
       do {
@@ -228,9 +228,9 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
                           console.log('DEBUG ERROR');
                           throw err;
                         });
-      } while (res.body['transactionState'] !== 'done');
+      } while (res.body['transactionState'] !== 'Done');
 
-      expect(res.body).to.have.property('transactionState').to.be.eql('done');
+      expect(res.body).to.have.property('transactionState').to.be.eql('Done');
       expect(res.status).to.be.eql(200);
       expect(res.body).to.have.property('amountEthers').to.be.eql(weisToEthers(fundNeeded).toString());
       expect(res.body).to.have.property('fromPublicId').to.be.eql(funderRes.body['publicId']);
@@ -318,7 +318,7 @@ describe('Endpoint /projects/<id>/funds: ',()=>{
         do {
           await sleep(1000);
           res = await getProject(chai, projectPublicId);
-        } while (res.body['state'] != 'IN_PROGRESS');
+        } while (res.body['state'] != 'In progress');
       });
       it('THEN the owner of the project should receive the funds of the first stage of it', async function(){
         res = await getWallet(chai, ownerRes.body['publicId']);

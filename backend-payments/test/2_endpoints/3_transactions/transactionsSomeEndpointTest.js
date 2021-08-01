@@ -47,7 +47,7 @@ describe('Endpoint /transactions: ',()=>{
       'toPublicId': 2,
       'toType': 'project',
       'transactionType': 'fund',
-      'transactionState': 'FUNDING'
+      'transactionState': 'Funding'
     };
     res = await chai.request(url)
                     .get(route)
