@@ -21,7 +21,7 @@ async function createProject(
   } catch(error) {
     log(`Project creation transaction failed:`);
     console.log(error);
-    updatesDict = { creationStatus: 'failed' };
+    updatesDict = { creationStatus: 'Failed' };
     await projectsRepo.update(publicId, updatesDict);
     return;
   }
@@ -53,7 +53,7 @@ async function createProject(
       };
     } else {
       log(`Project creation failed:\n\ttx hash: ${tx.hash}`);
-      updatesDict = { creationStatus: 'failed' };
+      updatesDict = { creationStatus: 'Failed' };
     }
     projectsRepo.update(publicId, updatesDict);
   });

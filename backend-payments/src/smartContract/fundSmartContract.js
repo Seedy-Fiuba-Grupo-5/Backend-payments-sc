@@ -47,7 +47,7 @@ async function fund(
       projectsRepo.addBalance(projectPublicId, weisToEthers(funds));
     } else {
       log(`Fund transaction failed:\n\ttx hash: ${tx.hash}\n\ttx id: ${transcationId}`);
-      updatesTransactionDict = { transactionState: 'failed'};
+      updatesTransactionDict = { transactionState: 'Failed'};
     }
 
     if (secondEvent && secondEvent.event === "ProjectStarted") {

@@ -44,7 +44,7 @@ async function setCompletedStage(
       projectsRepo.setCompletedStage(projectPublicId, stageIndex);
     } else {
       log(`Set completed stage transaction failed:\n\ttx hash: ${tx.hash}\n\ttx id: ${transcationId} `);
-      updatesTransactionDict = { transactionState: 'failed'};
+      updatesTransactionDict = { transactionState: 'Failed'};
     }
 
     if (secondEvent && secondEvent.event === "ProjectCompleted") {
