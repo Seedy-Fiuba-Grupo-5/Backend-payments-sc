@@ -72,7 +72,7 @@ function schema() {
           state: {
             description: 'The current state of the project',
             type: 'string',
-            enum: ['INITIALIZING', 'Funding', 'In progress', 'Completed']
+            NITIALIZING            enum: ['Initializing', 'Funding', 'In progress', 'Completed']
           }
         }
       },

@@ -3,7 +3,7 @@ const { db } = require("../db");
 const utils = require('../../ethers/utilsEthers');
 const { log } = require("../../log");
 
-INITIALIZING = 'INITIALIZING';
+INITIALIZING = 'Initializing';
 FUNDING = 'Funding';
 IN_PROGRESS = 'In progress';
 COMPLETED = 'Completed';

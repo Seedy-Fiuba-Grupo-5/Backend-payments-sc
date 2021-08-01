@@ -52,7 +52,7 @@ describe('Endpoint /projects: ', () => {
     expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost.map((i)=>i.toString()));
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('creationStatus').to.be.oneOf(['mining', 'done']);
-    expect(res.body).to.have.property('state').to.be.oneOf(['INITIALIZING', 'Funding']);
+    expect(res.body).to.have.property('state').to.be.oneOf(['Initializing', 'Funding']);
     stagesStates = stagesCost.map(() => false);
     expect(res.body).to.have.property('stagesStates').to.be.eql(stagesStates);
 	});
@@ -83,7 +83,7 @@ describe('Endpoint /projects: ', () => {
     expect(res.body).to.have.property('stagesCost').to.be.eql(stagesCost.map((i)=>i.toString()));
     expect(res.body).to.have.property('publicId').to.be.eql(publicId);
     expect(res.body).to.have.property('creationStatus').to.be.eql('building');
-    expect(res.body).to.have.property('state').to.be.eql('INITIALIZING');
+    expect(res.body).to.have.property('state').to.be.eql('Initializing');
     stagesStates = stagesCost.map(() => false);
     expect(res.body).to.have.property('stagesStates').to.be.eql(stagesStates);
   });
